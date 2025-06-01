@@ -1,18 +1,12 @@
-import s from "./index.module.css";
+import { Link } from "react-router-dom";
+import s from "./index.module.scss";
 
 const ExploreContainer = () => {
   return (
     <div className={s.container}>
-      <strong>Ready to create an app?</strong>
+      <strong>Arev Food - Applications</strong>
       <p>
-        Start with Ionic{" "}
-        <a
-          target="_blank"
-          rel="noopener noreferrer"
-          href="https://ionicframework.com/docs/components"
-        >
-          UI Components
-        </a>
+        here to see more details: <Link to="/about">About Us</Link>
       </p>
     </div>
   );

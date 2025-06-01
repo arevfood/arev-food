@@ -1,13 +1,22 @@
-import Home from "@/pages/home";
-import { IonRouterOutlet } from "@ionic/react";
 import { Route } from "react-router-dom";
+import PageHome from "@/pages/home";
+import { IonRouterOutlet } from "@ionic/react";
+import { IonReactRouter } from "@ionic/react-router";
+import PagesAbout from "@/pages/about";
 
-export default function MainRoute() {
+const MainRoute: React.FC = () => {
   return (
-    <IonRouterOutlet>
-      <Route exact path={"/"}>
-        <Home />
-      </Route>
-    </IonRouterOutlet>
+    <IonReactRouter>
+      <IonRouterOutlet>
+        <Route exact path={"/"}>
+          <PageHome />
+        </Route>
+        <Route exact path={"/about"}>
+          <PagesAbout />
+        </Route>
+      </IonRouterOutlet>
+    </IonReactRouter>
   );
-}
+};
+
+export default MainRoute;

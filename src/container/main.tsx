@@ -5,27 +5,29 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
+import { ReactNode } from "react";
 
-import ExploreContainer from "@/components/explore-container";
+type propTypes = {
+  title: string;
+  children: ReactNode;
+};
 
-const PagesHome: React.FC = () => {
+export default function ContainerMain({ children, title }: propTypes) {
   return (
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Blank</IonTitle>
+          <IonTitle>{title}</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
         <IonHeader collapse="condense">
           <IonToolbar>
-            <IonTitle size="large">Blank</IonTitle>
+            <IonTitle size="large">{title}</IonTitle>
           </IonToolbar>
         </IonHeader>
-        <ExploreContainer />
+        {children}
       </IonContent>
     </IonPage>
   );
-};
-
-export default PagesHome;
+}

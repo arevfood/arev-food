@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">arev-food</string>
+    <string name="title_activity_main">arev-food</string>
+    <string name="package_name">arev.food</string>
+    <string name="custom_url_scheme">arev.food</string>
+</resources>

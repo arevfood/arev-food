@@ -1,0 +1,11 @@
+/* For information on how to create your own theme, please see:
+http://ionicframework.com/docs/theming/ */
+
+@use "tailwindcss";
+
+:root {
+  --ion-background-color: #ffffff;
+  --ion-text-color: #000000;
+  --ion-toolbar-background: #ffffff;
+  --ion-toolbar-color: #000000;
+}

@@ -5,7 +5,7 @@ const MainFooter: React.FC = () => {
     <IonFooter>
       <IonToolbar
         class="h-[72px] rounded-tl-[20px] rounded-tr-[20px]"
-        style={{ "--border-width": 0 }}
+        style={{ "--border-width": 0, "--background": "#FFF" }}
       >
         <IonNav>Home</IonNav>
       </IonToolbar>

@@ -3,6 +3,9 @@ http://ionicframework.com/docs/theming/ */
 
 @use "tailwindcss";
 
+@import url("https://fonts.googleapis.com/css2?family=Mona+Sans:ital,wght@0,200..900;1,200..900&family=WDXL+Lubrifont+SC&display=swap");
+@config "../../tailwind.config.ts";
+
 :root {
   --ion-background-color: #ffffff;
   --ion-text-color: #000000;

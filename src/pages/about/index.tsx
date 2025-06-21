@@ -1,4 +1,4 @@
-import MainButton from "@/components/button";
+import MainButton from "@/components/common/button";
 import ContainerMain from "@/container/main";
 import React from "react";
 import { useHistory } from "react-router";

@@ -1,4 +1,4 @@
-import ExploreContainer from "@/components/explore-container";
+import ExploreContainer from "@/components/common/explore-container";
 import MainLayouts from "@/layouts/main";
 
 const PagesHome: React.FC = () => {

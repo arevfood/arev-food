@@ -8,6 +8,9 @@ const ExploreContainer = () => {
       <p>
         here to see more details: <Link to="/about">About Us</Link>
       </p>
+      <p className="!font-font_paragraph !text-primary_color">
+        ENV Test: {import.meta.env.VITE_COMPANY_NAME}
+      </p>
     </div>
   );
 };

@@ -28,14 +28,24 @@ import "@ionic/react/css/display.css";
 import "@ionic/react/css/palettes/dark.system.css";
 
 /* Theme variables */
-import "./theme/variables.scss";
+import "@/styles/variables.scss";
 import MainRoute from "@/routes";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 setupIonicReact();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60 * 5,
+    },
+  },
+});
 
 const App: React.FC = () => (
   <IonApp>
-    <MainRoute />
+    <QueryClientProvider client={queryClient}>
+      <MainRoute />
+    </QueryClientProvider>
   </IonApp>
 );
 

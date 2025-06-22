@@ -3,7 +3,7 @@ http://ionicframework.com/docs/theming/ */
 
 @use "tailwindcss";
 
-@import url("https://fonts.googleapis.com/css2?family=Mona+Sans:ital,wght@0,200..900;1,200..900&family=WDXL+Lubrifont+SC&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Baloo+Da+2:wght@400..800&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
 @config "../../tailwind.config.ts";
 
 :root {
@@ -11,4 +11,8 @@ http://ionicframework.com/docs/theming/ */
   --ion-text-color: #000000;
   --ion-toolbar-background: #ffffff;
   --ion-toolbar-color: #000000;
+  --ion-font-family: "Roboto";
 }
+
+@layer theme;
+@import "./tw_theme.scss" layer(theme);

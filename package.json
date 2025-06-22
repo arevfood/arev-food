@@ -4,19 +4,20 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host",
     "build": "tsc && vite build",
     "preview": "vite preview",
     "test.e2e": "cypress run",
     "test.unit": "vitest",
     "lint": "eslint",
-    "ionic:build": "npm run build",
-    "ionic:serve": "npm run dev -- --open"
+    "style-init": "tsx src/script/generate-sass-variable.ts",
+    "ionic:android": "yarn ionic capacitor run android -l --external",
+    "ionic:ios": "yarn ionic capacitor run ios -l --external"
   },
   "dependencies": {
     "@capacitor/android": "7.2.0",
     "@capacitor/app": "7.0.1",
-    "@capacitor/core": "7.2.0",
+    "@capacitor/core": "7.4.0",
     "@capacitor/haptics": "7.0.1",
     "@capacitor/ios": "7.2.0",
     "@capacitor/keyboard": "7.0.1",
@@ -28,6 +29,7 @@
     "@types/react-router": "^5.1.20",
     "@types/react-router-dom": "^5.3.3",
     "axios": "^1.10.0",
+    "dotenv": "^16.5.0",
     "ionicons": "^7.4.0",
     "react": "19.0.0",
     "react-dom": "19.0.0",
@@ -36,7 +38,8 @@
     "sass": "^1.89.1"
   },
   "devDependencies": {
-    "@capacitor/cli": "7.2.0",
+    "@capacitor/cli": "7.4.0",
+    "@ionic/cli": "^7.2.1",
     "@tailwindcss/postcss": "^4.1.8",
     "@tanstack/eslint-plugin-query": "^5.81.0",
     "@testing-library/dom": ">=7.21.4",

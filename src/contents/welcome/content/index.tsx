@@ -21,7 +21,10 @@ const ContentsWelcomeContent: React.FC = () => {
         }}
       >
         <SwiperSlide>
-          <IonImg src="/introduction.jpg" className="h-full object-cover" />
+          <IonImg
+            src="/welcome-content.jpg"
+            className="h-full object-cover object-left"
+          />
           <div className="absolute top-0 w-full h-full bg-linear-to-b from-primary_color/0 to-primary_color" />
           <div className="absolute bottom-[75px] p-4 text-left text-white_color">
             <h1 className="mb-6 !font-bold">Discover Foods That Fit You</h1>
@@ -31,7 +34,10 @@ const ContentsWelcomeContent: React.FC = () => {
           </div>
         </SwiperSlide>
         <SwiperSlide>
-          <IonImg src="/introduction.jpg" className="h-full object-cover" />
+          <IonImg
+            src="/welcome-content.jpg"
+            className="h-full object-cover object-center"
+          />
           <div className="absolute top-0 w-full h-full bg-linear-to-b from-primary_color/0 to-primary_color" />
           <div className="absolute bottom-[75px] p-4 text-left text-white_color">
             <h1 className="mb-6 !font-bold">Smarter Food, Better Energy</h1>
@@ -42,7 +48,10 @@ const ContentsWelcomeContent: React.FC = () => {
           </div>
         </SwiperSlide>
         <SwiperSlide>
-          <IonImg src="/introduction.jpg" className="h-full object-cover" />
+          <IonImg
+            src="/welcome-content.jpg"
+            className="h-full object-cover object-right"
+          />
           <div className="absolute top-0 w-full h-full bg-linear-to-b from-primary_color/0 to-primary_color" />
           <div className="absolute bottom-[75px] p-4 text-left text-white_color">
             <h1 className="mb-6 !font-bold">Health Insights That Matter</h1>

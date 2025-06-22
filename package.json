@@ -35,7 +35,8 @@
     "react-dom": "19.0.0",
     "react-router": "^5.3.4",
     "react-router-dom": "^5.3.4",
-    "sass": "^1.89.1"
+    "sass": "^1.89.1",
+    "swiper": "^11.2.8"
   },
   "devDependencies": {
     "@capacitor/cli": "7.4.0",

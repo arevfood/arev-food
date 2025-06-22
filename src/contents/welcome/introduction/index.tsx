@@ -1,7 +1,9 @@
 import MainButton from "@/components/common/button";
 import { IonImg } from "@ionic/react";
 
-const ContentsWelcomeIntroduction: React.FC = () => {
+const ContentsWelcomeIntroduction: React.FC<{ onClick?: () => void }> = ({
+  onClick,
+}) => {
   return (
     <div className="h-full relative">
       <IonImg src="/introduction.jpg" className="h-full object-cover" />
@@ -12,7 +14,7 @@ const ContentsWelcomeIntroduction: React.FC = () => {
           Discover foods that fit your body and help you feel your best, every
           day.
         </p>
-        <MainButton>Get Started</MainButton>
+        <MainButton onClick={onClick}>Get Started</MainButton>
       </div>
     </div>
   );

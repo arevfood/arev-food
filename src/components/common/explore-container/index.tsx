@@ -6,9 +6,9 @@ const ExploreContainer = () => {
     <div className={s.container}>
       <strong>Arev Food - Applications</strong>
       <p>
-        here to see more details: <Link to="/about">About Us</Link>
+        here to see more details: <Link to="/about">About Us Halo</Link>
       </p>
-      <p className="!font-font_paragraph !text-primary_color">
+      <p className="!font-paragraph !text-primary_color">
         ENV Test: {import.meta.env.VITE_COMPANY_NAME}
       </p>
     </div>

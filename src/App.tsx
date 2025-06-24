@@ -29,6 +29,7 @@ import "@ionic/react/css/palettes/dark.system.css";
 
 /* Theme variables */
 import "@/styles/variables.scss";
+import "@/styles/global.scss";
 import MainRoute from "@/routes";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 

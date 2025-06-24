@@ -1,10 +1,49 @@
-export default function MainButton({ onClick }: { onClick?: () => void }) {
+import { IonButton } from "@ionic/react";
+import { ReactNode } from "react";
+
+type props = {
+  children: ReactNode;
+  onClick?: () => void;
+  color?: "WHITE" | "ORANGE";
+};
+
+const MainButton: React.FC<props> = ({
+  onClick,
+  children,
+  color = "WHITE",
+}) => {
+  const colorSchema = {
+    WHITE: {
+      color: "var(--color-primary_color)",
+      "--background": "var(--color-white_color)",
+      "--background-focused": "var(--color-white_color)",
+      "--background-activated": "var(--color-white_color)",
+      "--background-hover": "var(--color-white_color)",
+      "--border-radius": "999px",
+    },
+    ORANGE: {
+      color: "var(--color-primary_color)",
+      "--background": "var(--color-primary_color)",
+      "--background-focused": "var(--colors-white_color)",
+      "--background-activated": "var(--colors-white_color)",
+      "--background-hover": "var(--colors-white_color)",
+      "--border-radius": "999px",
+    },
+  };
+
   return (
-    <button
-      className="!px-4 min-h-[32px] bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
-      onClick={onClick}
+    <IonButton
+      onClick={() => {
+        if (onClick) {
+          onClick();
+        }
+      }}
+      className={`w-full !font-heading font-bold min-h-[42px] rounded-full capitalize text-[14px]`}
+      style={colorSchema[color]}
     >
-      Click Me
-    </button>
+      {children}
+    </IonButton>
   );
-}
+};
+
+export default MainButton;

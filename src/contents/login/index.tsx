@@ -1,4 +1,5 @@
 import MainButton from "@/components/common/button";
+import { useAuth } from "@/hooks/data/authentication";
 import { IonContent, IonImg } from "@ionic/react";
 import { SubmitHandler, useForm } from "react-hook-form";
 
@@ -9,9 +10,10 @@ type inputProps = {
 
 const ContentLogin: React.FC = () => {
   const { register, handleSubmit } = useForm<inputProps>();
+  const { onSignin } = useAuth();
 
-  const onSubmit: SubmitHandler<inputProps> = (data) => {
-    console.log(data);
+  const onSubmit: SubmitHandler<inputProps> = async (data) => {
+    await onSignin({ email: data.username, password: data.password });
   };
 
   return (
@@ -38,7 +40,12 @@ const ContentLogin: React.FC = () => {
             />
           </form>
           <div className="mt-4">
-            <MainButton color="ORANGE" onClick={() => {}}>
+            <MainButton
+              color="ORANGE"
+              onClick={() => {
+                handleSubmit(onSubmit)();
+              }}
+            >
               Sign In
             </MainButton>
           </div>
@@ -51,13 +58,13 @@ const ContentLogin: React.FC = () => {
             </div>
             <div className="flex flex-wrap gap-2 justify-center items-center mt-6">
               <div className="w-[58px] h-[58px] rounded-full bg-white_color flex items-center justify-center text-black_color">
-                F
+                <IonImg src="/icons/facebook.png" className="w-auto h-[24px]" />
               </div>
               <div className="w-[58px] h-[58px] rounded-full bg-white_color flex items-center justify-center text-black_color">
-                G
+                <IonImg src="/icons/google.png" className="w-auto h-[24px]" />
               </div>
               <div className="w-[58px] h-[58px] rounded-full bg-white_color flex items-center justify-center text-black_color">
-                A
+                <IonImg src="/icons/apple.png" className="w-auto h-[24px]" />
               </div>
             </div>
           </div>

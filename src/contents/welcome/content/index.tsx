@@ -71,7 +71,6 @@ const ContentsWelcomeContent: React.FC = () => {
       </Swiper>
       <div className="absolute bottom-[35px] z-10 grid grid-cols-3 w-full h-[8px] gap-3 px-3">
         {Array.from({ length: 3 }).map((_item, index) => {
-          console.log("index", index);
           return (
             <div
               className={`${

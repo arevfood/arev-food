@@ -22,7 +22,7 @@ const MainButton: React.FC<props> = ({
       "--border-radius": "999px",
     },
     ORANGE: {
-      color: "var(--color-primary_color)",
+      color: "var(--color-white_color)",
       "--background": "var(--color-primary_color)",
       "--background-focused": "var(--colors-white_color)",
       "--background-activated": "var(--colors-white_color)",

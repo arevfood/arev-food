@@ -1,14 +1,15 @@
+import { useAuth } from "@/hooks/data/authentication";
 import { ReactNode } from "react";
 import { Redirect } from "react-router";
 
 const PrivateRoute = ({ component }: { component: ReactNode }) => {
-  const isLogin = false;
+  const { session } = useAuth();
 
-  if (isLogin) {
+  if (session) {
     return component;
   }
 
-  if (!isLogin) {
+  if (!session) {
     return <Redirect to={"/welcome"} />;
   }
 };

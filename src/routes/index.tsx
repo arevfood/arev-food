@@ -6,6 +6,7 @@ import PagesHome from "@/pages/home";
 import PagesWelcome from "@/pages/welcome";
 import PrivateRoute from "@/container/private";
 import PagesLogin from "@/pages/login";
+import PagesSignup from "@/pages/signup";
 
 const MainRoute: React.FC = () => {
   return (
@@ -13,6 +14,7 @@ const MainRoute: React.FC = () => {
       <IonRouterOutlet>
         <Route exact path={"/welcome"} component={PagesWelcome} />
         <Route exact path={"/login"} component={PagesLogin} />
+        <Route exact path={"/signup"} component={PagesSignup} />
         <Route
           exact
           path={"/"}

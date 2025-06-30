@@ -1,5 +1,6 @@
 import MainNotification from "@/components/common/notifications";
-import { UserLogin } from "@/models/user";
+import { UserLogin, UserSignup } from "@/models/user";
+import { FIREBASE_SIGNUP } from "@/providers/firebase/user";
 import { firebaseAuth } from "@/utils/connections/firebase";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
@@ -51,6 +52,25 @@ export const useAuth = () => {
     },
   });
 
+  const { mutateAsync: onSignup, isPending: onSignupLoading } = useMutation({
+    mutationFn: useCallback(async (payload: UserSignup) => {
+      const result = await FIREBASE_SIGNUP({
+        email: payload.email,
+        password: payload.password,
+        fullname: payload.fullname,
+      });
+      return result;
+    }, []),
+    onSuccess: (result) => {
+      queryClient.invalidateQueries({ queryKey: [queryKey] });
+      MainNotification({ type: "success", entity: entity, action: "signin" });
+      return result;
+    },
+    onError: () => {
+      MainNotification({ type: "error", entity: entity, action: "signin" });
+    },
+  });
+
   const { mutateAsync: onSignOut, isPending: onSignOutLoading } = useMutation({
     mutationFn: useCallback(async () => {
       const session = await signOut(firebaseAuth);
@@ -68,8 +88,10 @@ export const useAuth = () => {
 
   return {
     session: data,
-    loading: fetchLoading || onSigninLoading || onSignOutLoading,
+    loading:
+      fetchLoading || onSigninLoading || onSignOutLoading || onSignupLoading,
     onSignin,
     onSignOut,
+    onSignup,
   };
 };

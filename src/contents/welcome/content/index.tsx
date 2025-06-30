@@ -61,7 +61,7 @@ const ContentsWelcomeContent: React.FC = () => {
             </p>
             <MainButton
               onClick={() => {
-                router.push("/login");
+                router.replace("/login", { replace: true });
               }}
             >
               Start Your Journey

@@ -21,9 +21,11 @@ const sassVariables = `
   };
   --color-black_color: ${process.env.NEXT_PUBLIC_BLACK_COLOR || "#09080D"};
   --color-white_color: ${process.env.NEXT_PUBLIC_WHITE_COLOR || "#FFFFFF"};
+  --color-bg_color_1: ${process.env.NEXT_PUBLIC_WHITE_COLOR || "#f2f3f5"};
+  --color-bg_color_2: ${process.env.NEXT_PUBLIC_WHITE_COLOR || "#FEF8EC"};
 
   --font-heading: "Baloo Da 2";
-  --font-paragraph: "Roboto"
+  --font-paragraph: "Roboto";
   }
 `;
 

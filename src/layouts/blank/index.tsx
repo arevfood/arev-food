@@ -15,16 +15,16 @@ type propTypes = {
   withBackButton?: boolean;
 };
 
-export default function ContainerBlank({
+const LayoutBlank: React.FC<propTypes> = ({
   children,
   fullscreen,
   background,
   withBackButton = true,
-}: propTypes) {
+}) => {
   return (
     <IonPage>
       {withBackButton && (
-        <IonHeader>
+        <IonHeader className="!shadow-none">
           <IonToolbar
             style={{ "--background": "transparent", "--border-width": "0" }}
           >
@@ -39,10 +39,12 @@ export default function ContainerBlank({
       )}
       <IonContent
         fullscreen={fullscreen}
-        style={{ "--background": background || "#f2f3f5" }}
+        style={{ "--background": background || "var(--color-bg_color_1)" }}
       >
         {children}
       </IonContent>
     </IonPage>
   );
-}
+};
+
+export default LayoutBlank;

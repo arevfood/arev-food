@@ -7,6 +7,9 @@ import PagesWelcome from "@/pages/welcome";
 import PrivateRoute from "@/container/private";
 import PagesLogin from "@/pages/login";
 import PagesSignup from "@/pages/signup";
+import PagesSearch from "@/pages/search";
+import PagesFavorite from "@/pages/favorite";
+import PagesSetting from "@/pages/setting";
 
 const MainRoute: React.FC = () => {
   return (
@@ -19,6 +22,21 @@ const MainRoute: React.FC = () => {
           exact
           path={"/"}
           render={() => <PrivateRoute component={<PagesHome />} />}
+        />
+        <Route
+          exact
+          path={"/search"}
+          render={() => <PrivateRoute component={<PagesSearch />} />}
+        />
+        <Route
+          exact
+          path={"/favorite"}
+          render={() => <PrivateRoute component={<PagesFavorite />} />}
+        />
+        <Route
+          exact
+          path={"/setting"}
+          render={() => <PrivateRoute component={<PagesSetting />} />}
         />
         <Route exact path={"/about"} component={PagesAbout} />
       </IonRouterOutlet>

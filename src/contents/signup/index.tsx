@@ -1,6 +1,6 @@
 import MainButton from "@/components/common/button";
 import CustomInput from "@/components/common/input";
-import ContainerBlank from "@/container/blank";
+import LayoutBlank from "@/layouts/blank";
 import { useAuth } from "@/hooks/data/authentication";
 import { IonImg } from "@ionic/react";
 import { useForm, SubmitHandler } from "react-hook-form";
@@ -32,7 +32,7 @@ const ContentSignup: React.FC = () => {
   const password = watch("password", "");
 
   return (
-    <ContainerBlank fullscreen={true} background="#F2F3F5">
+    <LayoutBlank fullscreen={true} background="var(--color-bg_color_1)">
       <div className="h-full w-full flex items-center justify-center flex-col">
         <div className="flex items-center justify-center">
           <IonImg src="/arev-logo.png" className="w-[150px]" />
@@ -119,7 +119,7 @@ const ContentSignup: React.FC = () => {
           </div>
         </div>
       </div>
-    </ContainerBlank>
+    </LayoutBlank>
   );
 };
 

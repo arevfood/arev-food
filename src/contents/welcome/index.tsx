@@ -1,14 +1,14 @@
 import ContentsWelcomeIntroduction from "./introduction";
 import { useState } from "react";
 import ContentsWelcomeContent from "./content";
-import ContainerBlank from "@/container/blank";
+import LayoutBlank from "@/layouts/blank";
 
 const ContentsWelcome: React.FC = () => {
   const [stage, setStage] = useState<"initial" | "content">("initial");
   return (
-    <ContainerBlank
+    <LayoutBlank
       fullscreen={true}
-      background="#f2f3f5"
+      background="var(--color-bg_color_1)"
       withBackButton={false}
     >
       {stage === "initial" && (
@@ -19,7 +19,7 @@ const ContentsWelcome: React.FC = () => {
         />
       )}
       {stage === "content" && <ContentsWelcomeContent />}
-    </ContainerBlank>
+    </LayoutBlank>
   );
 };
 

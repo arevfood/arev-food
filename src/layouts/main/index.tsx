@@ -9,13 +9,18 @@ const MainLayouts: React.FC<{ children: ReactNode }> = ({
   children: ReactNode;
 }) => {
   return (
-    <IonPage>
-      <MainHeader />
-      <IonContent fullscreen style={{ "--background": "#f2f3f5" }}>
-        {children}
-      </IonContent>
-      <MainFooter />
-    </IonPage>
+    <>
+      <IonPage>
+        <MainHeader />
+        <IonContent
+          fullscreen
+          style={{ "--background": "var(--color-bg_color_1)" }}
+        >
+          <div className="px-4">{children}</div>
+        </IonContent>
+        <MainFooter />
+      </IonPage>
+    </>
   );
 };
 

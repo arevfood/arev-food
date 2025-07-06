@@ -1,10 +1,10 @@
-import ExploreContainer from "@/components/common/explore-container";
 import MainLayouts from "@/layouts/main";
+import { IonRouterLink } from "@ionic/react";
 
 const PagesHome: React.FC = () => {
   return (
     <MainLayouts>
-      <ExploreContainer />
+      <IonRouterLink routerLink="/about">About</IonRouterLink>
     </MainLayouts>
   );
 };

@@ -1,6 +1,6 @@
 import MainButton from "@/components/common/button";
 import CustomInput from "@/components/common/input";
-import ContainerBlank from "@/container/blank";
+import LayoutBlank from "@/layouts/blank";
 import { useAuth } from "@/hooks/data/authentication";
 import { IonImg } from "@ionic/react";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -22,7 +22,7 @@ const ContentLogin: React.FC = () => {
   };
 
   return (
-    <ContainerBlank fullscreen={true} background="#FEF8EC">
+    <LayoutBlank fullscreen={true} background="var(--color-bg_color_2)">
       <div className="h-full flex items-center justify-center flex-col">
         <div className="flex items-center justify-center">
           <IonImg src="/arev-logo.png" className="w-[150px]" />
@@ -87,7 +87,7 @@ const ContentLogin: React.FC = () => {
           </div>
         </div>
       </div>
-    </ContainerBlank>
+    </LayoutBlank>
   );
 };
 

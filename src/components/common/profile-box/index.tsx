@@ -1,0 +1,38 @@
+import OrangeBox from "@/components/wrapper/orange-box";
+import Avatar from "@/components/common/avatar";
+import MainButton from "@/components/common/button";
+
+type propTypes = {
+  name: string;
+  image: string;
+  age: number;
+  isFemale: boolean;
+};
+
+const ProfileBox: React.FC<propTypes> = ({
+  name,
+  image,
+  age,
+  isFemale = true,
+}) => {
+  return (
+    <OrangeBox withBackground>
+      <div className="flex flex-wrap gap-4 items-center">
+        <div>
+          <Avatar image={image || "/images/user-placeholder.png"} />
+        </div>
+        <div>
+          <div className="font-bold font-heading text-[26px]">{name}</div>
+          <div className="text-[14px] font-paragraph">{age} years old</div>
+        </div>
+      </div>
+      {isFemale && (
+        <div className="mt-6">
+          <MainButton color="WHITE">Menstrual Cycle</MainButton>
+        </div>
+      )}
+    </OrangeBox>
+  );
+};
+
+export default ProfileBox;

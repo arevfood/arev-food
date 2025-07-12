@@ -3,34 +3,23 @@ import HealthData from "@/components/common/health-data";
 import IconTitle from "@/components/common/icon-title";
 import ProfileBox from "@/components/common/profile-box";
 import UserInfo from "@/components/common/user-info";
-import MainLayouts from "@/layouts/main";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
+import { userInfoModel, userProfileModel } from "@/models/home";
 
-const PagesHome: React.FC = () => {
-  const userProfile = {
-    name: "Jessica M. Tan",
-    age: 28,
-    image: "/images/sample-user.jpg",
-    isFemale: true,
-  };
+type propTypes = {
+  userProfile: userProfileModel;
+  userInfo: userInfoModel;
+};
 
-  const userInfo = {
-    info: [
-      { title: "Gender", value: "Female" },
-      { title: "Height", value: "175 cm" },
-      { title: "Weight", value: "72 kg" },
-    ],
-    additional: [
-      { title: "Health Conditions", value: "None" },
-      { title: "Dietary Preference", value: "Balanced Diet" },
-    ],
-  };
-
+const ContentsHome: React.FC<propTypes> = ({ userProfile, userInfo }) => {
   return (
-    <MainLayouts>
+    <>
       <div className="mt-2">
-        <ProfileBox {...userProfile} />
+        <ProfileBox
+          {...userProfile}
+          isFemale={userProfile.active_menstrual_cycle}
+        />
       </div>
       <div className="mt-6">
         <IconTitle title="User Info" icon="/icons/user.svg" />
@@ -131,8 +120,8 @@ const PagesHome: React.FC = () => {
           </SwiperSlide>
         </Swiper>
       </div>
-    </MainLayouts>
+    </>
   );
 };
 
-export default PagesHome;
+export default ContentsHome;

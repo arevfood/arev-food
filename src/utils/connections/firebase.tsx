@@ -1,7 +1,15 @@
 import { FirebaseOptions, initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
-import { getAuth } from "firebase/auth";
+import {
+  Auth,
+  browserLocalPersistence,
+  getAuth,
+  indexedDBLocalPersistence,
+  initializeAuth,
+  setPersistence,
+} from "firebase/auth";
 import { getStorage } from "firebase/storage";
+import { Capacitor } from "@capacitor/core";
 
 const firebaseConfig: FirebaseOptions = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -14,6 +22,26 @@ const firebaseConfig: FirebaseOptions = {
 };
 
 const firebaseApp = initializeApp(firebaseConfig);
+
+let auth: Auth;
+if (Capacitor.isNativePlatform()) {
+  auth = initializeAuth(firebaseApp, {
+    persistence: indexedDBLocalPersistence,
+  });
+  console.log("[Firebase] 📱 Auth set up for IndexedDB (mobile).");
+} else {
+  auth = getAuth(firebaseApp);
+  setPersistence(auth, browserLocalPersistence)
+    .then(() => {
+      console.log("Persistance Firebase Auth set up for local (web).");
+    })
+    .catch((error) => {
+      console.error(
+        "Error while configuring Firebase Auth persistence:",
+        error
+      );
+    });
+}
 
 export const firebaseDb = getFirestore(firebaseApp);
 export const firebaseAuth = getAuth(firebaseApp);

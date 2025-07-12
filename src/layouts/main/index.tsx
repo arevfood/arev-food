@@ -3,20 +3,28 @@ import { ReactNode } from "react";
 import MainHeader from "@/layouts/header";
 import MainFooter from "@/layouts/footer";
 
-const MainLayouts: React.FC<{ children: ReactNode }> = ({
-  children,
-}: {
+type propTypes = {
   children: ReactNode;
+  transparent?: boolean;
+  fullWidth?: boolean;
+};
+
+const MainLayouts: React.FC<propTypes> = ({
+  children,
+  transparent = false,
+  fullWidth = false,
 }) => {
   return (
     <>
       <IonPage>
-        <MainHeader />
+        <MainHeader transparent={transparent} />
         <IonContent
           fullscreen
-          style={{ "--background": "var(--color-bg_color_1)" }}
+          style={{
+            "--background": "var(--color-bg_color_1)",
+          }}
         >
-          <div className="px-4">{children}</div>
+          <div className={!fullWidth ? "px-4" : ""}>{children}</div>
         </IonContent>
         <MainFooter />
       </IonPage>

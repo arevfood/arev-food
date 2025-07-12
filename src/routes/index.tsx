@@ -10,6 +10,7 @@ import PagesSignup from "@/pages/signup";
 import PagesSearch from "@/pages/search";
 import PagesFavorite from "@/pages/favorite";
 import PagesSetting from "@/pages/setting";
+import PageFoodDetails from "@/pages/food-details";
 
 const MainRoute: React.FC = () => {
   return (
@@ -37,6 +38,11 @@ const MainRoute: React.FC = () => {
           exact
           path={"/setting"}
           render={() => <PrivateRoute component={<PagesSetting />} />}
+        />
+        <Route
+          exact
+          path={"/food/:id"}
+          render={() => <PrivateRoute component={<PageFoodDetails />} />}
         />
         <Route exact path={"/about"} component={PagesAbout} />
       </IonRouterOutlet>

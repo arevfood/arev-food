@@ -1,5 +1,5 @@
 import Card from "@/components/wrapper/card";
-import { IonIcon, IonImg } from "@ionic/react";
+import { IonIcon, IonImg, IonRouterLink } from "@ionic/react";
 import TextDescription from "@/components/common/text-description";
 
 type propTypes = {
@@ -7,6 +7,7 @@ type propTypes = {
   title: string;
   description: string;
   isFav?: boolean;
+  slug: string;
 };
 
 const FoodCard: React.FC<propTypes> = ({
@@ -14,28 +15,31 @@ const FoodCard: React.FC<propTypes> = ({
   title,
   description,
   isFav = false,
+  slug,
 }) => {
   return (
-    <Card>
-      <div className="relative">
-        <IonImg src={image} className="object-cover h-full w-full" />
-        <div className="absolute top-[8px] right-[8px]">
-          <IonIcon
-            src="/icons/heart.svg"
-            className={`${
-              isFav ? "text-[#FF2323]" : "text-black_color/40"
-            } text-[24px]`}
+    <IonRouterLink routerLink={`/food/${slug}`}>
+      <Card className="cursor-pointer">
+        <div className="relative">
+          <IonImg src={image} className="object-cover h-full w-full" />
+          <div className="absolute top-[8px] right-[8px]">
+            <IonIcon
+              src="/icons/heart.svg"
+              className={`${
+                isFav ? "text-[#FF2323]" : "text-black_color/40"
+              } text-[24px]`}
+            />
+          </div>
+        </div>
+        <div className="py-4 px-3 text-left">
+          <TextDescription
+            title={title}
+            description={description}
+            ellipsisDescription
           />
         </div>
-      </div>
-      <div className="py-4 px-3 text-left">
-        <TextDescription
-          title={title}
-          description={description}
-          ellipsisDescription
-        />
-      </div>
-    </Card>
+      </Card>
+    </IonRouterLink>
   );
 };
 

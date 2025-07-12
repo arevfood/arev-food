@@ -17,7 +17,10 @@ const ContentLogin: React.FC = () => {
   const { onSignin } = useAuth();
 
   const onSubmit: SubmitHandler<inputProps> = async (data) => {
-    await onSignin({ email: data.username, password: data.password });
+    await onSignin({
+      email: data.username,
+      password: data.password,
+    });
     router.replace("/");
   };
 

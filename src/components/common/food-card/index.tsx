@@ -21,7 +21,7 @@ const FoodCard: React.FC<propTypes> = ({
     <IonRouterLink routerLink={`/food/${slug}`}>
       <Card className="cursor-pointer">
         <div className="relative">
-          <IonImg src={image} className="object-cover h-full w-full" />
+          <IonImg src={image} className="object-cover h-[125px] w-full" />
           <div className="absolute top-[8px] right-[8px]">
             <IonIcon
               src="/icons/heart.svg"

@@ -1,9 +1,10 @@
+import ContentsFavorite from "@/contents/favorite";
 import MainLayouts from "@/layouts/main";
 
 const PagesFavorite: React.FC = () => {
   return (
-    <MainLayouts>
-      <div>Favorite</div>
+    <MainLayouts transparent fullWidth>
+      <ContentsFavorite />
     </MainLayouts>
   );
 };

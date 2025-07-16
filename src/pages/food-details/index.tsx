@@ -1,11 +1,8 @@
 import ContentsFoodDetails from "@/contents/food-details";
 import MainLayouts from "@/layouts/main";
 import { FoodDetailsModel } from "@/models/food-details";
-import { useParams } from "react-router";
 
 const PageFoodDetails: React.FC = () => {
-  const params = useParams();
-
   const sampleData: FoodDetailsModel = {
     title: "Raw Almond",
     description:
@@ -32,7 +29,6 @@ const PageFoodDetails: React.FC = () => {
     ],
   };
 
-  console.log("params", params);
   return (
     <MainLayouts transparent fullWidth>
       <ContentsFoodDetails data={sampleData} />

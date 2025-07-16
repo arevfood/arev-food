@@ -26,7 +26,7 @@ const ContentsFoodDetails: React.FC<propTypes> = ({ isFav, data }) => {
       <div className="top-0 left-0 fixed">
         <IonImg src="/images/food-01.jpg" />
       </div>
-      <div className="rounded-tl-[24px] rounded-tr-[24px] bg-bg_color_1 px-8 py-6 mt-[180px] z-[10] relative">
+      <div className="rounded-tl-[24px] rounded-tr-[24px] bg-bg_color_1 px-4 py-6 mt-[180px] z-[10] relative">
         <div className="relative">
           <TextDescription
             title={data.title || "Food Name"}

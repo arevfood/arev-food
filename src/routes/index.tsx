@@ -11,6 +11,7 @@ import PagesSearch from "@/pages/search";
 import PagesFavorite from "@/pages/favorite";
 import PagesSetting from "@/pages/setting";
 import PageFoodDetails from "@/pages/food-details";
+import PagesRecommend from "@/pages/recommend";
 
 const MainRoute: React.FC = () => {
   return (
@@ -33,6 +34,11 @@ const MainRoute: React.FC = () => {
           exact
           path={"/favorite"}
           render={() => <PrivateRoute component={<PagesFavorite />} />}
+        />
+        <Route
+          exact
+          path={"/recommendation"}
+          render={() => <PrivateRoute component={<PagesRecommend />} />}
         />
         <Route
           exact

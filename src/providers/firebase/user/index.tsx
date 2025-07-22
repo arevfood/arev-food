@@ -26,7 +26,6 @@ export const FIREBASE_SIGNUP = async ({
 
     const userData = await getDoc(docRef);
     const result = userData.data();
-    console.log("result", result);
 
     return result;
   } catch (error) {

@@ -1,0 +1,16 @@
+.checkbox {
+  ion-checkbox {
+    --checkbox-background-checked: var(--color-primary_color);
+    --checkbox-background: transparent;
+    --checkmark-color: var(--color-white_color);
+  }
+
+  ion-checkbox::part(container) {
+    border-radius: 6px;
+    border: 2px solid var(--color-primary_color);
+  }
+
+  ion-checkbox::part(label) {
+    margin-inline-start: 5px !important;
+  }
+}

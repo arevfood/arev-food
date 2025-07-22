@@ -35,13 +35,11 @@ export const useAuth = () => {
 
   const { mutateAsync: onSignin, isPending: onSigninLoading } = useMutation({
     mutationFn: useCallback(async (payload: UserLogin) => {
-      console.log("onsignin");
       const session = await signInWithEmailAndPassword(
         firebaseAuth,
         payload.email,
         payload.password
       );
-      console.log("session", session);
       return session;
     }, []),
     onSuccess: (result) => {

@@ -4,7 +4,7 @@ import { ReactNode } from "react";
 type props = {
   children: ReactNode;
   onClick?: () => void;
-  color?: "WHITE" | "ORANGE";
+  color?: "WHITE" | "ORANGE" | "ORANGE_OUTLINE";
 };
 
 const MainButton: React.FC<props> = ({
@@ -28,6 +28,17 @@ const MainButton: React.FC<props> = ({
       "--background-activated": "var(--colors-white_color)",
       "--background-hover": "var(--colors-white_color)",
       "--border-radius": "999px",
+    },
+    ORANGE_OUTLINE: {
+      color: "var(--color-primary_color)",
+      "--background": "transparent",
+      "--background-focused": "transparent",
+      "--background-activated": "transparent",
+      "--background-hover": "transparent",
+      "--border-radius": "999px",
+      "--border-color": "var(--color-primary_color)",
+      "--border-style": "solid",
+      "--border-width": "2px",
     },
   };
 

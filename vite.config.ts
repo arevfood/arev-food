@@ -16,4 +16,14 @@ export default defineConfig({
     environment: "jsdom",
     setupFiles: "./src/setupTests.ts",
   },
+  css: {
+    preprocessorOptions: {
+      sass: {
+        api: "modern",
+      },
+      scss: {
+        api: "modern",
+      },
+    },
+  },
 });

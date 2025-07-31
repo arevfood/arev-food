@@ -12,6 +12,11 @@ import PagesFavorite from "@/pages/favorite";
 import PagesSetting from "@/pages/setting";
 import PageFoodDetails from "@/pages/food-details";
 import PagesRecommend from "@/pages/recommend";
+import PagesSettingProfile from "@/pages/setting/profile";
+import PagesSettingHealthData from "@/pages/setting/health-data";
+import PagesSettingChangePassword from "@/pages/setting/change-password";
+import PagesSettingDeleteAccount from "@/pages/setting/delete-account";
+import PagesSettingMenstrualCycle from "@/pages/setting/menstrual-cycle";
 
 const MainRoute: React.FC = () => {
   return (
@@ -44,6 +49,37 @@ const MainRoute: React.FC = () => {
           exact
           path={"/setting"}
           render={() => <PrivateRoute component={<PagesSetting />} />}
+        />
+        <Route
+          exact
+          path={"/setting/profile"}
+          render={() => <PrivateRoute component={<PagesSettingProfile />} />}
+        />
+        <Route
+          exact
+          path={"/setting/health-data"}
+          render={() => <PrivateRoute component={<PagesSettingHealthData />} />}
+        />
+        <Route
+          exact
+          path={"/setting/change-password"}
+          render={() => (
+            <PrivateRoute component={<PagesSettingChangePassword />} />
+          )}
+        />
+        <Route
+          exact
+          path={"/setting/delete-account"}
+          render={() => (
+            <PrivateRoute component={<PagesSettingDeleteAccount />} />
+          )}
+        />
+        <Route
+          exact
+          path={"/setting/menstrual-cycle"}
+          render={() => (
+            <PrivateRoute component={<PagesSettingMenstrualCycle />} />
+          )}
         />
         <Route
           exact

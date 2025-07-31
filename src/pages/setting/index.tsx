@@ -1,21 +1,12 @@
-import MainButton from "@/components/common/button";
+import ContentsSettings from "@/contents/settings";
 import MainLayouts from "@/layouts/main";
-import { firebaseAuth } from "@/utils/connections/firebase";
-import { signOut } from "firebase/auth";
-import { useHistory } from "react-router";
 
 const PagesSetting: React.FC = () => {
-  const router = useHistory();
   return (
     <MainLayouts>
-      <MainButton
-        onClick={async () => {
-          router.replace("/login");
-          signOut(firebaseAuth);
-        }}
-      >
-        Logout
-      </MainButton>
+      <div className="mt-4">
+        <ContentsSettings />
+      </div>
     </MainLayouts>
   );
 };

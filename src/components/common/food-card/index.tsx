@@ -8,6 +8,7 @@ type propTypes = {
   title: string;
   description: string;
   isFav?: boolean;
+  onFavorite?: () => void;
   slug: string;
   loading?: boolean;
 };
@@ -18,35 +19,41 @@ const FoodCard: React.FC<propTypes> = ({
   description,
   isFav = false,
   loading = false,
+  onFavorite,
   slug,
 }) => {
   return (
     <>
       {loading && <FoodCardSkeleton />}
       {!loading && (
-        <IonRouterLink routerLink={`/food/${slug}`}>
-          <Card className="cursor-pointer h-full">
-            <div className="relative">
-              <IonImg src={image} className="object-cover h-[125px] w-full" />
-              <div className="absolute top-[8px] right-[8px]">
-                <IonIcon
-                  src="/icons/heart.svg"
-                  className={`${
-                    isFav ? "text-[#FF2323]" : "text-black_color/40"
-                  } text-[24px]`}
+        <div className="relative">
+          <div className="absolute top-[8px] right-[8px] z-10">
+            <IonIcon
+              src="/icons/heart.svg"
+              className={`${
+                isFav ? "text-[#FF2323]" : "text-black_color/40"
+              } text-[24px]`}
+              onClick={() => {
+                onFavorite?.();
+              }}
+            />
+          </div>
+          <IonRouterLink routerLink={`/food/${slug}`}>
+            <Card className="cursor-pointer h-full">
+              <div className="relative">
+                <IonImg src={image} className="object-cover h-[125px] w-full" />
+              </div>
+              <div className="py-4 px-3 text-left">
+                <TextDescription
+                  title={title}
+                  description={description}
+                  ellipsisDescription
+                  ellipsisTitle
                 />
               </div>
-            </div>
-            <div className="py-4 px-3 text-left">
-              <TextDescription
-                title={title}
-                description={description}
-                ellipsisDescription
-                ellipsisTitle
-              />
-            </div>
-          </Card>
-        </IonRouterLink>
+            </Card>
+          </IonRouterLink>
+        </div>
       )}
     </>
   );

@@ -1,5 +1,5 @@
 import MainNotification from "@/components/common/notifications";
-import { UserLogin, UserSignup } from "@/models/user";
+import { SessionUser, UserLogin, UserSignup } from "@/models/user";
 import { FIREBASE_SIGNUP } from "@/providers/firebase/user";
 import { firebaseAuth } from "@/utils/connections/firebase";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -87,7 +87,7 @@ export const useAuth = () => {
   });
 
   return {
-    session: data,
+    session: data as SessionUser,
     loading:
       fetchLoading || onSigninLoading || onSignOutLoading || onSignupLoading,
     onSignin,

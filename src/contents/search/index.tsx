@@ -3,6 +3,7 @@ import IconTitle from "@/components/common/icon-title";
 import SearchInput from "@/components/common/search-input";
 import { useFoodFilterCtx } from "@/context/food-filter";
 import { foodFilterData } from "@/data/food-filter";
+import { useFavorite } from "@/hooks/data/favorite";
 import { useFoods } from "@/hooks/data/food";
 import { FoodQueryDataModel } from "@/models/food-query";
 import { useCallback, useEffect, useState } from "react";
@@ -20,6 +21,7 @@ const ContentSearch: React.FC = () => {
     onGetFoodRecommendation,
     loading: foodsLoading,
   } = useFoods({});
+  const { data: favoriteData, onFavorite } = useFavorite();
   const { value: filterValue } = useFoodFilterCtx();
 
   const [searchResult, setSearchResult] = useState<FoodQueryDataModel[]>([]);
@@ -81,6 +83,12 @@ const ContentSearch: React.FC = () => {
                           image={food.image_url}
                           title={food.name}
                           description={food.food_details?.description || "-"}
+                          isFav={
+                            favoriteData?.findIndex(
+                              (findFood) => findFood.id === food.id
+                            ) !== -1 && Boolean(food.id)
+                          }
+                          onFavorite={() => onFavorite({ food_id: food.id })}
                           loading={foodsLoading}
                         />
                       </div>

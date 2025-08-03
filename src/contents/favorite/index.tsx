@@ -1,10 +1,13 @@
 import FoodCard from "@/components/common/food-card";
 import IconTitle from "@/components/common/icon-title";
+import { useFavorite } from "@/hooks/data/favorite";
 import { IonImg } from "@ionic/react";
 
 type propTypes = {};
 
 const ContentsFavorite: React.FC<propTypes> = () => {
+  const { data: favoriteList, onFavorite } = useFavorite();
+
   return (
     <>
       <div className="top-0 left-0 fixed">
@@ -18,34 +21,19 @@ const ContentsFavorite: React.FC<propTypes> = () => {
             icon="/icons/thumbs-up.svg"
           />
           <div className="grid grid-cols-2 gap-4 mt-4">
-            <FoodCard
-              slug="raw-almonds-2"
-              image="/images/food-01.jpg"
-              title="Raw Almonds"
-              description="Naturally nutrient-dense and perfect for snacking. Great source of vitamin E and healthy fats."
-              isFav
-            />
-            <FoodCard
-              slug="raw-almonds-2"
-              image="/images/food-01.jpg"
-              title="Raw Almonds"
-              description="Naturally nutrient-dense and perfect for snacking. Great source of vitamin E and healthy fats."
-              isFav
-            />
-            <FoodCard
-              slug="raw-almonds-2"
-              image="/images/food-01.jpg"
-              title="Raw Almonds"
-              description="Naturally nutrient-dense and perfect for snacking. Great source of vitamin E and healthy fats."
-              isFav
-            />
-            <FoodCard
-              slug="raw-almonds-2"
-              image="/images/food-01.jpg"
-              title="Raw Almonds"
-              description="Naturally nutrient-dense and perfect for snacking. Great source of vitamin E and healthy fats."
-              isFav
-            />
+            {favoriteList &&
+              favoriteList.map((food) => {
+                return (
+                  <FoodCard
+                    slug={food.id}
+                    image={food.image_url || ""}
+                    title={food.name}
+                    description={food.description}
+                    onFavorite={() => onFavorite({ food_id: food.id })}
+                    isFav
+                  />
+                );
+              })}
           </div>
         </div>
       </div>

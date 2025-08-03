@@ -5,21 +5,38 @@ import ProfileBox from "@/components/common/profile-box";
 import UserInfo from "@/components/common/user-info";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
-import { userInfoModel, userProfileModel } from "@/models/home";
+import { useFavorite } from "@/hooks/data/favorite";
+import { useUser } from "@/hooks/data/user";
 
-type propTypes = {
-  userProfile: userProfileModel;
-  userInfo: userInfoModel;
-};
+type propTypes = {};
 
-const ContentsHome: React.FC<propTypes> = ({ userProfile, userInfo }) => {
+const ContentsHome: React.FC<propTypes> = () => {
+  const { data: userDetails } = useUser();
+  const { data: favoriteList, onFavorite } = useFavorite();
+
+  const userProfile = {
+    name: userDetails?.fullname || "John Doe",
+    age: 28,
+    image: "/images/sample-user.jpg",
+    isFemale: true,
+  };
+
+  const userInfo = {
+    info: [
+      { title: "Gender", value: "Female" },
+      { title: "Height", value: "175 cm" },
+      { title: "Weight", value: "72 kg" },
+    ],
+    additional: [
+      { title: "Health Conditions", value: "None" },
+      { title: "Dietary Preference", value: "Balanced Diet" },
+    ],
+  };
+
   return (
     <>
       <div className="mt-2">
-        <ProfileBox
-          {...userProfile}
-          isFemale={userProfile.active_menstrual_cycle}
-        />
+        <ProfileBox {...userProfile} isFemale={userProfile.isFemale} />
       </div>
       <div className="mt-6">
         <IconTitle title="User Info" icon="/icons/user.svg" />
@@ -91,33 +108,21 @@ const ContentsHome: React.FC<propTypes> = ({ userProfile, userInfo }) => {
       </div>
       <div className="mt-4 mb-6">
         <Swiper slidesPerView={2.2} spaceBetween={16} centeredSlides={false}>
-          <SwiperSlide>
-            <FoodCard
-              slug="raw-almonds-1"
-              image="/images/food-01.jpg"
-              title="Raw Almonds"
-              description="Naturally nutrient-dense and perfect for snacking. Great source of vitamin E and healthy fats."
-              isFav
-            />
-          </SwiperSlide>
-          <SwiperSlide>
-            <FoodCard
-              slug="raw-almonds-2"
-              image="/images/food-01.jpg"
-              title="Raw Almonds"
-              description="Naturally nutrient-dense and perfect for snacking. Great source of vitamin E and healthy fats."
-              isFav
-            />
-          </SwiperSlide>
-          <SwiperSlide>
-            <FoodCard
-              slug="raw-almonds-3"
-              image="/images/food-01.jpg"
-              title="Raw Almonds"
-              description="Naturally nutrient-dense and perfect for snacking. Great source of vitamin E and healthy fats."
-              isFav
-            />
-          </SwiperSlide>
+          {favoriteList &&
+            favoriteList.map((item) => {
+              return (
+                <SwiperSlide>
+                  <FoodCard
+                    slug={item.id}
+                    image={item.image_url || ""}
+                    title={item.name}
+                    description={item.description}
+                    onFavorite={() => onFavorite({ food_id: item.id })}
+                    isFav
+                  />
+                </SwiperSlide>
+              );
+            })}
         </Swiper>
       </div>
     </>

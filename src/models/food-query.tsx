@@ -23,5 +23,6 @@ export interface FoodDetailsQueryDataModel {
   fiber_g: number;
   origin?: string[];
   common_uses?: string[];
-  image_url?: string[];
+  image_url?: string;
+  id: string;
 }

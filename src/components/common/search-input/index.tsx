@@ -6,20 +6,28 @@ import { FilterListModel } from "@/models/filter-list";
 import CustomCheckbox from "@/components/common/checkbox";
 import MainButton from "@/components/common/button";
 import { useLocation, useHistory } from "react-router";
+import { useFoodFilterCtx } from "@/context/food-filter";
 
 type propTypes = {
   filterList: FilterListModel[];
+  onFilter?: () => void;
+  onReset?: () => void;
 };
 
-const SearchInput: React.FC<propTypes> = ({ filterList }) => {
+const SearchInput: React.FC<propTypes> = ({
+  filterList,
+  onFilter,
+  onReset,
+}) => {
   const router = useHistory();
   const location = useLocation();
+  const { setValue: setFilterValue } = useFoodFilterCtx();
 
   const [searchInput, setSearchInput] = useState("");
   const [openFilter, setOpenFilter] = useState(false);
   const [selectedFilter, setSelectedFilter] = useState<{
-    [parent: string]: string[];
-  }>({ health_condition: [] });
+    [key: string]: string[];
+  }>({ health_conditions: [] });
 
   const handleSelectFilter = ({
     key,
@@ -40,21 +48,33 @@ const SearchInput: React.FC<propTypes> = ({ filterList }) => {
     }
 
     setSelectedFilter(newSelectedFilter);
+    setFilterValue(newSelectedFilter);
+  };
+
+  const handleSearchQuery = () => {
+    const searchParams = new URLSearchParams(location.search);
+    searchParams.set("query", searchInput);
+    router.push({
+      pathname: location.pathname,
+      search: `?${searchParams.toString()}`,
+    });
   };
 
   const handleSearch = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
-      const searchParams = new URLSearchParams(location.search);
-      searchParams.set("query", searchInput);
-      router.push({
-        pathname: location.pathname,
-        search: `?${searchParams.toString()}`,
-      });
+      handleSearchQuery();
     }
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchInput(event.target.value);
+  };
+
+  const handleResetFilter = () => {
+    setSelectedFilter({ health_conditions: [] });
+    setFilterValue({});
+    setOpenFilter(false);
+    onReset?.();
   };
 
   return (
@@ -66,6 +86,7 @@ const SearchInput: React.FC<propTypes> = ({ filterList }) => {
           placeholder="Search..."
           onChange={handleChange}
           onKeyDown={handleSearch}
+          disabled={openFilter}
         />{" "}
         <div className="absolute translate-y-[-50%] top-[50%] right-[20px] flex items-center bg-white">
           <IonIcon
@@ -80,39 +101,58 @@ const SearchInput: React.FC<propTypes> = ({ filterList }) => {
         </div>
       </div>
       {openFilter && (
-        <div className="px-4 py-6 bg-white text-black rounded-[8px] absolute w-full z-10">
-          {filterList.map((item) => {
-            return (
-              <div key={uuid()} className="mb-6">
-                <div className="font-heading font-bold mb-2">{item.label}</div>
-                <div className="flex flex-wrap gap-4">
-                  {item.items.map((list) => {
-                    return (
-                      <CustomCheckbox
-                        label={list.label}
-                        onChange={() => {
-                          handleSelectFilter({
-                            key: item.key,
-                            value: list.key,
-                          });
-                        }}
-                      />
-                    );
-                  })}
-                </div>
-              </div>
-            );
-          })}
-          <div className="flex flex-wrap gap-4 flex-col">
-            <MainButton color="ORANGE">Apply Filter</MainButton>
-            <MainButton
-              color="ORANGE_OUTLINE"
-              onClick={() => {
-                setSelectedFilter({ health_condition: [] });
-              }}
-            >
-              Clear Filter
-            </MainButton>
+        <div className="px-4 bg-white text-black rounded-[8px] absolute w-full z-10  overflow-y-scroll">
+          <div className=" relative">
+            <div className="h-[40vh] overflow-y-scroll pt-6">
+              {filterList.map((item) => {
+                return (
+                  <div key={uuid()} className="mb-6">
+                    <div className="font-heading font-bold mb-2">
+                      {item.label}
+                    </div>
+                    <div className="flex flex-wrap gap-4">
+                      {item.items.map((list) => {
+                        return (
+                          <CustomCheckbox
+                            label={list.label}
+                            checked={
+                              selectedFilter[item.key]?.includes(list.key) ||
+                              false
+                            }
+                            onChange={() => {
+                              handleSelectFilter({
+                                key: item.key,
+                                value: list.key,
+                              });
+                            }}
+                          />
+                        );
+                      })}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+            <div className="flex flex-wrap gap-4 flex-col py-6">
+              <MainButton
+                color="ORANGE"
+                onClick={() => {
+                  setOpenFilter(false);
+                  handleSearchQuery();
+                  onFilter?.();
+                }}
+              >
+                Apply Filter
+              </MainButton>
+              <MainButton
+                color="ORANGE_OUTLINE"
+                onClick={() => {
+                  handleResetFilter();
+                }}
+              >
+                Clear Filter
+              </MainButton>
+            </div>
           </div>
         </div>
       )}

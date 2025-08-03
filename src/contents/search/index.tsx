@@ -1,45 +1,68 @@
 import FoodCard from "@/components/common/food-card";
 import IconTitle from "@/components/common/icon-title";
 import SearchInput from "@/components/common/search-input";
-import { FilterListModel } from "@/models/filter-list";
+import { useFoodFilterCtx } from "@/context/food-filter";
+import { foodFilterData } from "@/data/food-filter";
+import { useFoods } from "@/hooks/data/food";
+import { FoodQueryDataModel } from "@/models/food-query";
+import { useCallback, useEffect, useState } from "react";
 import { useLocation } from "react-router";
 import { Swiper, SwiperSlide } from "swiper/react";
 
 const ContentSearch: React.FC = () => {
   const location = useLocation();
   const query = new URLSearchParams(location.search).get("query");
+  const [isSearch, setIsSearch] = useState(!!query);
 
-  const filterList: FilterListModel[] = [
-    {
-      label: "Health Conditions",
-      key: "health_conditions",
-      items: [
-        { key: "diabetes_friendly", label: "Diabetes-Friendly" },
-        { key: "iron_rich", label: "Iron Rich" },
-      ],
+  const {
+    data: foodsData,
+    onSearch,
+    onGetFoodRecommendation,
+    loading: foodsLoading,
+  } = useFoods({});
+  const { value: filterValue } = useFoodFilterCtx();
+
+  const [searchResult, setSearchResult] = useState<FoodQueryDataModel[]>([]);
+  const handleSearch = useCallback(
+    async (search: string) => {
+      if (query) {
+        const data = await onSearch({
+          query: search,
+        });
+        setSearchResult(data);
+        setIsSearch(true);
+      }
     },
-    {
-      label: "Food Category",
-      key: "food_category",
-      items: [
-        { label: "Fruits", key: "fruits" },
-        { label: "Vegetable", key: "vegetable" },
-      ],
-    },
-    {
-      label: "Dietary Preference",
-      key: "dietary_preference",
-      items: [
-        { label: "Balanced Diet", key: "balanced_diet" },
-        { label: "Vegan", key: "vegan" },
-      ],
-    },
-  ];
+    [onSearch, query]
+  );
+
+  const handleFilter = useCallback(async () => {
+    if (filterValue) {
+      const data = await onGetFoodRecommendation(filterValue);
+      setSearchResult(data);
+      setIsSearch(true);
+    }
+  }, [filterValue, onGetFoodRecommendation]);
+
+  useEffect(() => {
+    if (query) {
+      handleSearch(query);
+    }
+  }, [handleSearch, query]);
 
   return (
     <>
-      <SearchInput filterList={filterList} />
-      {!query && (
+      <SearchInput
+        filterList={foodFilterData}
+        onFilter={() => {
+          handleFilter();
+        }}
+        onReset={() => {
+          setSearchResult([]);
+          setIsSearch(false);
+        }}
+      />
+      {!isSearch && (
         <>
           <IconTitle title="Popular Result" icon="/icons/search-love.svg" />
           <div className="mt-4">
@@ -48,73 +71,40 @@ const ContentSearch: React.FC = () => {
               spaceBetween={16}
               centeredSlides={false}
             >
-              <SwiperSlide>
-                <FoodCard
-                  slug="raw-almonds-1"
-                  image="/images/food-01.jpg"
-                  title="Raw Almonds"
-                  description="Naturally nutrient-dense and perfect for snacking. Great source of vitamin E and healthy fats."
-                />
-              </SwiperSlide>
-              <SwiperSlide>
-                <FoodCard
-                  slug="raw-almonds-2"
-                  image="/images/food-01.jpg"
-                  title="Raw Almonds"
-                  description="Naturally nutrient-dense and perfect for snacking. Great source of vitamin E and healthy fats."
-                />
-              </SwiperSlide>
-              <SwiperSlide>
-                <FoodCard
-                  slug="raw-almonds-3"
-                  image="/images/food-01.jpg"
-                  title="Raw Almonds"
-                  description="Naturally nutrient-dense and perfect for snacking. Great source of vitamin E and healthy fats."
-                />
-              </SwiperSlide>
+              {foodsData &&
+                foodsData.map((food, index) => {
+                  return (
+                    <SwiperSlide key={index}>
+                      <div className="w-full">
+                        <FoodCard
+                          slug={food.id}
+                          image={food.image_url}
+                          title={food.name}
+                          description={food.food_details?.description || "-"}
+                          loading={foodsLoading}
+                        />
+                      </div>
+                    </SwiperSlide>
+                  );
+                })}
             </Swiper>
           </div>
         </>
       )}
 
-      {query && (
+      {isSearch && (
         <div className="grid grid-cols-2 gap-4 pb-6">
-          <FoodCard
-            slug="raw-almonds-1"
-            image="/images/food-01.jpg"
-            title="Raw Almonds"
-            description="Naturally nutrient-dense and perfect for snacking. Great source of vitamin E and healthy fats."
-          />
-          <FoodCard
-            slug="raw-almonds-2"
-            image="/images/food-01.jpg"
-            title="Raw Almonds"
-            description="Naturally nutrient-dense and perfect for snacking. Great source of vitamin E and healthy fats."
-          />
-          <FoodCard
-            slug="raw-almonds-3"
-            image="/images/food-01.jpg"
-            title="Raw Almonds"
-            description="Naturally nutrient-dense and perfect for snacking. Great source of vitamin E and healthy fats."
-          />
-          <FoodCard
-            slug="raw-almonds-3"
-            image="/images/food-01.jpg"
-            title="Raw Almonds"
-            description="Naturally nutrient-dense and perfect for snacking. Great source of vitamin E and healthy fats."
-          />
-          <FoodCard
-            slug="raw-almonds-3"
-            image="/images/food-01.jpg"
-            title="Raw Almonds"
-            description="Naturally nutrient-dense and perfect for snacking. Great source of vitamin E and healthy fats."
-          />
-          <FoodCard
-            slug="raw-almonds-3"
-            image="/images/food-01.jpg"
-            title="Raw Almonds"
-            description="Naturally nutrient-dense and perfect for snacking. Great source of vitamin E and healthy fats."
-          />
+          {searchResult.map((food) => {
+            return (
+              <FoodCard
+                slug={food.id}
+                image={food.image_url}
+                title={food.name}
+                description={food.food_details?.description || "-"}
+                loading={foodsLoading}
+              />
+            );
+          })}
         </div>
       )}
     </>

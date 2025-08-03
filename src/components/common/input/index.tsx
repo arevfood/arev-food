@@ -9,6 +9,7 @@ type props = {
   iconClass?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
+  disabled?: boolean;
 };
 
 const CustomInput: React.FC<props> = ({
@@ -19,6 +20,7 @@ const CustomInput: React.FC<props> = ({
   iconClass,
   onChange = (_e: React.ChangeEvent<HTMLInputElement>) => {},
   onKeyDown = (_e: React.KeyboardEvent<HTMLInputElement>) => {},
+  disabled = false,
   ...props
 }) => {
   return (
@@ -36,6 +38,7 @@ const CustomInput: React.FC<props> = ({
           className="grow "
           onChange={onChange}
           onKeyDown={onKeyDown}
+          disabled={disabled}
         />
       </div>
       {errorMessage && (

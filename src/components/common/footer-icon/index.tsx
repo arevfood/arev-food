@@ -13,7 +13,14 @@ const FooterIcon: React.FC<propTypes> = ({ active = false, icon, link }) => {
   return (
     <IonButton
       className=""
-      style={{ "--ion-toolbar-color": "transparent", "--box-shadow": "none" }}
+      style={{
+        "--ion-toolbar-color": "transparent",
+        "--box-shadow": "none",
+        "--background": "transparent",
+        "--background-hover": "transparent",
+        "--background-focused": "transparent",
+        "--background-activated": "transparent",
+      }}
       onClick={() => {
         if (link) router.replace(link);
       }}

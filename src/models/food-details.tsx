@@ -1,8 +1,9 @@
 export interface FoodDetailsModel {
-  title: string;
+  name: string;
   description: string;
-  nutritional_information: { title: string; value: string }[];
-  health_benefit: { label: string }[];
-  better_way_to_eat: { label: string }[];
+  image_url: string;
+  nutritional_information: { title: string; value: string; unit: string }[];
+  health_benefit: string[];
+  better_way_to_eat: string[];
   best_time_to_eat: { title: string; value: string }[];
 }

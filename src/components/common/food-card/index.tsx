@@ -1,7 +1,8 @@
 import Card from "@/components/wrapper/card";
-import { IonIcon, IonImg, IonRouterLink } from "@ionic/react";
+import { IonIcon, IonRouterLink } from "@ionic/react";
 import TextDescription from "@/components/common/text-description";
 import FoodCardSkeleton from "./skeleton";
+import CustomImage from "@/components/common/image";
 
 type propTypes = {
   image: string;
@@ -27,7 +28,7 @@ const FoodCard: React.FC<propTypes> = ({
       {loading && <FoodCardSkeleton />}
       {!loading && (
         <div className="relative">
-          <div className="absolute top-[8px] right-[8px] z-10">
+          <div className="absolute top-[8px] right-[8px] z-1">
             <IonIcon
               src="/icons/heart.svg"
               className={`${
@@ -40,8 +41,8 @@ const FoodCard: React.FC<propTypes> = ({
           </div>
           <IonRouterLink routerLink={`/food/${slug}`}>
             <Card className="cursor-pointer h-full">
-              <div className="relative">
-                <IonImg src={image} className="object-cover h-[125px] w-full" />
+              <div className="h-[125px] relative">
+                <CustomImage image={image} />
               </div>
               <div className="py-4 px-3 text-left">
                 <TextDescription

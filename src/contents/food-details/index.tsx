@@ -1,21 +1,31 @@
 import IconTitle from "@/components/common/icon-title";
+import CustomImage from "@/components/common/image";
 import TextDescription from "@/components/common/text-description";
 import Card from "@/components/wrapper/card";
+import { useFavorite } from "@/hooks/data/favorite";
 import { FoodDetailsModel } from "@/models/food-details";
-import { IonIcon, IonImg } from "@ionic/react";
+import { IonIcon } from "@ionic/react";
+import { useParams } from "react-router";
 
 type propTypes = {
-  isFav?: boolean;
   data: FoodDetailsModel;
 };
 
-const ContentsFoodDetails: React.FC<propTypes> = ({ isFav, data }) => {
+const ContentsFoodDetails: React.FC<propTypes> = ({ data }) => {
+  const { id }: { id: string } = useParams();
+  const { data: favoriteList, onFavorite } = useFavorite();
+  const isFav = favoriteList?.findIndex((food) => food.id === id) !== -1;
+
   const ContentItem = ({ title, value }: { title: string; value: string }) => {
     return (
       <>
-        <div className="flex justify-between text-black mb-6 last:mb-0">
-          <div className="font-bold font-heading text-[16px]">{title}</div>
-          <div className="text-black/40 text-[14px]">{value}</div>
+        <div className="flex items-start justify-between text-black mb-6 last:mb-0 gap-4">
+          <div className="font-bold font-heading text-[16px] w-[50%]">
+            {title}
+          </div>
+          <div className="text-black/40 text-[14px] w-[50%] text-right">
+            {value}
+          </div>
         </div>
       </>
     );
@@ -24,16 +34,19 @@ const ContentsFoodDetails: React.FC<propTypes> = ({ isFav, data }) => {
   return (
     <>
       <div className="top-0 left-0 fixed">
-        <IonImg src="/images/food-01.jpg" />
+        <CustomImage image={data.image_url} />
       </div>
       <div className="rounded-tl-[24px] rounded-tr-[24px] bg-bg_color_1 px-4 py-6 mt-[180px] z-[10] relative">
         <div className="relative">
           <TextDescription
-            title={data.title || "Food Name"}
+            title={data.name || "Food Name"}
             description={data.description || "Description of the food"}
             titleSize="large"
           />
-          <div className="absolute top-0 right-0">
+          <div
+            className="absolute top-0 right-0"
+            onClick={() => onFavorite({ food_id: id })}
+          >
             <IonIcon
               icon="/icons/heart.svg"
               className={`${
@@ -51,7 +64,7 @@ const ContentsFoodDetails: React.FC<propTypes> = ({ isFav, data }) => {
                   return (
                     <ContentItem
                       title={item.title}
-                      value={item.value}
+                      value={`${item.value}${item.unit} / 100g`}
                       key={index}
                     />
                   );
@@ -67,8 +80,11 @@ const ContentsFoodDetails: React.FC<propTypes> = ({ isFav, data }) => {
               <div className="py-6 px-4">
                 {data.health_benefit.map((item, index) => {
                   return (
-                    <div key={index} className="text-black mb-6 last:mb-0">
-                      ✔ {item.label}
+                    <div
+                      key={index}
+                      className="text-black mb-6 last:mb-0 flex gap-3 items-start"
+                    >
+                      <div>✔</div> <div className="self-center">{item}</div>
                     </div>
                   );
                 })}
@@ -83,8 +99,11 @@ const ContentsFoodDetails: React.FC<propTypes> = ({ isFav, data }) => {
               <div className="py-6 px-4">
                 {data.better_way_to_eat.map((item, index) => {
                   return (
-                    <div key={index} className="text-black mb-6 last:mb-0">
-                      ✔ {item.label}
+                    <div
+                      key={index}
+                      className="text-black mb-6 last:mb-0 capitalize flex gap-3 items-start"
+                    >
+                      <div>✔</div> <div className="self-center">{item}</div>
                     </div>
                   );
                 })}

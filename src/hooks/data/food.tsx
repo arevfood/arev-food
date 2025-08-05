@@ -1,3 +1,4 @@
+import { FoodDetailsModel } from "@/models/food-details";
 import { FoodQueryDataModel, FoodQueryPayloadModel } from "@/models/food-query";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
@@ -65,13 +66,14 @@ export const useFoods = ({
   };
 };
 
-export const useFood = ({ slug }: { slug: string }) => {
+export const useFood = ({ slug }: { slug?: string }) => {
   const { data: data, isLoading: fetchLoading } = useQuery({
     queryKey: [entity, slug],
     queryFn: async () => {
-      const result = await axios.get(`${baseUrl}/food/${slug}`);
-      return result.data.result as FoodQueryDataModel;
+      const result = await axios.get(`${baseUrl}/foods/${slug}`);
+      return result.data.food as FoodDetailsModel;
     },
+    enabled: !!slug,
   });
 
   return { data, loading: fetchLoading };

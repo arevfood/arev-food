@@ -16,7 +16,7 @@ const OrangeBox: React.FC<propTypes> = ({
         <div className="absolute top-0 right-0">
           <IonImg
             src="/images/card-01.png"
-            className="object-cover h-[125px]"
+            className="object-cover w-[150px]"
           />
         </div>
       )}
@@ -24,7 +24,7 @@ const OrangeBox: React.FC<propTypes> = ({
         <div className="absolute bottom-0 left-0">
           <IonImg
             src="/images/card-02.png"
-            className="object-cover h-[125px]"
+            className="object-cover w-[180px]"
           />
         </div>
       )}

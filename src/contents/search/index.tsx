@@ -30,6 +30,7 @@ const ContentSearch: React.FC = () => {
       if (query) {
         const data = await onSearch({
           query: search,
+          query_type: "concept",
         });
         setSearchResult(data);
         setIsSearch(true);

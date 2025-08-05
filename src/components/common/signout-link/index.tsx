@@ -30,11 +30,16 @@ const SignoutLink: React.FC = () => {
         ref={modal}
         trigger="signout-modal"
         presentingElement={presentingElement!}
-        className="px-[20px]"
-        style={{ "--height": "350px", "--border-radius": "24px" }}
+        className="px-[20px] bg-black/80"
+        style={{
+          "--height": "350px",
+          "--border-radius": "24px",
+        }}
+        showBackdrop={true}
+        mode="md"
       >
         <IonContent className="px-[20px]">
-          <div className="px-5 py-8 w-full h-full flex items-center justify-center flex-col">
+          <div className="px-5 py-8 w-full h-full flex items-center justify-center flex-col bg-white">
             <div>
               <div className="font-bold font-heading text-[22px] text-black mb-6">
                 Logout

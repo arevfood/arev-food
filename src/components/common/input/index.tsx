@@ -25,7 +25,7 @@ const CustomInput: React.FC<props> = ({
 }) => {
   return (
     <div className="w-full relative">
-      <div className="w-full bg-white !mb-4 px-4 py-3 rounded-[100px] !text-black !font-bold font-heading placeholder:opacity-30 placeholder:font-heading flex border-[3px] border-bg_color_1">
+      <div className="w-full bg-white !mb-4 px-4 py-3 rounded-[100px] !text-black !font-bold font-heading placeholder:opacity-30 placeholder:font-heading flex border-[3px] !border-bg_color_1">
         {icon && (
           <div>
             <IonIcon src={icon} className={iconClass} />
@@ -35,10 +35,11 @@ const CustomInput: React.FC<props> = ({
           {...props}
           placeholder={placeholder || "Enter text"}
           type={type || "text"}
-          className="grow "
+          className="grow outline-[0px]"
           onChange={onChange}
           onKeyDown={onKeyDown}
           disabled={disabled}
+          style={{ outline: "none !important", outlineWidth: "0px !important" }}
         />
       </div>
       {errorMessage && (

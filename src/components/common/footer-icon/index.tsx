@@ -29,7 +29,7 @@ const FooterIcon: React.FC<propTypes> = ({ active = false, icon, link }) => {
         icon={icon}
         className={`${
           active ? "text-primary_color" : "text-black_color/40"
-        } text-[28px] ${s.icon} footer-icon`}
+        } text-[24px] ${s.icon} footer-icon`}
       />
     </IonButton>
   );

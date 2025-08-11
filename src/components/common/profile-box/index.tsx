@@ -1,6 +1,7 @@
 import OrangeBox from "@/components/wrapper/orange-box";
 import Avatar from "@/components/common/avatar";
 import MainButton from "@/components/common/button";
+import { useHistory } from "react-router-dom";
 
 type propTypes = {
   name: string;
@@ -15,6 +16,8 @@ const ProfileBox: React.FC<propTypes> = ({
   age,
   isFemale = true,
 }) => {
+  const router = useHistory();
+
   return (
     <OrangeBox withBackground>
       <div className="flex flex-wrap gap-4 items-center">
@@ -28,7 +31,9 @@ const ProfileBox: React.FC<propTypes> = ({
       </div>
       {isFemale && (
         <div className="mt-6">
-          <MainButton color="WHITE">Menstrual Cycle</MainButton>
+          <MainButton color="WHITE" onClick={() => router.push("/menstrual")}>
+            Menstrual Cycle
+          </MainButton>
         </div>
       )}
     </OrangeBox>

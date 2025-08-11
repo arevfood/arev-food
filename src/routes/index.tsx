@@ -17,6 +17,7 @@ import PagesSettingHealthData from "@/pages/setting/health-data";
 import PagesSettingChangePassword from "@/pages/setting/change-password";
 import PagesSettingDeleteAccount from "@/pages/setting/delete-account";
 import PagesSettingMenstrualCycle from "@/pages/setting/menstrual-cycle";
+import PagesMenstrual from "@/pages/menstrual";
 
 const MainRoute: React.FC = () => {
   return (
@@ -80,6 +81,11 @@ const MainRoute: React.FC = () => {
           render={() => (
             <PrivateRoute component={<PagesSettingMenstrualCycle />} />
           )}
+        />
+        <Route
+          exact
+          path={"/menstrual"}
+          render={() => <PrivateRoute component={<PagesMenstrual />} />}
         />
         <Route
           exact

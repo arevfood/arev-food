@@ -2,26 +2,38 @@ import MainButton from "@/components/common/button";
 import CustomInput from "@/components/common/input";
 import LayoutBlank from "@/layouts/blank";
 import { useAuth } from "@/hooks/data/authentication";
-import { IonImg } from "@ionic/react";
+import {IonImg, IonSpinner} from "@ionic/react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useHistory } from "react-router";
+import { useToastAlert } from "@/hooks/ui/toast-alert";
 
 type inputProps = {
-  username: string;
+  email: string;
   password: string;
 };
 
 const ContentLogin: React.FC = () => {
+  const { showToast } = useToastAlert();
   const router = useHistory();
-  const { register, handleSubmit } = useForm<inputProps>();
-  const { onSignin } = useAuth();
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm<inputProps>();
+
+  const { onSignin, loading } = useAuth();
 
   const onSubmit: SubmitHandler<inputProps> = async (data) => {
-    await onSignin({
-      email: data.username,
-      password: data.password,
-    });
-    router.replace("/");
+    try {
+      await onSignin(data);
+      showToast("Login successful!", "success");
+      router.replace("/");
+    } catch (error) {
+      console.error(error);
+      showToast("Login failed!", "error");
+      setValue("password", "");
+    }
   };
 
   return (
@@ -36,14 +48,24 @@ const ContentLogin: React.FC = () => {
           </h1>
           <form onSubmit={handleSubmit(onSubmit)}>
             <CustomInput
-              {...register("username")}
+              {...register("email", {
+                required: "Please input your email!"
+              })}
               placeholder="Email"
               type="email"
+              errorMessage={errors.email?.message}
             />
             <CustomInput
-              {...register("password")}
+              {...register("password", {
+                required: "Please input your password!",
+                minLength: {
+                  value: 6,
+                  message: "Password must be at least 6 characters!",
+                },
+              })}
               placeholder="Password"
               type="password"
+              errorMessage={errors.password?.message}
             />
           </form>
           <div>
@@ -52,8 +74,19 @@ const ContentLogin: React.FC = () => {
               onClick={() => {
                 handleSubmit(onSubmit)();
               }}
+              isDisabled={loading}
             >
-              Sign In
+              {loading ? (
+                  <div className="flex items-center gap-2">
+                    Logging In...
+                    <IonSpinner
+                        name="crescent"
+                        className="text-white w-[20px] h-[20px] ms-[6px]"
+                    />
+                  </div>
+              ) : (
+                  "Sign In"
+              )}
             </MainButton>
           </div>
           <div className="w-full text-black_color text-right opacity-30 text-[12px] mt-2">

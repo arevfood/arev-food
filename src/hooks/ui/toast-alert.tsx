@@ -5,28 +5,21 @@ type ToastType = "success" | "error" | "medium";
 export function useToastAlert() {
     const [present] = useIonToast();
 
+    const typeColor: Record<ToastType, string> = {
+        success: "success",
+        error: "danger",
+        medium: "medium",
+    };
+
     const showToast = (
         message: string,
         type: ToastType = "medium",
         duration: number = 2000
     ) => {
-        let color: string;
-
-        switch (type) {
-            case "success":
-                color = "success";
-                break;
-            case "error":
-                color = "danger";
-                break;
-            default:
-                color = "medium";
-        }
-
         present({
             message,
             duration,
-            color,
+            color: typeColor[type],
             position: "bottom",
             buttons: [
                 {

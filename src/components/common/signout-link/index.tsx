@@ -1,9 +1,9 @@
 import { useHistory } from "react-router";
 import { useEffect, useRef, useState } from "react";
 import {IonModal, IonContent, IonSpinner} from "@ionic/react";
-import MainButton from "../button";
 import {useAuth} from "@/hooks/data/authentication";
-import { useToastAlert } from "@/hooks/ui/toast-alert";
+import {useToastAlert} from "@/hooks/ui/toast-alert";
+import MainButton from "@/components/common/button";
 
 const SignoutLink: React.FC = () => {
   const { showToast } = useToastAlert();
@@ -25,9 +25,14 @@ const SignoutLink: React.FC = () => {
   }
 
   const onSubmit = async () => {
-    showToast("Logout successful!", "success");
-    router.replace("/login");
-    await onSignOut();
+    await onSignOut(undefined, {
+      onSuccess: () => {
+        showToast("Logout successful!", "success");
+      },
+      onError: () => {
+        showToast("Logout failed!", "error");
+      }
+    });
   };
 
   return (

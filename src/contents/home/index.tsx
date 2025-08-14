@@ -7,12 +7,17 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import { useFavorite } from "@/hooks/data/favorite";
 import { useUser } from "@/hooks/data/user";
+import {useFoods} from "@/hooks/data/food";
 
 type propTypes = {};
 
 const ContentsHome: React.FC<propTypes> = () => {
   const { data: userDetails } = useUser();
   const { data: favoriteList, onFavorite } = useFavorite();
+  const { data: foodRecommendationList, onGetFoodRecommendation } = useFoods({limit: 5});
+
+    console.log(userDetails)
+    console.log(foodRecommendationList)
 
   const userProfile = {
     name: userDetails?.fullname || "John Doe",

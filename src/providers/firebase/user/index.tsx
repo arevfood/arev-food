@@ -68,10 +68,9 @@ export const FIREBASE_UPDATE_USER = async ({
   try {
     const docRef = doc(firebaseDb, "users", id);
     await setDoc(doc(firebaseDb, "users", id), {
-      ...docRef,
-      ...payload,
-      updatedAt: new Date().toISOString(),
-    });
+      ...payload, updatedAt: new Date().toISOString(),
+        }, { merge: true }
+    );
 
     const userData = await getDoc(docRef);
     const result = userData.data();

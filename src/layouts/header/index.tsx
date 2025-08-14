@@ -7,7 +7,7 @@ import {
   IonButtons,
 } from "@ionic/react";
 import { useEffect, useState } from "react";
-import { useHistory } from "react-router";
+import { useHistory, useLocation } from "react-router";
 
 type propTypes = {
   transparent?: boolean;
@@ -16,7 +16,10 @@ type propTypes = {
 const MainHeader: React.FC<propTypes> = ({ transparent }) => {
   const router = useHistory();
   const ionRouter = useIonRouter();
+    const location = useLocation();
   const [canGoBack, setCanGoBack] = useState(false);
+
+    const isHome = location.pathname === "/";
 
   useEffect(() => {
     setCanGoBack(ionRouter.canGoBack());
@@ -34,28 +37,24 @@ const MainHeader: React.FC<propTypes> = ({ transparent }) => {
         className="h-[54px] flex"
       >
         <IonButtons slot="start">
-          {canGoBack ? (
-            <div className={`px-4`}>
-              <IonBackButton
-                defaultHref="/"
-                icon={
-                  !transparent
-                    ? "/icons/back-arrow.svg"
-                    : "icons/white-background-arrow.svg"
-                }
-                text={""}
-                className="text-[24px]"
-              />
-            </div>
-          ) : (
-            <div
-              onClick={() => {
-                router.replace("/");
-              }}
-            >
-              <IonImg src="/arev-logo.png" className="w-[54px]" />
-            </div>
-          )}
+            {isHome ? (
+                <div onClick={() => router.replace("/")}>
+                    <IonImg src="/arev-logo.png" className="w-[54px]" />
+                </div>
+            ) : (
+                <div className="px-4">
+                    <IonBackButton
+                        defaultHref="/"
+                        icon={
+                            !transparent
+                                ? "/icons/arrow-left.svg"
+                                : "icons/white-background-arrow.svg"
+                        }
+                        text={""}
+                        className="!w-[20px] !h-[20px]"
+                    />
+                </div>
+            )}
         </IonButtons>
       </IonToolbar>
     </IonHeader>

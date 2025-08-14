@@ -27,7 +27,7 @@ const FoodCard: React.FC<propTypes> = ({
     <>
       {loading && <FoodCardSkeleton />}
       {!loading && (
-        <div className="relative">
+        <div className="relative w-full">
           <div className="absolute top-[8px] right-[8px] z-1">
             <IonIcon
               src="/icons/heart.svg"

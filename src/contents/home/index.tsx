@@ -16,9 +16,6 @@ const ContentsHome: React.FC<propTypes> = () => {
   const { data: favoriteList, onFavorite } = useFavorite();
   const { data: foodRecommendationList, onGetFoodRecommendation } = useFoods({limit: 5});
 
-    console.log(userDetails)
-    console.log(foodRecommendationList)
-
   const userProfile = {
     name: userDetails?.fullname || "John Doe",
     age: 28,
@@ -78,30 +75,21 @@ const ContentsHome: React.FC<propTypes> = () => {
       </div>
       <div className="mt-4">
         <Swiper slidesPerView={2.2} spaceBetween={16} centeredSlides={false}>
-          <SwiperSlide>
-            <FoodCard
-              slug="raw-almonds-1"
-              image="/images/food-01.jpg"
-              title="Raw Almonds"
-              description="Naturally nutrient-dense and perfect for snacking. Great source of vitamin E and healthy fats."
-            />
-          </SwiperSlide>
-          <SwiperSlide>
-            <FoodCard
-              slug="raw-almonds-2"
-              image="/images/food-01.jpg"
-              title="Raw Almonds"
-              description="Naturally nutrient-dense and perfect for snacking. Great source of vitamin E and healthy fats."
-            />
-          </SwiperSlide>
-          <SwiperSlide>
-            <FoodCard
-              slug="raw-almonds-3"
-              image="/images/food-01.jpg"
-              title="Raw Almonds"
-              description="Naturally nutrient-dense and perfect for snacking. Great source of vitamin E and healthy fats."
-            />
-          </SwiperSlide>
+            {foodRecommendationList &&
+                foodRecommendationList.map((item) => {
+                    return (
+                        <SwiperSlide>
+                            <FoodCard
+                                slug={item.id}
+                                image={item.image_url || ""}
+                                title={item.name}
+                                description={item.description || ""}
+                                onFavorite={() => onGetFoodRecommendation({ food_id: item.id })}
+                                isFav
+                            />
+                        </SwiperSlide>
+                    );
+                })}
         </Swiper>
       </div>
       <div className="mt-6">

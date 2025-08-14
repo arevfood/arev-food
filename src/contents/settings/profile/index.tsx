@@ -1,12 +1,12 @@
 import MainButton from "@/components/common/button";
 import CustomInput from "@/components/common/input";
-import takePhoto from "@/utils/take-photo";
 import {IonImg, IonSpinner} from "@ionic/react";
 import {useToastAlert} from "@/hooks/ui/toast-alert";
 import {SubmitHandler, useForm} from "react-hook-form";
 import CustomSelect from "@/components/common/select-option";
 import {useUser} from "@/hooks/data/user";
 import {useEffect} from "react";
+import {uploadImageToStorage} from "@/utils/upload-image";
 
 type inputProps = {
     fullname: string;
@@ -16,6 +16,7 @@ type inputProps = {
     gender: string;
     country: string;
     city: string;
+    photoUrl?: string;
 };
 
 const ContentsSettingsProfile: React.FC = () => {
@@ -28,6 +29,23 @@ const ContentsSettingsProfile: React.FC = () => {
         setValue,
         formState: { errors },
     } = useForm<inputProps>();
+    console.log(userDetail);
+
+    const handlePhotoChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file || !userDetail) return;
+
+        try {
+            const url = await uploadImageToStorage(file, `users/${file.name}`);
+            setValue('photoUrl', url)
+            console.log(url)
+            // await onUpdate({ payload: { photoUrl: url } });
+            showToast("Profile photo updated!", "success");
+        } catch (err) {
+            console.log(err)
+            showToast("Failed to upload photo", "error");
+        }
+    };
 
     const onSubmit: SubmitHandler<inputProps> = async (data) => {
         const filteredPayload = Object.fromEntries(
@@ -58,20 +76,18 @@ const ContentsSettingsProfile: React.FC = () => {
       <div className="font-bold font-heading text-[22px] text-black">
         Edit Profile
       </div>
-      <div className="mx-auto flex items-center justify-center mt-10">
-        <div
-          onClick={() => {
-            takePhoto();
-          }}
-          className="relative w-fit rounded-full overflow-hidden"
-        >
-          <IonImg
-            src="/images/user-placeholder.png"
-            className="w-[100px] h-[100px] rounded-full bg-[#FDEAC5] flex items-center justify-center relative"
-            style={{ borderRadius: "100%" }}
-          />
-        </div>
-      </div>
+        <label className="mx-auto flex items-center justify-center mt-10 w-fit rounded-full overflow-hidden cursor-pointer">
+            <IonImg
+                src={userDetail?.photoUrl || "/images/user-placeholder.png"}
+                className="w-[100px] h-[100px] rounded-full bg-[#FDEAC5] object-cover"
+            />
+            <input
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={handlePhotoChange}
+            />
+        </label>
       <div className="mt-10">
         <div className="font-bold font-heading text-[18px] text-black mb-4">
           Personal Information

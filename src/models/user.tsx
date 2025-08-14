@@ -16,6 +16,7 @@ export interface SessionUser extends User {
 }
 
 export interface UserDataModel {
+  uid: string;
   email: string;
   fullname: string;
   phoneNumber: string;
@@ -23,7 +24,7 @@ export interface UserDataModel {
   gender: string;
   country: string;
   city: string;
-  updatedAt: string;
+  photoUrl: string;
   createdAt: string;
-  uid: string;
+  updatedAt: string;
 }

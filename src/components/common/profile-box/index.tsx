@@ -6,15 +6,15 @@ import { useHistory } from "react-router-dom";
 type propTypes = {
   name: string;
   image: string;
-  age: number;
-  isFemale: boolean;
+  age: string;
+  gender: string;
 };
 
 const ProfileBox: React.FC<propTypes> = ({
   name,
   image,
   age,
-  isFemale = true,
+  gender,
 }) => {
   const router = useHistory();
 
@@ -29,7 +29,7 @@ const ProfileBox: React.FC<propTypes> = ({
           <div className="text-[14px] font-paragraph">{age} years old</div>
         </div>
       </div>
-      {isFemale && (
+      {gender === 'female' && (
         <div className="mt-6">
           <MainButton color="WHITE" onClick={() => router.push("/menstrual")}>
             Menstrual Cycle

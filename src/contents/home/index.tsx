@@ -8,24 +8,33 @@ import "swiper/css";
 import { useFavorite } from "@/hooks/data/favorite";
 import { useUser } from "@/hooks/data/user";
 import {useFoods} from "@/hooks/data/food";
+import {capitalize} from "@/utils/capitalize-text";
+import {getAge} from "@/utils/generate-age";
 
 type propTypes = {};
 
 const ContentsHome: React.FC<propTypes> = () => {
-  const { data: userDetails } = useUser();
+  const { data: userDetail } = useUser();
   const { data: favoriteList, onFavorite } = useFavorite();
   const { data: foodRecommendationList, onGetFoodRecommendation } = useFoods({limit: 5});
 
-  const userProfile = {
-    name: userDetails?.fullname || "John Doe",
-    age: 28,
-    image: "/images/sample-user.jpg",
-    isFemale: true,
-  };
+    const userProfile = userDetail
+        ? {
+            name: userDetail.fullname || "-",
+            gender: userDetail.gender || "-",
+            age: getAge(userDetail.dateBirth),
+            image: "/images/sample-user.jpg",
+        }
+        : {
+            name: "-",
+            gender: "-",
+            age: "-",
+            image: "/images/sample-user.jpg",
+        };
 
   const userInfo = {
     info: [
-      { title: "Gender", value: "Female" },
+      { title: "Gender", value: capitalize(userProfile.gender) },
       { title: "Height", value: "175 cm" },
       { title: "Weight", value: "72 kg" },
     ],
@@ -38,7 +47,7 @@ const ContentsHome: React.FC<propTypes> = () => {
   return (
     <>
       <div className="mt-2">
-        <ProfileBox {...userProfile} isFemale={userProfile.isFemale} />
+        <ProfileBox {...userProfile} gender={userProfile.gender}/>
       </div>
       <div className="mt-6">
         <IconTitle title="User Info" icon="/icons/user.svg" />

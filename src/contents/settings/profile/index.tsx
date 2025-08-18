@@ -5,8 +5,7 @@ import {useToastAlert} from "@/hooks/ui/toast-alert";
 import {SubmitHandler, useForm} from "react-hook-form";
 import CustomSelect from "@/components/common/select-option";
 import {useUser} from "@/hooks/data/user";
-import {useEffect} from "react";
-import {uploadImageToStorage} from "@/utils/upload-image";
+import {useEffect, useState} from "react";
 
 type inputProps = {
     fullname: string;
@@ -22,6 +21,11 @@ type inputProps = {
 const ContentsSettingsProfile: React.FC = () => {
     const { data: userDetail, onUpdate, loading } = useUser();
     const { showToast } = useToastAlert();
+    const [photo, setPhoto] = useState<{ file: File | null; preview: string | null }>({
+        file: null,
+        preview: null,
+    });
+
     const {
         register,
         handleSubmit,
@@ -29,47 +33,50 @@ const ContentsSettingsProfile: React.FC = () => {
         setValue,
         formState: { errors },
     } = useForm<inputProps>();
-    console.log(userDetail);
 
-    const handlePhotoChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
-        if (!file || !userDetail) return;
+        if (!file) return;
 
-        try {
-            const url = await uploadImageToStorage(file, `users/${file.name}`);
-            setValue('photoUrl', url)
-            console.log(url)
-            // await onUpdate({ payload: { photoUrl: url } });
-            showToast("Profile photo updated!", "success");
-        } catch (err) {
-            console.log(err)
-            showToast("Failed to upload photo", "error");
-        }
+        setPhoto({file, preview: URL.createObjectURL(file)});
     };
 
     const onSubmit: SubmitHandler<inputProps> = async (data) => {
-        const filteredPayload = Object.fromEntries(
-            Object.entries(data).filter(([_, value]) => value !== "" && value != null)
+        const filteredPayload = Object.entries(data).reduce<{ [key: string]: string }>(
+            (acc, [key, value]) => {
+                if (value !== "" && value != null) {
+                    acc[key] = String(value);
+                }
+                return acc;
+            }, {}
         );
-        const result = await onUpdate({ payload: filteredPayload });
+
+        const result = await onUpdate({
+            payload: filteredPayload,
+            file: photo.file,
+        });
+
         if (!result) {
             showToast("Edit profile failed!", "error");
             return;
         }
+
         showToast("Edit profile successful!", "success");
+        setPhoto({ file: null, preview: null });
     };
 
     useEffect(() => {
         if (userDetail) {
-            setValue('fullname', userDetail.fullname)
-            setValue('email', userDetail.email)
-            setValue('phoneNumber', userDetail.phoneNumber)
-            setValue('dateBirth', userDetail.dateBirth)
-            setValue('gender', userDetail.gender)
-            setValue('country', userDetail.country)
-            setValue('city', userDetail.city)
+            setValue("fullname", userDetail.fullname);
+            setValue("email", userDetail.email);
+            setValue("phoneNumber", userDetail.phoneNumber);
+            setValue("dateBirth", userDetail.dateBirth);
+            setValue("gender", userDetail.gender);
+            setValue("country", userDetail.country);
+            setValue("city", userDetail.city);
+            setValue("photoUrl", userDetail.photoUrl);
         }
-    }, [userDetail, setValue])
+    }, [userDetail, setValue]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -78,7 +85,11 @@ const ContentsSettingsProfile: React.FC = () => {
       </div>
         <label className="mx-auto flex items-center justify-center mt-10 w-fit rounded-full overflow-hidden cursor-pointer">
             <IonImg
-                src={userDetail?.photoUrl || "/images/user-placeholder.png"}
+                src={
+                    photo.preview ||
+                    userDetail?.photoUrl ||
+                    "/images/user-placeholder.png"
+                }
                 className="w-[100px] h-[100px] rounded-full bg-[#FDEAC5] object-cover"
             />
             <input

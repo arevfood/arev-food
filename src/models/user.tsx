@@ -22,6 +22,15 @@ export interface UserMenstrualCycle {
   pms_intensity: number;
 }
 
+export interface UserHealth {
+  height: number;
+  weight: number;
+  blood_sugar_level: number;
+  blood_pressure: string;
+  health_conditions: string;
+  diet_type: string;
+}
+
 export interface UserDataModel {
   uid: string;
   email: string;
@@ -33,6 +42,7 @@ export interface UserDataModel {
   city: string;
   photoUrl: string;
   menstrual_cycle: UserMenstrualCycle;
+  health: UserHealth;
   createdAt: string;
   updatedAt: string;
 }

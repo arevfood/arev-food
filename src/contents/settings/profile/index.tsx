@@ -54,7 +54,7 @@ const ContentsSettingsProfile: React.FC = () => {
         }
     }, [userDetail, setValue])
 
-    return (
+return (
         <form onSubmit={handleSubmit(onSubmit)}>
             <div className="font-bold font-heading text-[22px] text-black">
                 Edit Profile

@@ -7,6 +7,7 @@ import {SubmitHandler, useForm} from "react-hook-form";
 import CustomSelect from "@/components/common/select-option";
 import {useUser} from "@/hooks/data/user";
 import {useEffect} from "react";
+import {genderOptions} from "@/data/gender";
 
 type inputProps = {
     fullname: string;
@@ -114,10 +115,7 @@ const ContentsSettingsProfile: React.FC = () => {
           <CustomSelect
               placeholder="Gender"
               value={watch("gender")}
-              options={[
-                  { value: "male", label: "Male" },
-                  { value: "female", label: "Female" },
-              ]}
+              options={genderOptions}
               onChange={(val) => setValue("gender", val)}
               errorMessage={errors.gender?.message}
           />

@@ -35,7 +35,7 @@ const SignoutLink: React.FC = () => {
 
   return (
     <>
-      <div id="signout-modal" className="text-[16px] px-2 py-2.5 text-black flex items-center gap-[8px] opacity-[0.62] duration-300 rounded-[8px] active:opacity-100 active:bg-black/[0.04]">
+      <div id="signout-modal" className="cursor-pointer text-[16px] px-2 py-2.5 text-black flex items-center gap-[8px] opacity-[0.62] duration-300 rounded-[8px] active:opacity-100 active:bg-black/[0.04]">
         <IonImg src="/icons/setting-logout.svg" className="w-[20px] h-[20px]"/>
         Sign Out
         <IonImg src="/icons/chevron-left.svg" className="ms-auto w-[14px] h-[14px] rotate-180"/>

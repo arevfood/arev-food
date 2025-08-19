@@ -26,7 +26,7 @@ const ProfileBox: React.FC<propTypes> = ({
         </div>
         <div>
           <div className="font-bold font-heading text-[26px]">{name}</div>
-          <div className="text-[14px] font-paragraph">{age} years old</div>
+          <div className="text-[14px] font-paragraph">{age}</div>
         </div>
       </div>
       {gender === 'female' && (

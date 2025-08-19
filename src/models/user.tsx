@@ -15,6 +15,13 @@ export interface SessionUser extends User {
   user: UserDataModel;
 }
 
+export interface UserMenstrualCycle {
+  last_period_start_date: string;
+  average_cycle_length: number;
+  cycle_pattern: string;
+  pms_intensity: number;
+}
+
 export interface UserDataModel {
   uid: string;
   email: string;
@@ -25,6 +32,7 @@ export interface UserDataModel {
   country: string;
   city: string;
   photoUrl: string;
+  menstrual_cycle: UserMenstrualCycle;
   createdAt: string;
   updatedAt: string;
 }

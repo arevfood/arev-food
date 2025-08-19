@@ -9,6 +9,7 @@ export interface FoodQueryPayloadModel {
 export interface FoodQueryDataModel {
   id: string;
   name: string;
+  description: string;
   image_url: string;
   food_details?: FoodDetailsQueryDataModel;
 }

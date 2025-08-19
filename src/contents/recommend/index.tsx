@@ -1,10 +1,34 @@
 import FoodCard from "@/components/common/food-card";
 import IconTitle from "@/components/common/icon-title";
-import { IonImg } from "@ionic/react";
+import {IonImg, IonSpinner} from "@ionic/react";
+import {useFoods} from "@/hooks/data/food";
+import {useEffect, useState} from "react";
+import {FoodQueryDataModel} from "@/models/food-query";
+import MainButton from "@/components/common/button";
 
 type propTypes = {};
 
 const ContentRecommend: React.FC<propTypes> = () => {
+  const [page, setPage] = useState(1);
+  const [allFoods, setAllFoods] = useState<FoodQueryDataModel[]>([]);
+  const [loadMore, setLoadMore] = useState(true);
+  const limit = 10;
+
+  const { data, loading, onGetFoodRecommendation } = useFoods({limit, page});
+
+  useEffect(() => {
+    if (data) {
+      setAllFoods((prev) => [...prev, ...data]);
+      if (data.length < limit) {
+        setLoadMore(false);
+      }
+    }
+  }, [data]);
+
+  const handleLoadMore = () => {
+    setPage((prev) => prev + 1);
+  };
+
   return (
     <>
       <div className="top-0 left-0 fixed">
@@ -17,32 +41,51 @@ const ContentRecommend: React.FC<propTypes> = () => {
             description="These foods are tailored to your health goals and preferences."
             icon="/icons/meat.svg"
           />
-          <div className="grid grid-cols-2 gap-4 mt-4">
-            <FoodCard
-              slug="raw-almonds-2"
-              image="/images/food-01.jpg"
-              title="Raw Almonds"
-              description="Naturally nutrient-dense and perfect for snacking. Great source of vitamin E and healthy fats."
+          {allFoods ? (
+            <>
+              <div className="grid grid-cols-2 gap-4 mt-4">
+                {allFoods &&
+                    allFoods.map((item) => {
+                      return (
+                          <FoodCard
+                              slug={item.id}
+                              image={item.image_url || ""}
+                              title={item.name}
+                              description={item.description || ""}
+                              onFavorite={() => onGetFoodRecommendation({ food_id: item.id })}
+                              isFav
+                          />
+                      );
+                    })}
+              </div>
+              {loadMore && (
+                  <div className="w-fit mx-auto mt-4">
+                    <MainButton
+                        color="ORANGE"
+                        onClick={handleLoadMore}
+                        isDisabled={loading}
+                    >
+                      {loading ? (
+                          <div className="flex items-center gap-2">
+                            Loading...
+                            <IonSpinner
+                                name="crescent"
+                                className="text-white w-[20px] h-[20px] ms-[6px]"
+                            />
+                          </div>
+                      ) : (
+                          "Load More"
+                      )}
+                    </MainButton>
+                  </div>
+              )}
+            </>
+          ) : (
+            <IonSpinner
+                name="crescent"
+                className="text-black/[0.42] w-[32px] h-[32px] ms-[6px] mx-auto"
             />
-            <FoodCard
-              slug="raw-almonds-2"
-              image="/images/food-01.jpg"
-              title="Raw Almonds"
-              description="Naturally nutrient-dense and perfect for snacking. Great source of vitamin E and healthy fats."
-            />
-            <FoodCard
-              slug="raw-almonds-2"
-              image="/images/food-01.jpg"
-              title="Raw Almonds"
-              description="Naturally nutrient-dense and perfect for snacking. Great source of vitamin E and healthy fats."
-            />
-            <FoodCard
-              slug="raw-almonds-2"
-              image="/images/food-01.jpg"
-              title="Raw Almonds"
-              description="Naturally nutrient-dense and perfect for snacking. Great source of vitamin E and healthy fats."
-            />
-          </div>
+          )}
         </div>
       </div>
     </>

@@ -2,6 +2,7 @@ import MainButton from "@/components/common/button";
 import CustomInput from "@/components/common/input";
 import {SubmitHandler, useForm} from "react-hook-form";
 import CustomSelect from "@/components/common/select-option";
+import {cyclePatternOptions} from "@/data/cycle-pattern";
 
 type inputProps = {
     last_period_start_date: string;
@@ -53,13 +54,7 @@ const ContentsSettingsMenstrualCycle: React.FC = () => {
                 <CustomSelect
                     placeholder="Cycle Pattern (Optional)"
                     value={watch("cycle_pattern")}
-                    options={[
-                        { value: "", label: "Choose cycle pattern" },
-                        { value: "regular", label: "Regular" },
-                        { value: "irregular", label: "Irregular" },
-                        { value: "short", label: "Short Cycle (<21 days)" },
-                        { value: "long", label: "Long Cycle (>35 days)" },
-                    ]}
+                    options={cyclePatternOptions}
                     onChange={(val) => setValue("cycle_pattern", val)}
                     errorMessage={errors.cycle_pattern?.message}
                 />

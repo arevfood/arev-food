@@ -1,17 +1,20 @@
 import { useHistory } from "react-router";
-import { signOut } from "firebase/auth";
-import { firebaseAuth } from "@/utils/connections/firebase";
 import { useEffect, useRef, useState } from "react";
-import { IonModal, IonContent } from "@ionic/react";
-import MainButton from "../button";
+import {IonModal, IonContent, IonSpinner} from "@ionic/react";
+import {useAuth} from "@/hooks/data/authentication";
+import {useToastAlert} from "@/hooks/ui/toast-alert";
+import MainButton from "@/components/common/button";
 
 const SignoutLink: React.FC = () => {
+  const { showToast } = useToastAlert();
   const modal = useRef<HTMLIonModalElement>(null);
   const page = useRef(null);
   const router = useHistory();
 
   const [presentingElement, setPresentingElement] =
     useState<HTMLElement | null>(null);
+
+  const { onSignOut, loading } = useAuth();
 
   useEffect(() => {
     setPresentingElement(page.current);
@@ -20,6 +23,17 @@ const SignoutLink: React.FC = () => {
   function dismiss() {
     modal.current?.dismiss();
   }
+
+  const onSubmit = async () => {
+    await onSignOut(undefined, {
+      onSuccess: () => {
+        showToast("Logout successful!", "success");
+      },
+      onError: () => {
+        showToast("Logout failed!", "error");
+      }
+    });
+  };
 
   return (
     <>
@@ -54,12 +68,20 @@ const SignoutLink: React.FC = () => {
               <div className="mt-8">
                 <MainButton
                   color="ORANGE"
-                  onClick={async () => {
-                    router.replace("/login");
-                    signOut(firebaseAuth);
-                  }}
+                  onClick={onSubmit}
+                  isDisabled={loading}
                 >
-                  Logout
+                  {loading ? (
+                      <div className="flex items-center gap-2">
+                        Logging out...
+                        <IonSpinner
+                            name="crescent"
+                            className="text-white w-[20px] h-[20px] ms-[6px]"
+                        />
+                      </div>
+                  ) : (
+                      "Logout"
+                  )}
                 </MainButton>
               </div>
               <div className="mt-4">

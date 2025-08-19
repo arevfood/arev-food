@@ -5,12 +5,14 @@ type props = {
   children: ReactNode;
   onClick?: () => void;
   color?: "WHITE" | "ORANGE" | "ORANGE_OUTLINE";
+  isDisabled?: boolean;
 };
 
 const MainButton: React.FC<props> = ({
   onClick,
   children,
   color = "WHITE",
+  isDisabled = false,
 }) => {
   const colorSchema = {
     WHITE: {
@@ -49,8 +51,9 @@ const MainButton: React.FC<props> = ({
           onClick();
         }
       }}
-      className={`w-full !font-heading font-bold min-h-[42px] rounded-full capitalize text-[14px]`}
+      className={`w-full !font-heading font-bold min-h-[42px] rounded-full capitalize text-[14px] ${isDisabled ? '!opacity-100' : ''}`}
       style={colorSchema[color]}
+      disabled={isDisabled}
     >
       {children}
     </IonButton>

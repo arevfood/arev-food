@@ -2,9 +2,10 @@ import MainButton from "@/components/common/button";
 import CustomInput from "@/components/common/input";
 import LayoutBlank from "@/layouts/blank";
 import { useAuth } from "@/hooks/data/authentication";
-import { IonImg } from "@ionic/react";
+import { IonImg, IonSpinner } from "@ionic/react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useHistory } from "react-router";
+import { useToastAlert } from "@/hooks/ui/toast-alert";
 
 type inputProps = {
   fullname: string;
@@ -14,18 +15,27 @@ type inputProps = {
 };
 
 const ContentSignup: React.FC = () => {
+  const { showToast } = useToastAlert();
   const router = useHistory();
   const {
     register,
     handleSubmit,
     watch,
+    setValue,
     formState: { errors },
   } = useForm<inputProps>();
 
-  const { onSignup } = useAuth();
+  const { onSignup, loading } = useAuth();
 
   const onSubmit: SubmitHandler<inputProps> = async (data) => {
-    await onSignup(data);
+    const result = await onSignup(data);
+    if (!result) {
+      showToast("Sign up failed!", "error");
+      setValue('password', '')
+      setValue('confirm_password', '')
+      return;
+    }
+    showToast("Sign up successful!", "success");
     router.replace("/");
   };
 
@@ -57,7 +67,7 @@ const ContentSignup: React.FC = () => {
             />
             <CustomInput
               {...register("password", {
-                required: true,
+                required: "Please input your password!",
                 minLength: {
                   value: 6,
                   message: "Password must be at least 6 characters!",
@@ -84,8 +94,19 @@ const ContentSignup: React.FC = () => {
               onClick={() => {
                 handleSubmit(onSubmit)();
               }}
+              isDisabled={loading}
             >
-              Sign Up
+              {loading ? (
+                  <div className="flex items-center gap-2">
+                    Signing Up...
+                    <IonSpinner
+                        name="crescent"
+                        className="text-white w-[20px] h-[20px] ms-[6px]"
+                    />
+                  </div>
+              ) : (
+                  "Sign Up"
+              )}
             </MainButton>
           </div>
           <div className="mt-[80px]">

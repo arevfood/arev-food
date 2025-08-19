@@ -1,6 +1,5 @@
-import { useHistory } from "react-router";
 import { useEffect, useRef, useState } from "react";
-import {IonModal, IonContent, IonSpinner} from "@ionic/react";
+import {IonModal, IonContent, IonSpinner, IonImg} from "@ionic/react";
 import {useAuth} from "@/hooks/data/authentication";
 import {useToastAlert} from "@/hooks/ui/toast-alert";
 import MainButton from "@/components/common/button";
@@ -9,7 +8,6 @@ const SignoutLink: React.FC = () => {
   const { showToast } = useToastAlert();
   const modal = useRef<HTMLIonModalElement>(null);
   const page = useRef(null);
-  const router = useHistory();
 
   const [presentingElement, setPresentingElement] =
     useState<HTMLElement | null>(null);
@@ -37,8 +35,10 @@ const SignoutLink: React.FC = () => {
 
   return (
     <>
-      <div id="signout-modal" className="font-paragraph text-[16px] text-black">
+      <div id="signout-modal" className="text-[16px] px-2 py-2.5 text-black flex items-center gap-[8px] opacity-[0.62] duration-300 rounded-[8px] active:opacity-100 active:bg-black/[0.04]">
+        <IonImg src="/icons/setting-logout.svg" className="w-[20px] h-[20px]"/>
         Sign Out
+        <IonImg src="/icons/chevron-left.svg" className="ms-auto w-[14px] h-[14px] rotate-180"/>
       </div>
       <IonModal
         ref={modal}

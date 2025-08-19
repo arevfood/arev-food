@@ -6,6 +6,7 @@ import {useUser} from "@/hooks/data/user";
 import {useToastAlert} from "@/hooks/ui/toast-alert";
 import {useEffect} from "react";
 import {IonSpinner} from "@ionic/react";
+import {cyclePatternOptions} from "@/data/cycle-pattern";
 
 type inputProps = {
     menstrual_cycle: {
@@ -88,16 +89,10 @@ const ContentsSettingsMenstrualCycle: React.FC = () => {
             <div>
                 <CustomSelect
                     placeholder="Cycle Pattern (Optional)"
-                    value={watch("menstrual_cycle.cycle_pattern")}
-                    options={[
-                        { value: "", label: "Choose cycle pattern" },
-                        { value: "regular", label: "Regular" },
-                        { value: "irregular", label: "Irregular" },
-                        { value: "short", label: "Short Cycle (<21 days)" },
-                        { value: "long", label: "Long Cycle (>35 days)" },
-                    ]}
-                    onChange={(val) => setValue("menstrual_cycle.cycle_pattern", val)}
-                    errorMessage={errors.menstrual_cycle?.cycle_pattern?.message}
+                    value={watch("cycle_pattern")}
+                    options={cyclePatternOptions}
+                    onChange={(val) => setValue("cycle_pattern", val)}
+                    errorMessage={errors.cycle_pattern?.message}
                 />
             </div>
             <div>

@@ -2,15 +2,24 @@ import MainButton from "@/components/common/button";
 import CustomInput from "@/components/common/input";
 import {SubmitHandler, useForm} from "react-hook-form";
 import CustomSelect from "@/components/common/select-option";
+import {useUser} from "@/hooks/data/user";
+import {useToastAlert} from "@/hooks/ui/toast-alert";
+import {useEffect} from "react";
+import {IonSpinner} from "@ionic/react";
 
 type inputProps = {
-    last_period_start_date: string;
-    average_cycle_length: number;
-    cycle_pattern?: string;
-    pms_intensity?: number;
+    menstrual_cycle: {
+        last_period_start_date: string;
+        average_cycle_length: number;
+        cycle_pattern?: string;
+        pms_intensity?: number;
+    }
 };
 
 const ContentsSettingsMenstrualCycle: React.FC = () => {
+    const { data: userDetail, onUpdate, loading } = useUser();
+    const { showToast } = useToastAlert();
+
     const {
         register,
         handleSubmit,
@@ -20,8 +29,35 @@ const ContentsSettingsMenstrualCycle: React.FC = () => {
     } = useForm<inputProps>();
 
     const onSubmit: SubmitHandler<inputProps> = async (data) => {
-        console.log(data)
+        const filteredPayload = {
+            menstrual_cycle: Object.entries(data.menstrual_cycle).reduce<Record<string, any>>(
+                (acc, [key, value]) => {
+                    if (value !== "" && value != null) {
+                        acc[key] = value;
+                    }
+                    return acc;
+                }, {}
+            ),
+        };
+
+        const result = await onUpdate({ payload: filteredPayload });
+
+        if (!result) {
+            showToast("Setup menstrual cycle failed!", "error");
+            return;
+        }
+
+        showToast("Setup menstrual cycle successful!", "success");
     };
+
+    useEffect(() => {
+        if (userDetail) {
+            setValue("menstrual_cycle.last_period_start_date", userDetail.menstrual_cycle?.last_period_start_date);
+            setValue("menstrual_cycle.average_cycle_length", userDetail.menstrual_cycle?.average_cycle_length);
+            setValue("menstrual_cycle.cycle_pattern", userDetail.menstrual_cycle?.cycle_pattern);
+            setValue("menstrual_cycle.pms_intensity", userDetail.menstrual_cycle?.pms_intensity);
+        }
+    }, [userDetail, setValue]);
 
   return (
     <div className="mt-4">
@@ -31,28 +67,28 @@ const ContentsSettingsMenstrualCycle: React.FC = () => {
             </div>
             <div>
                 <CustomInput
-                    {...register("last_period_start_date", {
+                    {...register("menstrual_cycle.last_period_start_date", {
                         required: "Please choose last period!"
                     })}
                     placeholder="Last Period Start Date"
                     type="date"
-                    errorMessage={errors.last_period_start_date?.message}
+                    errorMessage={errors.menstrual_cycle?.last_period_start_date?.message}
                 />
             </div>
             <div>
                 <CustomInput
-                    {...register("average_cycle_length", {
+                    {...register("menstrual_cycle.average_cycle_length", {
                         required: "Please enter average cycle!"
                     })}
                     placeholder="Average Cycle Length"
                     type="number"
-                    errorMessage={errors.average_cycle_length?.message}
+                    errorMessage={errors.menstrual_cycle?.average_cycle_length?.message}
                 />
             </div>
             <div>
                 <CustomSelect
                     placeholder="Cycle Pattern (Optional)"
-                    value={watch("cycle_pattern")}
+                    value={watch("menstrual_cycle.cycle_pattern")}
                     options={[
                         { value: "", label: "Choose cycle pattern" },
                         { value: "regular", label: "Regular" },
@@ -60,20 +96,38 @@ const ContentsSettingsMenstrualCycle: React.FC = () => {
                         { value: "short", label: "Short Cycle (<21 days)" },
                         { value: "long", label: "Long Cycle (>35 days)" },
                     ]}
-                    onChange={(val) => setValue("cycle_pattern", val)}
-                    errorMessage={errors.cycle_pattern?.message}
+                    onChange={(val) => setValue("menstrual_cycle.cycle_pattern", val)}
+                    errorMessage={errors.menstrual_cycle?.cycle_pattern?.message}
                 />
             </div>
             <div>
                 <CustomInput
-                    {...register("pms_intensity")}
+                    {...register("menstrual_cycle.pms_intensity")}
                     placeholder="PMS Intensity (Optional)"
                     type="number"
-                    errorMessage={errors.pms_intensity?.message}
+                    errorMessage={errors.menstrual_cycle?.pms_intensity?.message}
                 />
             </div>
             <div className="mt-8">
-                <MainButton color="ORANGE" onClick={() => handleSubmit(onSubmit)()}>Complete Setup</MainButton>
+                <MainButton
+                    color="ORANGE"
+                    onClick={() => {
+                        handleSubmit(onSubmit)();
+                    }}
+                    isDisabled={loading}
+                >
+                    {loading ? (
+                        <div className="flex items-center gap-2">
+                            Completed...
+                            <IonSpinner
+                                name="crescent"
+                                className="text-white w-[20px] h-[20px] ms-[6px]"
+                            />
+                        </div>
+                    ) : (
+                        "Complete Setup"
+                    )}
+                </MainButton>
             </div>
         </form>
     </div>

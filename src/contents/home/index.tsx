@@ -22,7 +22,7 @@ const ContentsHome: React.FC<propTypes> = () => {
         ? {
             name: userDetail.fullname || "-",
             gender: userDetail.gender || "-",
-            age: getAge(userDetail.dateBirth),
+            age: userDetail?.dateBirth ? `${getAge(userDetail.dateBirth)} years old` : "-",
             image: "/images/sample-user.jpg",
         }
         : {

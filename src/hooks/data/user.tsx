@@ -24,13 +24,7 @@ export const useUser = () => {
 
   const { mutateAsync: onUpdate, isPending: onUpdateLoading } = useMutation({
     mutationFn: useCallback(
-        async ({
-                 payload,
-                 file,
-               }: {
-          payload: { [key: string]: string };
-          file?: File | null;
-        }) => {
+        async ({ payload, file }: { payload: Record<string, any>; file?: File | null }) => {
           const finalPayload = { ...payload };
 
           if (file) {

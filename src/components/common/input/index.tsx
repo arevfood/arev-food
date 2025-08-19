@@ -1,5 +1,5 @@
 import { IonIcon } from "@ionic/react";
-import {InputHTMLAttributes, useState} from "react";
+import {InputHTMLAttributes} from "react";
 
 type props = {
   placeholder?: string;
@@ -23,10 +23,7 @@ const CustomInput: React.FC<props> = ({
   disabled = false,
   ...props
 }) => {
-  const [value, setValue] = useState("");
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(e.target.value);
     onChange(e);
   };
 
@@ -37,9 +34,6 @@ const CustomInput: React.FC<props> = ({
           <div>
             <IonIcon src={icon} className={iconClass} />
           </div>
-        )}
-        {type === 'date' && !value && (
-            <span className="opacity-50 font-heading">{placeholder}</span>
         )}
         <input
           {...props}

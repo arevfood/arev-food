@@ -1,12 +1,11 @@
 import MainButton from "@/components/common/button";
 import CustomInput from "@/components/common/input";
-import takePhoto from "@/utils/take-photo";
 import {IonImg, IonSpinner} from "@ionic/react";
 import {useToastAlert} from "@/hooks/ui/toast-alert";
 import {SubmitHandler, useForm} from "react-hook-form";
 import CustomSelect from "@/components/common/select-option";
 import {useUser} from "@/hooks/data/user";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import {genderOptions} from "@/data/gender";
 
 type inputProps = {
@@ -17,11 +16,17 @@ type inputProps = {
     gender: string;
     country: string;
     city: string;
+    photoUrl?: string;
 };
 
 const ContentsSettingsProfile: React.FC = () => {
     const { data: userDetail, onUpdate, loading } = useUser();
     const { showToast } = useToastAlert();
+    const [photo, setPhoto] = useState<{ file: File | null; preview: string | null }>({
+        file: null,
+        preview: null,
+    });
+
     const {
         register,
         handleSubmit,
@@ -30,49 +35,71 @@ const ContentsSettingsProfile: React.FC = () => {
         formState: { errors },
     } = useForm<inputProps>();
 
+    const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        setPhoto({file, preview: URL.createObjectURL(file)});
+    };
+
     const onSubmit: SubmitHandler<inputProps> = async (data) => {
-        const filteredPayload = Object.fromEntries(
-            Object.entries(data).filter(([_, value]) => value !== "" && value != null)
+        const filteredPayload = Object.entries(data).reduce<{ [key: string]: string }>(
+            (acc, [key, value]) => {
+                if (value !== "" && value != null) {
+                    acc[key] = String(value);
+                }
+                return acc;
+            }, {}
         );
-        const result = await onUpdate({ payload: filteredPayload });
+
+        const result = await onUpdate({
+            payload: filteredPayload,
+            file: photo.file,
+        });
+
         if (!result) {
             showToast("Edit profile failed!", "error");
             return;
         }
+
         showToast("Edit profile successful!", "success");
+        setPhoto({ file: null, preview: null });
     };
 
     useEffect(() => {
         if (userDetail) {
-            setValue('fullname', userDetail.fullname)
-            setValue('email', userDetail.email)
-            setValue('phoneNumber', userDetail.phoneNumber)
-            setValue('dateBirth', userDetail.dateBirth)
-            setValue('gender', userDetail.gender)
-            setValue('country', userDetail.country)
-            setValue('city', userDetail.city)
+            setValue("fullname", userDetail.fullname);
+            setValue("email", userDetail.email);
+            setValue("phoneNumber", userDetail.phoneNumber);
+            setValue("dateBirth", userDetail.dateBirth);
+            setValue("gender", userDetail.gender);
+            setValue("country", userDetail.country);
+            setValue("city", userDetail.city);
+            setValue("photoUrl", userDetail.photoUrl);
         }
-    }, [userDetail, setValue])
+    }, [userDetail, setValue]);
 
-return (
-        <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="font-bold font-heading text-[22px] text-black">
-                Edit Profile
-            </div>
-            <div className="mx-auto flex items-center justify-center mt-10">
-                <div
-                    onClick={() => {
-                        takePhoto();
-                    }}
-                    className="relative w-fit rounded-full overflow-hidden"
-                >
-                    <IonImg
-                        src="/images/user-placeholder.png"
-                        className="w-[100px] h-[100px] rounded-full bg-[#FDEAC5] flex items-center justify-center relative"
-                        style={{ borderRadius: "100%" }}
-                    />
-                </div>
-            </div>
+  return (
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <div className="font-bold font-heading text-[22px] text-black">
+        Edit Profile
+      </div>
+        <label className="mx-auto flex items-center justify-center mt-10 w-fit rounded-full overflow-hidden cursor-pointer">
+            <IonImg
+                src={
+                    photo.preview ||
+                    userDetail?.photoUrl ||
+                    "/images/user-placeholder.png"
+                }
+                className="w-[100px] h-[100px] rounded-full bg-[#FDEAC5] object-cover"
+            />
+            <input
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={handlePhotoChange}
+            />
+        </label>
             <div className="mt-10">
                 <div className="font-bold font-heading text-[18px] text-black mb-4">
                     Personal Information

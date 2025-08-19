@@ -7,6 +7,7 @@ import { useAuth } from "./authentication";
 import { UserDataModel } from "@/models/user";
 import { useCallback } from "react";
 import MainNotification from "@/components/common/notifications";
+import { uploadImageToStorage } from "@/utils/upload-image";
 
 const entity = "user";
 export const useUser = () => {
@@ -23,14 +24,19 @@ export const useUser = () => {
 
   const { mutateAsync: onUpdate, isPending: onUpdateLoading } = useMutation({
     mutationFn: useCallback(
-      async ({ payload }: { payload: { [key: string]: string } }) => {
-        const result = await FIREBASE_UPDATE_USER({
-          id: session.user.uid,
-          payload: payload,
-        });
-        return result;
-      },
-      [session.user.uid]
+        async ({ payload, file }: { payload: Record<string, any>; file?: File | null }) => {
+          const finalPayload = { ...payload };
+
+          if (file) {
+            finalPayload.photoUrl = await uploadImageToStorage(file, `users/${file.name}`);
+          }
+
+          return await FIREBASE_UPDATE_USER({
+            id: session.user.uid,
+            payload: finalPayload,
+          });
+        },
+        [session.user.uid]
     ),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [entity, session.user.uid] });

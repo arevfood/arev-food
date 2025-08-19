@@ -10,6 +10,7 @@ import { useUser } from "@/hooks/data/user";
 import {useFoods} from "@/hooks/data/food";
 import {capitalize} from "@/utils/capitalize-text";
 import {getAge} from "@/utils/generate-age";
+import CardEmpty from "@/components/wrapper/card-empty";
 
 type propTypes = {};
 
@@ -17,6 +18,7 @@ const ContentsHome: React.FC<propTypes> = () => {
   const { data: userDetail } = useUser();
   const { data: favoriteList, onFavorite } = useFavorite();
   const { data: foodRecommendationList, onGetFoodRecommendation } = useFoods({limit: 5});
+  const isHaveUserMenstrualCycleData = !!userDetail?.menstrual_cycle
 
     const userProfile = userDetail
         ? {
@@ -83,23 +85,27 @@ const ContentsHome: React.FC<propTypes> = () => {
         />
       </div>
       <div className="mt-4">
-        <Swiper slidesPerView={2.2} spaceBetween={16} centeredSlides={false}>
-            {foodRecommendationList &&
-                foodRecommendationList.map((item) => {
-                    return (
-                        <SwiperSlide>
-                            <FoodCard
-                                slug={item.id}
-                                image={item.image_url || ""}
-                                title={item.name}
-                                description={item.description || ""}
-                                onFavorite={() => onGetFoodRecommendation({ food_id: item.id })}
-                                isFav
-                            />
-                        </SwiperSlide>
-                    );
-                })}
-        </Swiper>
+          {!isHaveUserMenstrualCycleData ? (
+              <CardEmpty title="No Recommendation Food Data"/>
+          ) : (
+              <Swiper slidesPerView={2.2} spaceBetween={16} centeredSlides={false}>
+                  {foodRecommendationList &&
+                      foodRecommendationList.map((item) => {
+                          return (
+                              <SwiperSlide>
+                                  <FoodCard
+                                      slug={item.id}
+                                      image={item.image_url || ""}
+                                      title={item.name}
+                                      description={item.description || ""}
+                                      onFavorite={() => onGetFoodRecommendation({ food_id: item.id })}
+                                      isFav
+                                  />
+                              </SwiperSlide>
+                          );
+                      })}
+              </Swiper>
+          )}
       </div>
       <div className="mt-6">
         <IconTitle
@@ -109,23 +115,26 @@ const ContentsHome: React.FC<propTypes> = () => {
         />
       </div>
       <div className="mt-4 mb-6">
-        <Swiper slidesPerView={2.2} spaceBetween={16} centeredSlides={false}>
-          {favoriteList &&
-            favoriteList.map((item) => {
-              return (
-                <SwiperSlide>
-                  <FoodCard
-                    slug={item.id}
-                    image={item.image_url || ""}
-                    title={item.name}
-                    description={item.description}
-                    onFavorite={() => onFavorite({ food_id: item.id })}
-                    isFav
-                  />
-                </SwiperSlide>
-              );
-            })}
-        </Swiper>
+          {!favoriteList ? (
+              <CardEmpty title="No Favorite Food Data"/>
+          ) : (
+            <Swiper slidesPerView={2.2} spaceBetween={16} centeredSlides={false}>
+              {favoriteList.map((item) => {
+                  return (
+                    <SwiperSlide>
+                      <FoodCard
+                        slug={item.id}
+                        image={item.image_url || ""}
+                        title={item.name}
+                        description={item.description}
+                        onFavorite={() => onFavorite({ food_id: item.id })}
+                        isFav
+                      />
+                    </SwiperSlide>
+                  );
+                })}
+            </Swiper>
+          )}
       </div>
     </>
   );

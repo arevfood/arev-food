@@ -25,15 +25,16 @@ const ContentLogin: React.FC = () => {
   const { onSignin, loading } = useAuth();
 
   const onSubmit: SubmitHandler<inputProps> = async (data) => {
-    try {
-      await onSignin(data);
-      showToast("Login successful!", "success");
-      router.replace("/");
-    } catch (error) {
-      console.error(error);
-      showToast("Login failed!", "error");
-      setValue("password", "");
-    }
+    await onSignin(data, {
+      onSuccess: () => {
+        showToast("Login successful!", "success");
+        router.replace("/");
+      },
+      onError: () => {
+        showToast("Login failed!", "error");
+        setValue("password", "");
+      }
+    });
   };
 
   return (

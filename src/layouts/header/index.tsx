@@ -12,13 +12,11 @@ type propTypes = {
 };
 
 const MainHeader: React.FC<propTypes> = ({ transparent }) => {
-    const router = useHistory();
+const router = useHistory();
     const location = useLocation();
 
-    const isHome = location.pathname === "/"
-        || location.pathname === "/search"
-        || location.pathname === "/favorite"
-        || location.pathname === "/setting";
+    const homeRoutes = ["/", "/search", "/favorite", "/setting"];
+    const isHome = homeRoutes.includes(location.pathname);
 
     return (
         <IonHeader className="!shadow-none">

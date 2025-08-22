@@ -37,12 +37,12 @@ const ContentsHome: React.FC<propTypes> = () => {
   const userInfo = {
     info: [
       { title: "Gender", value: capitalize(userProfile.gender) },
-      { title: "Height", value: "175 cm" },
-      { title: "Weight", value: "72 kg" },
+      { title: "Height", value: userDetail?.health?.height ? userDetail?.health?.height + " Cm" : "-" },
+      { title: "Weight", value: userDetail?.health?.weight ? userDetail?.health?.weight + " Kg" : "-" },
     ],
     additional: [
-      { title: "Health Conditions", value: "None" },
-      { title: "Dietary Preference", value: "Balanced Diet" },
+      { title: "Health Conditions", value: userDetail?.health?.health_conditions ? capitalize(userDetail?.health?.health_conditions) : "None" },
+      { title: "Dietary Preference", value: userDetail?.health?.diet_type ? capitalize(userDetail?.health?.diet_type) : "None" },
     ],
   };
 

@@ -7,6 +7,7 @@ import {useToastAlert} from "@/hooks/ui/toast-alert";
 import {useEffect} from "react";
 import {IonSpinner} from "@ionic/react";
 import {cyclePatternOptions} from "@/data/cycle-pattern";
+import CustomInputDate from "@/components/common/input-date";
 
 type inputProps = {
     menstrual_cycle: {
@@ -67,12 +68,12 @@ const ContentsSettingsMenstrualCycle: React.FC = () => {
                 🩸 Menstrual Details
             </div>
             <div>
-                <CustomInput
+                <CustomInputDate
                     {...register("menstrual_cycle.last_period_start_date", {
                         required: "Please choose last period!"
                     })}
-                    placeholder="Last Period Start Date"
-                    type="date"
+                    value={watch("menstrual_cycle.last_period_start_date")}
+                    label="Last Period Start Date"
                     errorMessage={errors.menstrual_cycle?.last_period_start_date?.message}
                 />
             </div>

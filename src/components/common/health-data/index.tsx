@@ -3,7 +3,7 @@ import Tags from "@/components/common/tags";
 
 type propTypes = {
   title: string;
-  value: string;
+  value: string | number;
   unit?: string;
   image?: string;
 };

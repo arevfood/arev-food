@@ -88,11 +88,11 @@ const ContentsSettingsMenstrualCycle: React.FC = () => {
             </div>
             <div>
                 <CustomSelect
-                    placeholder="Cycle Pattern (Optional)"
-                    value={watch("cycle_pattern")}
+                    label="Cycle Pattern (Optional)"
+                    value={watch("menstrual_cycle.cycle_pattern")}
                     options={cyclePatternOptions}
-                    onChange={(val) => setValue("cycle_pattern", val)}
-                    errorMessage={errors.cycle_pattern?.message}
+                    onChange={(val) => setValue("menstrual_cycle.cycle_pattern", val)}
+                    errorMessage={errors.menstrual_cycle?.cycle_pattern?.message}
                 />
             </div>
             <div>

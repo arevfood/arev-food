@@ -143,7 +143,7 @@ const ContentsSettingsProfile: React.FC = () => {
           errorMessage={errors.dateBirth?.message}
         />
         <CustomSelect
-          placeholder="Gender"
+          label="Gender"
           value={watch("gender")}
           options={genderOptions}
           onChange={(val) => setValue("gender", val)}

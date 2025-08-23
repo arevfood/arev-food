@@ -44,11 +44,11 @@ const ContentsSettingsMenstrualCycle: React.FC = () => {
         const result = await onUpdate({ payload: filteredPayload });
 
         if (!result) {
-            showToast("Setup menstrual cycle failed!", "error");
+            showToast("Save Failed", "Couldn’t update cycle data. Please try again.", "error");
             return;
         }
 
-        showToast("Setup menstrual cycle successful!", "success");
+        showToast("Cycle Saved", "Your menstrual cycle data has been updated.", "success");
     };
 
     useEffect(() => {
@@ -89,10 +89,10 @@ const ContentsSettingsMenstrualCycle: React.FC = () => {
             <div>
                 <CustomSelect
                     placeholder="Cycle Pattern (Optional)"
-                    value={watch("cycle_pattern")}
+                    value={watch("menstrual_cycle.cycle_pattern")}
                     options={cyclePatternOptions}
-                    onChange={(val) => setValue("cycle_pattern", val)}
-                    errorMessage={errors.cycle_pattern?.message}
+                    onChange={(val) => setValue("menstrual_cycle.cycle_pattern", val)}
+                    errorMessage={errors.menstrual_cycle?.cycle_pattern?.message}
                 />
             </div>
             <div>

@@ -30,12 +30,12 @@ const ContentSignup: React.FC = () => {
   const onSubmit: SubmitHandler<inputProps> = async (data) => {
     const result = await onSignup(data);
     if (!result) {
-      showToast("Sign up failed!", "error");
+      showToast("Registration Failed", "Something went wrong. Please check your details.", "error");
       setValue('password', '')
       setValue('confirm_password', '')
       return;
     }
-    showToast("Sign up successful!", "success");
+    showToast("Account Created", "Your account has been successfully registered.", "success");
     router.replace("/");
   };
 

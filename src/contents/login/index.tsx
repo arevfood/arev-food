@@ -27,11 +27,11 @@ const ContentLogin: React.FC = () => {
   const onSubmit: SubmitHandler<inputProps> = async (data) => {
     await onSignin(data, {
       onSuccess: () => {
-        showToast("Login successful!", "success");
+        showToast("Login Successful", "Welcome back, you’re now signed in.", "success");
         router.replace("/");
       },
       onError: () => {
-        showToast("Login failed!", "error");
+        showToast("Login Failed", "Invalid email or password. Please try again.", "error");
         setValue("password", "");
       }
     });

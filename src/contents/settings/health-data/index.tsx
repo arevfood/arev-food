@@ -46,11 +46,11 @@ const ContentsSettingsHealthData: React.FC = () => {
         const result = await onUpdate({ payload: filteredPayload });
 
         if (!result) {
-            showToast("Setup menstrual cycle failed!", "error");
+            showToast("Save Failed", "Couldn’t save health data. Please try again.", "error");
             return;
         }
 
-        showToast("Setup menstrual cycle successful!", "success");
+        showToast("Data Saved", "Your health data has been successfully updated.", "success");
     };
 
     useEffect(() => {

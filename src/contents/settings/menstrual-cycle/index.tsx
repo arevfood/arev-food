@@ -8,13 +8,14 @@ import {useEffect} from "react";
 import {IonSpinner} from "@ionic/react";
 import {cyclePatternOptions} from "@/data/cycle-pattern";
 import CustomInputDate from "@/components/common/input-date";
+import {pmsIntensityOptions} from "@/data/pms-intensity";
 
 type inputProps = {
     menstrual_cycle: {
         last_period_start_date: string;
         average_cycle_length: number;
         cycle_pattern?: string;
-        pms_intensity?: number;
+        pms_intensity?: string;
     }
 };
 
@@ -82,25 +83,27 @@ const ContentsSettingsMenstrualCycle: React.FC = () => {
                     {...register("menstrual_cycle.average_cycle_length", {
                         required: "Please enter average cycle!"
                     })}
-                    placeholder="Average Cycle Length"
+                    label="Average Cycle Length"
+                    placeholder="days, e.g. 30"
                     type="number"
                     errorMessage={errors.menstrual_cycle?.average_cycle_length?.message}
                 />
             </div>
             <div>
                 <CustomSelect
-                    placeholder="Cycle Pattern (Optional)"
-                    value={watch("cycle_pattern")}
+                    placeholder="Choose your Cycle Pattern (Optional)"
+                    value={watch("menstrual_cycle.cycle_pattern")}
                     options={cyclePatternOptions}
-                    onChange={(val) => setValue("cycle_pattern", val)}
-                    errorMessage={errors.cycle_pattern?.message}
+                    onChange={(val) => setValue("menstrual_cycle.cycle_pattern", val)}
+                    errorMessage={errors.menstrual_cycle?.cycle_pattern?.message}
                 />
             </div>
             <div>
-                <CustomInput
-                    {...register("menstrual_cycle.pms_intensity")}
-                    placeholder="PMS Intensity (Optional)"
-                    type="number"
+                <CustomSelect
+                    placeholder="Choose your PMS Intensity (Optional)"
+                    value={watch("menstrual_cycle.pms_intensity")}
+                    options={pmsIntensityOptions}
+                    onChange={(val) => setValue("menstrual_cycle.pms_intensity", val)}
                     errorMessage={errors.menstrual_cycle?.pms_intensity?.message}
                 />
             </div>

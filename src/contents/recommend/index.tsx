@@ -21,16 +21,22 @@ const ContentRecommend: React.FC<propTypes> = () => {
 
   useEffect(() => {
     const fetchRecommendations = async () => {
-      if (!userDetail?.dateBirth || !userDetail?.gender || !userDetail?.health) return;
+      if (!userDetail?.health) return;
 
       try {
         const foods = await onGetFoodRecommendation({
           age: String(getAge(userDetail.dateBirth)),
-          dietary_preference: userDetail.health.dietary_preference,
+          country: userDetail.country,
+          city: userDetail.city,
           gender: userDetail.gender,
+          height: String(userDetail.health.height),
+          weight: String(userDetail.health.weight),
+          blood_sugar_level: String(userDetail.health.blood_sugar_level),
+          blood_pressure: userDetail.health.blood_pressure,
+          dietary_preference: userDetail.health.dietary_preference,
           health_condition: userDetail.health.health_conditions
               .split(",")
-              .map((c: string) => c.trim()),
+              .map((condition: string) => condition.trim()),
           lifestyle: userDetail.health.lifestyle,
           limit: String(limit),
           page: String(page),

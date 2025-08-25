@@ -21,7 +21,7 @@ const ContentsHome: React.FC<propTypes> = () => {
   const { data: favoriteList, onFavorite } = useFavorite();
     const { onGetFoodRecommendation } = useFoods({});
     const [foodRecommendationList, setFoodRecommendationList] = useState<FoodQueryDataModel[]>([]);
-  const isHaveRecommendationFood = !!userDetail?.dateBirth && !!userDetail?.gender && !!userDetail?.health;
+  const isHaveRecommendationFood = !!userDetail?.health;
 
     const userProfile = userDetail
         ? {
@@ -51,13 +51,19 @@ const ContentsHome: React.FC<propTypes> = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            if (!userDetail?.dateBirth || !userDetail?.gender || !userDetail?.health) return;
+            if (!userDetail?.health) return;
 
             try {
                 const foods = await onGetFoodRecommendation({
                     age: String(getAge(userDetail.dateBirth)),
-                    dietary_preference: userDetail.health.dietary_preference,
+                    country: userDetail.country,
+                    city: userDetail.city,
                     gender: userDetail.gender,
+                    height: String(userDetail.health.height),
+                    weight: String(userDetail.health.weight),
+                    blood_sugar_level: String(userDetail.health.blood_sugar_level),
+                    blood_pressure: userDetail.health.blood_pressure,
+                    dietary_preference: userDetail.health.dietary_preference,
                     health_condition: userDetail.health.health_conditions
                         .split(",")
                         .map((condition: string) => condition.trim()),

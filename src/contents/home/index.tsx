@@ -11,14 +11,17 @@ import {useFoods} from "@/hooks/data/food";
 import {capitalize} from "@/utils/capitalize-text";
 import {getAge} from "@/utils/generate-age";
 import CardEmpty from "@/components/wrapper/card-empty";
+import {FoodQueryDataModel} from "@/models/food-query";
+import {useEffect, useState} from "react";
 
 type propTypes = {};
 
 const ContentsHome: React.FC<propTypes> = () => {
   const { data: userDetail } = useUser();
   const { data: favoriteList, onFavorite } = useFavorite();
-  const { data: foodRecommendationList, onGetFoodRecommendation } = useFoods({limit: 5});
-  const isHaveUserMenstrualCycleData = !!userDetail?.menstrual_cycle
+    const { onGetFoodRecommendation } = useFoods({});
+    const [foodRecommendationList, setFoodRecommendationList] = useState<FoodQueryDataModel[]>([]);
+  const isHaveRecommendationFood = !!userDetail?.dateBirth && !!userDetail?.gender && !!userDetail?.health;
 
     const userProfile = userDetail
         ? {
@@ -46,7 +49,33 @@ const ContentsHome: React.FC<propTypes> = () => {
     ],
   };
 
-  return (
+    useEffect(() => {
+        const fetchData = async () => {
+            if (!userDetail?.dateBirth || !userDetail?.gender || !userDetail?.health) return;
+
+            try {
+                const foods = await onGetFoodRecommendation({
+                    age: String(getAge(userDetail.dateBirth)),
+                    dietary_preference: userDetail.health.dietary_preference,
+                    gender: userDetail.gender,
+                    health_condition: userDetail.health.health_conditions
+                        .split(",")
+                        .map((condition: string) => condition.trim()),
+                    lifestyle: userDetail.health.lifestyle,
+                });
+
+                setFoodRecommendationList(foods || []);
+            } catch (error) {
+                console.error(error);
+            } finally {
+                console.log(foodRecommendationList)
+            }
+        };
+
+        fetchData();
+    }, [userDetail]);
+
+    return (
     <>
       <div className="mt-2">
         <ProfileBox {...userProfile} gender={userProfile.gender}/>
@@ -81,11 +110,11 @@ const ContentsHome: React.FC<propTypes> = () => {
         <IconTitle
           title="Recommendation Food"
           icon="/icons/meat.svg"
-          link="/recommendation"
+          link={isHaveRecommendationFood || foodRecommendationList.length !== 0 ? '/recommendation' : ''}
         />
       </div>
       <div className="mt-4">
-          {!isHaveUserMenstrualCycleData ? (
+          {!isHaveRecommendationFood || foodRecommendationList.length === 0 ? (
               <CardEmpty title="No Recommendation Food Data"/>
           ) : (
               <Swiper slidesPerView={2.2} spaceBetween={16} centeredSlides={false}>

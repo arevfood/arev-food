@@ -28,7 +28,8 @@ export interface UserHealth {
   blood_sugar_level: number;
   blood_pressure: string;
   health_conditions: string;
-  diet_type: string;
+  dietary_preference: string;
+  lifestyle: string;
 }
 
 export interface UserDataModel {

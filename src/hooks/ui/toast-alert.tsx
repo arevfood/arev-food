@@ -1,5 +1,5 @@
 import { useIonToast } from "@ionic/react";
-import "../../styles/toast.scss";
+import "@/styles/toast.scss";
 
 type ToastType = "success" | "error";
 
@@ -7,9 +7,8 @@ export function useToastAlert() {
     const [present] = useIonToast();
 
     const showToast = (
-        header: string,
-        message: string,
-        type: ToastType,
+        {header, message, type} :
+        {header: string, message: string, type: ToastType}
     ) => {
         present({
             header,

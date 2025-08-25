@@ -25,10 +25,10 @@ const SignoutLink: React.FC = () => {
   const onSubmit = async () => {
     await onSignOut(undefined, {
       onSuccess: () => {
-        showToast("Logout Successful", "You’ve been signed out. See you soon!", "success");
+        showToast({header: "Logout Successful", message: "You’ve been signed out. See you soon!", type: "success"});
       },
       onError: () => {
-        showToast("Logout Failed", "Unable to log out. Please try again.", "error");
+        showToast({header: "Logout Failed", message: "Unable to log out. Please try again.", type: "error"});
       }
     });
   };

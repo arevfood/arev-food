@@ -46,11 +46,11 @@ const ContentsSettingsHealthData: React.FC = () => {
         const result = await onUpdate({ payload: filteredPayload });
 
         if (!result) {
-            showToast("Save Failed", "Couldn’t save health data. Please try again.", "error");
+            showToast({header: "Save Failed", message: "Couldn’t save health data. Please try again.", type: "error"});
             return;
         }
 
-        showToast("Data Saved", "Your health data has been successfully updated.", "success");
+        showToast({header: "Data Saved", message: "Your health data has been successfully updated.", type: "success"});
     };
 
     useEffect(() => {

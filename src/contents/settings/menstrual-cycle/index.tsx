@@ -7,13 +7,14 @@ import {useToastAlert} from "@/hooks/ui/toast-alert";
 import {useEffect} from "react";
 import {IonSpinner} from "@ionic/react";
 import {cyclePatternOptions} from "@/data/cycle-pattern";
+import {pmsIntensityOptions} from "@/data/pms-intensity";
 
 type inputProps = {
     menstrual_cycle: {
         last_period_start_date: string;
         average_cycle_length: number;
         cycle_pattern?: string;
-        pms_intensity?: number;
+        pms_intensity?: string;
     }
 };
 
@@ -89,6 +90,7 @@ const ContentsSettingsMenstrualCycle: React.FC = () => {
             <div>
                 <CustomSelect
                     label="Cycle Pattern (Optional)"
+                    placeholder="Choose cycle pattern"
                     value={watch("menstrual_cycle.cycle_pattern")}
                     options={cyclePatternOptions}
                     onChange={(val) => setValue("menstrual_cycle.cycle_pattern", val)}
@@ -96,10 +98,12 @@ const ContentsSettingsMenstrualCycle: React.FC = () => {
                 />
             </div>
             <div>
-                <CustomInput
-                    {...register("menstrual_cycle.pms_intensity")}
-                    placeholder="PMS Intensity (Optional)"
-                    type="number"
+                <CustomSelect
+                    label="PMS Intensity (Optional)"
+                    placeholder="Choose pms intensity"
+                    value={watch("menstrual_cycle.pms_intensity")}
+                    options={pmsIntensityOptions}
+                    onChange={(val) => setValue("menstrual_cycle.pms_intensity", val)}
                     errorMessage={errors.menstrual_cycle?.pms_intensity?.message}
                 />
             </div>

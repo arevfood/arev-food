@@ -6,50 +6,151 @@ import MenstrualBanner from "@/components/common/menstrual-banner";
 import Card from "@/components/wrapper/card";
 import YellowBox from "@/components/wrapper/yellow-box";
 import { Swiper, SwiperSlide } from "swiper/react";
+import {useUser} from "@/hooks/data/user";
+import {useToastAlert} from "@/hooks/ui/toast-alert";
+import {SubmitHandler, useForm} from "react-hook-form";
+import {useEffect, useState} from "react";
+import {cyclePatternOptions} from "@/data/cycle-pattern";
+import CustomSelect from "@/components/common/select-option";
+import {pmsIntensityOptions} from "@/data/pms-intensity";
+import {IonSpinner} from "@ionic/react";
+import {useFoods} from "@/hooks/data/food";
+import {FoodQueryDataModel} from "@/models/food-query";
+import {getAge} from "@/utils/generate-age";
+import CardEmpty from "@/components/wrapper/card-empty";
+import {getMenstrualPhase} from "@/utils/calculate-menstrual-phase";
+
+type inputProps = {
+  menstrual_cycle: {
+    last_period_start_date: string;
+    average_cycle_length: number;
+    cycle_pattern?: string;
+    pms_intensity?: string;
+  }
+};
 
 const ContentMenstrual: React.FC = () => {
+  const { data: userDetail, onUpdate, loading } = useUser();
+  const { showToast } = useToastAlert();
+  const { onGetFoodRecommendation } = useFoods({});
+  const [foodRecommendationList, setFoodRecommendationList] = useState<FoodQueryDataModel[]>([]);
+  const isHaveRecommendationFood = !!userDetail?.health;
+  const phaseInfo = userDetail?.menstrual_cycle
+      ? getMenstrualPhase({
+        lastPeriod: userDetail.menstrual_cycle.last_period_start_date,
+        cycleLength: userDetail.menstrual_cycle.average_cycle_length
+      }) : null;
+
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    watch,
+    formState: { errors },
+  } = useForm<inputProps>();
+
+  const onSubmit: SubmitHandler<inputProps> = async (data) => {
+    const filteredPayload = {
+      menstrual_cycle: Object.entries(data.menstrual_cycle).reduce<Record<string, any>>(
+          (acc, [key, value]) => {
+            if (value !== "" && value != null) {
+              acc[key] = value;
+            }
+            return acc;
+          }, {}
+      ),
+    };
+
+    const result = await onUpdate({ payload: filteredPayload });
+
+    if (!result) {
+      showToast("Setup menstrual cycle failed!", "error");
+      return;
+    }
+
+    showToast("Setup menstrual cycle successful!", "success");
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!userDetail?.health) return;
+
+      try {
+        const foods = await onGetFoodRecommendation({
+          age: String(getAge(userDetail.dateBirth)),
+          country: userDetail.country,
+          city: userDetail.city,
+          gender: userDetail.gender,
+          height: String(userDetail.health.height),
+          weight: String(userDetail.health.weight),
+          blood_sugar_level: String(userDetail.health.blood_sugar_level),
+          blood_pressure: userDetail.health.blood_pressure,
+          dietary_preference: userDetail.health.dietary_preference,
+          health_condition: userDetail.health.health_conditions
+              .split(",")
+              .map((condition: string) => condition.trim()),
+          lifestyle: userDetail.health.lifestyle,
+        });
+
+        setFoodRecommendationList(foods || []);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchData();
+  }, [userDetail]);
+
+  useEffect(() => {
+    if (userDetail) {
+      setValue("menstrual_cycle.last_period_start_date", userDetail.menstrual_cycle?.last_period_start_date);
+      setValue("menstrual_cycle.average_cycle_length", userDetail.menstrual_cycle?.average_cycle_length);
+      setValue("menstrual_cycle.cycle_pattern", userDetail.menstrual_cycle?.cycle_pattern);
+      setValue("menstrual_cycle.pms_intensity", userDetail.menstrual_cycle?.pms_intensity);
+    }
+  }, [userDetail, setValue]);
+
   return (
     <div>
       <div className="mt-6">
         <IconTitle title="Menstrual" icon="/icons/calender-clock.svg" />
       </div>
       <div className="mt-4">
-        <MenstrualBanner />
+        <MenstrualBanner
+            title="Current Phase"
+            subtitle={phaseInfo?.phase}
+            description={`*Days Until Next Period: ${phaseInfo?.daysUntilNext} Days`}
+        />
       </div>
       <div className="mt-6">
         <IconTitle
           title="Recommendation Food"
           icon="/icons/meat.svg"
-          link="/recommendation"
+          link={isHaveRecommendationFood || foodRecommendationList.length !== 0 ? '/recommendation' : ''}
         />
       </div>
       <div className="mt-4">
-        <Swiper slidesPerView={2.2} spaceBetween={16} centeredSlides={false}>
-          <SwiperSlide>
-            <FoodCard
-              slug="raw-almonds-1"
-              image="/images/food-01.jpg"
-              title="Raw Almonds"
-              description="Naturally nutrient-dense and perfect for snacking. Great source of vitamin E and healthy fats."
-            />
-          </SwiperSlide>
-          <SwiperSlide>
-            <FoodCard
-              slug="raw-almonds-2"
-              image="/images/food-01.jpg"
-              title="Raw Almonds"
-              description="Naturally nutrient-dense and perfect for snacking. Great source of vitamin E and healthy fats."
-            />
-          </SwiperSlide>
-          <SwiperSlide>
-            <FoodCard
-              slug="raw-almonds-3"
-              image="/images/food-01.jpg"
-              title="Raw Almonds"
-              description="Naturally nutrient-dense and perfect for snacking. Great source of vitamin E and healthy fats."
-            />
-          </SwiperSlide>
-        </Swiper>
+        {!isHaveRecommendationFood || foodRecommendationList.length === 0 ? (
+            <CardEmpty title="No Recommendation Food Data"/>
+        ) : (
+            <Swiper slidesPerView={2.2} spaceBetween={16} centeredSlides={false}>
+              {foodRecommendationList &&
+                  foodRecommendationList.map((item) => {
+                    return (
+                        <SwiperSlide>
+                          <FoodCard
+                              slug={item.id}
+                              image={item.image_url || ""}
+                              title={item.name}
+                              description={item.food_details?.description || ""}
+                              onFavorite={() => onGetFoodRecommendation({ food_id: item.id })}
+                              isFav
+                          />
+                        </SwiperSlide>
+                    );
+                  })}
+            </Swiper>
+        )}
       </div>
       <div className="mt-6">
         <IconTitle title="Food to Avoid" icon="/icons/stop.svg" />
@@ -122,25 +223,71 @@ const ContentMenstrual: React.FC = () => {
       <div className="mt-6">
         <IconTitle title="Update Menstrual Cycle" icon="/icons/calender.svg" />
       </div>
-      <div className="mt-4 mb-10">
+      <form className="mt-4 mb-10" onSubmit={handleSubmit(onSubmit)}>
         <Card className="p-4">
           <div>
-            <CustomInput placeholder="Start of Current Period" />
+            <CustomInput
+                {...register("menstrual_cycle.last_period_start_date", {
+                  required: "Please choose last period!"
+                })}
+                placeholder="Last Period Start Date"
+                type="date"
+                errorMessage={errors.menstrual_cycle?.last_period_start_date?.message}
+            />
           </div>
           <div>
-            <CustomInput placeholder="Average Cycle Length" />
+            <CustomInput
+                {...register("menstrual_cycle.average_cycle_length", {
+                  required: "Please enter average cycle!"
+                })}
+                placeholder="Average Cycle Length"
+                type="number"
+                errorMessage={errors.menstrual_cycle?.average_cycle_length?.message}
+            />
           </div>
           <div>
-            <CustomInput placeholder="Cycle Pattern (Optional)" />
+            <CustomSelect
+                label="Cycle Pattern (Optional)"
+                placeholder="Choose cycle pattern"
+                value={watch("menstrual_cycle.cycle_pattern")}
+                options={cyclePatternOptions}
+                onChange={(val) => setValue("menstrual_cycle.cycle_pattern", val)}
+                errorMessage={errors.menstrual_cycle?.cycle_pattern?.message}
+            />
           </div>
           <div>
-            <CustomInput placeholder="PMS Intensity (Optional)" />
+            <CustomSelect
+                label="PMS Intensity (Optional)"
+                placeholder="Choose pms intensity"
+                value={watch("menstrual_cycle.pms_intensity")}
+                options={pmsIntensityOptions}
+                onChange={(val) => setValue("menstrual_cycle.pms_intensity", val)}
+                errorMessage={errors.menstrual_cycle?.pms_intensity?.message}
+            />
           </div>
           <div className="mt-8">
-            <MainButton color="ORANGE">Update Menstrual Cycle</MainButton>
+            <MainButton
+                color="ORANGE"
+                onClick={() => {
+                  handleSubmit(onSubmit)();
+                }}
+                isDisabled={loading}
+            >
+              {loading ? (
+                  <div className="flex items-center gap-2">
+                    Updating Menstrual Cycle...
+                    <IonSpinner
+                        name="crescent"
+                        className="text-white w-[20px] h-[20px] ms-[6px]"
+                    />
+                  </div>
+              ) : (
+                  "Update Menstrual Cycle"
+              )}
+            </MainButton>
           </div>
         </Card>
-      </div>
+      </form>
     </div>
   );
 };

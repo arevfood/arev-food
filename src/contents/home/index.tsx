@@ -67,8 +67,6 @@ const ContentsHome: React.FC<propTypes> = () => {
                 setFoodRecommendationList(foods || []);
             } catch (error) {
                 console.error(error);
-            } finally {
-                console.log(foodRecommendationList)
             }
         };
 
@@ -126,7 +124,7 @@ const ContentsHome: React.FC<propTypes> = () => {
                                       slug={item.id}
                                       image={item.image_url || ""}
                                       title={item.name}
-                                      description={item.description || ""}
+                                      description={item.food_details?.description || ""}
                                       onFavorite={() => onGetFoodRecommendation({ food_id: item.id })}
                                       isFav
                                   />

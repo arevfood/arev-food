@@ -70,13 +70,13 @@ const ContentsHome: React.FC<propTypes> = () => {
                         title="Blood Sugar Level"
                         value={userDetail?.health.blood_sugar_level}
                         unit="mg/dL"
-                        image="/images/health-condition.jpg"
+                        image="/images/blood-sugar-level.jpg"
                     />
                     <HealthData
                         title="Blood Pressure"
                         value={userDetail?.health.blood_pressure}
                         unit="mmHg"
-                        image="/images/health-condition.jpg"
+                        image="/images/blood-pressure.jpg"
                     />
                 </div>
             </>

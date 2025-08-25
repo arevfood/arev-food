@@ -1,6 +1,13 @@
 import { IonImg } from "@ionic/react";
 import Tags from "@/components/common/tags";
 
+type StatusColor = "NORMAL" | "DANGER" | "SUCCESS" | "WARNING";
+
+type Status = {
+    type: string;
+    color: StatusColor;
+};
+
 type propTypes = {
   title: string;
   value: string | number;
@@ -9,6 +16,37 @@ type propTypes = {
 };
 
 const HealthData: React.FC<propTypes> = ({ title, value, unit, image }) => {
+    let status: Status = {
+        type: "Normal",
+        color: "NORMAL",
+    };
+
+    const getBloodSugarStatus = (value: string): Status => {
+        const valueParse = parseInt(value, 10);
+
+        if (valueParse < 70) return { type: "Not Good", color: "DANGER" };
+        if (valueParse >= 70 && valueParse <= 99) return { type: "Good", color: "SUCCESS" };
+        if (valueParse >= 100 && valueParse <= 125) return { type: "Normal", color: "NORMAL" };
+        return { type: "Not Good", color: "DANGER" };
+    };
+
+    const getBloodPressureStatus = (value: string): Status => {
+        const [systolicStr, diastolicStr] = value.toString().split("/");
+        const systolic = parseInt(systolicStr, 10);
+        const diastolic = parseInt(diastolicStr, 10);
+
+        if (systolic < 90 || diastolic < 60) return { type: "Not Good", color: "DANGER" };
+        if (systolic <= 120 && diastolic <= 80) return { type: "Good", color: "SUCCESS" };
+        if (systolic <= 139 || diastolic <= 89) return { type: "Normal", color: "NORMAL" };
+        return { type: "Not Good", color: "DANGER" };
+    };
+
+    if (title.includes("Blood Sugar Level") && typeof value === "string") {
+        status = getBloodSugarStatus(value);
+    } else if (title.includes("Blood Pressure") && typeof value === "string") {
+        status = getBloodPressureStatus(value);
+    }
+
   return (
     <div className="rounded-[8px] min-h-[180px] relative overflow-hidden">
       <IonImg
@@ -26,7 +64,7 @@ const HealthData: React.FC<propTypes> = ({ title, value, unit, image }) => {
         </div>
       </div>
       <div className="absolute top-[8px] left-[10px] ">
-        <Tags label="Normal" />
+        <Tags label={status.type} status={status.color}/>
       </div>
     </div>
   );

@@ -109,16 +109,18 @@ const ContentsSettingsProfile: React.FC = () => {
         </div>
         <CustomInput
           {...register("fullname", {
-            required: "Please input your full name!",
+            required: "Please input your full name",
           })}
-          placeholder="Full Name"
+          label="Full Name"
+          placeholder="Enter your full name"
           errorMessage={errors.fullname?.message}
         />
         <CustomInput
           {...register("email", {
             required: "Please input your email!",
           })}
-          placeholder="Email"
+          label="Email"
+          placeholder="Enter your email"
           type="email"
           errorMessage={errors.email?.message}
         />
@@ -126,7 +128,8 @@ const ContentsSettingsProfile: React.FC = () => {
           {...register("phoneNumber", {
             required: "Please input your phone number!",
           })}
-          placeholder="Phone Number"
+          label="Phone Number"
+          placeholder="Enter your phone number"
           errorMessage={errors.phoneNumber?.message}
         />
       </div>
@@ -138,7 +141,8 @@ const ContentsSettingsProfile: React.FC = () => {
           {...register("dateBirth", {
             required: "Please input your date of birth!",
           })}
-          placeholder="Date of Birth"
+          label="Date of Birth"
+          placeholder="Choose your date of birth"
           type="date"
           errorMessage={errors.dateBirth?.message}
         />
@@ -151,21 +155,23 @@ const ContentsSettingsProfile: React.FC = () => {
         />
       </div>
       <div className="mt-4">
-        <div className="font-bold font-heading text-[18px] text-black">
+        <div className="font-bold font-heading text-[18px] text-black mb-4">
           Location
         </div>
         <CustomInput
           {...register("country", {
             required: "Please input your country!",
           })}
-          placeholder="Country"
+          label="Country"
+          placeholder="Enter your country"
           errorMessage={errors.country?.message}
         />
         <CustomInput
           {...register("city", {
             required: "Please input your city!",
           })}
-          placeholder="City"
+          label="City"
+          placeholder="Enter your city"
           errorMessage={errors.city?.message}
         />
       </div>

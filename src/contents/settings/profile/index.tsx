@@ -99,121 +99,114 @@ const ContentsSettingsProfile: React.FC = () => {
   }, [userDetail, setValue]);
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="font-bold font-heading text-[22px] text-black">
-        Edit Profile
-      </div>
-      <label className="mx-auto flex items-center justify-center mt-10 w-fit rounded-full overflow-hidden cursor-pointer">
-        <IonImg
-          src={
-            photo.preview ||
-            userDetail?.photoUrl ||
-            "/images/user-placeholder.png"
-          }
-          className="w-[100px] h-[100px] rounded-full bg-[#FDEAC5] object-cover"
-        />
-        <input
-          type="file"
-          accept="image/*"
-          className="hidden"
-          onChange={handlePhotoChange}
-        />
-      </label>
-      <div className="mt-10">
-        <div className="font-bold font-heading text-[18px] text-black mb-4">
-          Personal Information
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className="font-bold font-heading text-[22px] text-black">
+          Edit Profile
         </div>
-        <CustomInput
-          {...register("fullname", {
-            required: "Please input your full name!",
-          })}
-          placeholder="Full Name"
-          errorMessage={errors.fullname?.message}
-        />
-        <CustomInput
-          {...register("email", {
-            required: "Please input your email!",
-          })}
-          placeholder="Email"
-          type="email"
-          errorMessage={errors.email?.message}
-        />
-        <CustomInput
-          {...register("phoneNumber", {
-            required: "Please input your phone number!",
-          })}
-          placeholder="Phone Number"
-          errorMessage={errors.phoneNumber?.message}
-        />
-      </div>
-      <div className="mt-4">
-        <div className="font-bold font-heading text-[18px] text-black mb-4">
-          Basic Details
+        <label className="mx-auto flex items-center justify-center mt-10 w-fit rounded-full overflow-hidden cursor-pointer">
+          <IonImg
+              src={
+                  photo.preview ||
+                  userDetail?.photoUrl ||
+                  "/images/user-placeholder.png"
+              }
+              className="w-[100px] h-[100px] rounded-full bg-[#FDEAC5] object-cover"
+          />
+          <input
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={handlePhotoChange}
+          />
+        </label>
+        <div className="mt-10">
+          <div className="font-bold font-heading text-[18px] text-black mb-4">
+            Personal Information
+          </div>
+          <CustomInput
+              {...register("fullname", {
+                required: "Please input your full name!",
+              })}
+              placeholder="Full Name"
+              errorMessage={errors.fullname?.message}
+          />
+          <CustomInput
+              {...register("email", {
+                required: "Please input your email!",
+              })}
+              placeholder="Email"
+              type="email"
+              errorMessage={errors.email?.message}
+          />
+          <CustomInput
+              {...register("phoneNumber", {
+                required: "Please input your phone number!",
+              })}
+              placeholder="Phone Number"
+              errorMessage={errors.phoneNumber?.message}
+          />
         </div>
-        <CustomInput
-          {...register("dateBirth", {
-            required: "Please input your date of birth!",
-          })}
-          placeholder="Date of Birth"
-          type="date"
-          errorMessage={errors.dateBirth?.message}
-        />
-        <CustomSelect
-          label="Gender"
-          value={watch("gender")}
-          options={genderOptions}
-          onChange={(val) => setValue("gender", val)}
-          errorMessage={errors.gender?.message}
-        />
-      </div>
-      <div className="mt-4">
-        <div className="font-bold font-heading text-[18px] text-black mb-4">
-          Location
+        <div className="mt-4">
+          <div className="font-bold font-heading text-[18px] text-black mb-4">
+            Basic Details
+          </div>
+          <CustomInput
+              {...register("dateBirth", {
+                required: "Please input your date of birth!",
+              })}
+              placeholder="Date of Birth"
+              type="date"
+              errorMessage={errors.dateBirth?.message}
+          />
+          <CustomSelect
+              label="Gender"
+              value={watch("gender")}
+              options={genderOptions}
+              onChange={(val) => setValue("gender", val)}
+              errorMessage={errors.gender?.message}
+          />
         </div>
-        <CustomSelect
-            label="Country"
-            value={watch("country")}
-            options={countries.map((country) => ({ label: country, value: country }))}
-            onChange={(val) => setValue("country", val)}
-            errorMessage={errors.country?.message}
-        />
-        {/*<CustomInput*/}
-        {/*  {...register("country", {*/}
-        {/*    required: "Please input your country!",*/}
-        {/*  })}*/}
-        {/*  placeholder="Country"*/}
-        {/*  errorMessage={errors.country?.message}*/}
-        {/*/>*/}
-        <CustomInput
-          {...register("city", {
-            required: "Please input your city!",
-          })}
-          placeholder="City"
-          errorMessage={errors.city?.message}
-        />
-      </div>
-      <div className="my-6">
-        <MainButton
-          color="ORANGE"
-          onClick={() => {
-            handleSubmit(onSubmit)();
-          }}
-          isDisabled={loading}
-        >
-          {loading ? (
-            <div className="flex items-center gap-2">
-              Saving Changes...
-              <IonSpinner
-                name="crescent"
-                className="text-white w-[20px] h-[20px] ms-[6px]"
-              />
-            </div>
-          ) : (
-            "Save Changes"
-          )}
-        </MainButton>
-      </div>
-    </form>
+        <div className="mt-4">
+          <div className="font-bold font-heading text-[18px] text-black mb-4">
+            Location
+          </div>
+          <CustomSelect
+              label="Country"
+              value={watch("country")}
+              options={countries.map((country) => ({ label: country, value: country }))}
+              onChange={(val) => setValue("country", val)}
+              errorMessage={errors.country?.message}
+          />
+          <CustomInput
+              {...register("city", {
+                required: "Please input your city!",
+              })}
+              placeholder="City"
+              errorMessage={errors.city?.message}
+          />
+        </div>
+        <div className="my-6">
+          <MainButton
+              color="ORANGE"
+              onClick={() => {
+                handleSubmit(onSubmit)();
+              }}
+              isDisabled={loading}
+          >
+            {loading ? (
+                <div className="flex items-center gap-2">
+                  Saving Changes...
+                  <IonSpinner
+                      name="crescent"
+                      className="text-white w-[20px] h-[20px] ms-[6px]"
+                  />
+                </div>
+            ) : (
+                "Save Changes"
+            )}
+          </MainButton>
+        </div>
+      </form>
   );
 };
 

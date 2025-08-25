@@ -31,6 +31,7 @@ const ContentsSettingsProfile: React.FC = () => {
     preview: null,
   });
   const [countries, setCountries] = useState<string[]>([]);
+  const [cities, setCities] = useState<string[]>([]);
 
   const {
     register,
@@ -47,6 +48,20 @@ const ContentsSettingsProfile: React.FC = () => {
       setCountries(countryList);
     } catch (err) {
       console.error(err);
+    }
+  };
+
+  const fetchCities = async (country: string) => {
+    try {
+      const res = await axios.post("https://countriesnow.space/api/v0.1/countries/cities", {
+        country,
+      });
+      const data = Array.isArray(res.data.data) ? res.data.data : [];
+      setCities(data);
+      return data;
+    } catch (err) {
+      console.error(err);
+      return [];
     }
   };
 
@@ -86,16 +101,22 @@ const ContentsSettingsProfile: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (userDetail) {
-      setValue("fullname", userDetail.fullname);
-      setValue("email", userDetail.email);
-      setValue("phoneNumber", userDetail.phoneNumber);
-      setValue("dateBirth", userDetail.dateBirth);
-      setValue("gender", userDetail.gender);
-      setValue("country", userDetail.country);
-      setValue("city", userDetail.city);
-      setValue("photoUrl", userDetail.photoUrl);
-    }
+    const loadData = async () => {
+      if (userDetail) {
+        setValue("fullname", userDetail.fullname);
+        setValue("email", userDetail.email);
+        setValue("phoneNumber", userDetail.phoneNumber);
+        setValue("dateBirth", userDetail.dateBirth);
+        setValue("gender", userDetail.gender);
+        setValue("country", userDetail.country);
+        setValue("city", userDetail.city);
+        setValue("photoUrl", userDetail.photoUrl);
+
+        await fetchCities(userDetail.country);
+      }
+    };
+
+    loadData();
   }, [userDetail, setValue]);
 
   return (
@@ -160,6 +181,7 @@ const ContentsSettingsProfile: React.FC = () => {
           />
           <CustomSelect
               label="Gender"
+              placeholder="Choose your gender"
               value={watch("gender")}
               options={genderOptions}
               onChange={(val) => setValue("gender", val)}
@@ -172,16 +194,22 @@ const ContentsSettingsProfile: React.FC = () => {
           </div>
           <CustomSelect
               label="Country"
+              placeholder="Choose your country"
               value={watch("country")}
               options={countries.map((country) => ({ label: country, value: country }))}
-              onChange={(val) => setValue("country", val)}
+              onChange={async (val) => {
+                setValue("country", val);
+                await fetchCities(val);
+                setValue("city", "");
+              }}
               errorMessage={errors.country?.message}
           />
-          <CustomInput
-              {...register("city", {
-                required: "Please input your city!",
-              })}
-              placeholder="City"
+          <CustomSelect
+              label="City"
+              placeholder="Choose your city"
+              value={watch("city")}
+              options={cities.map((city) => ({ label: city, value: city }))}
+              onChange={(val) => setValue("city", val)}
               errorMessage={errors.city?.message}
           />
         </div>

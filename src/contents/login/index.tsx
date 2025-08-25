@@ -52,7 +52,8 @@ const ContentLogin: React.FC = () => {
               {...register("email", {
                 required: "Please input your email!"
               })}
-              placeholder="Email"
+              label="Email"
+              placeholder="Enter your email"
               type="email"
               errorMessage={errors.email?.message}
             />
@@ -64,7 +65,8 @@ const ContentLogin: React.FC = () => {
                   message: "Password must be at least 6 characters!",
                 },
               })}
-              placeholder="Password"
+              label="Password"
+              placeholder="Enter your email"
               type="password"
               errorMessage={errors.password?.message}
             />

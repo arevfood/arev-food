@@ -19,7 +19,7 @@ export interface UserMenstrualCycle {
   last_period_start_date: string;
   average_cycle_length: number;
   cycle_pattern: string;
-  pms_intensity: number;
+  pms_intensity: string;
 }
 
 export interface UserHealth {

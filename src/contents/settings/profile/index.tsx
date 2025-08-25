@@ -7,6 +7,7 @@ import CustomSelect from "@/components/common/select-option";
 import { useUser } from "@/hooks/data/user";
 import { useEffect, useState } from "react";
 import { genderOptions } from "@/data/gender";
+import axios from "axios";
 
 type inputProps = {
   fullname: string;
@@ -29,6 +30,7 @@ const ContentsSettingsProfile: React.FC = () => {
     file: null,
     preview: null,
   });
+  const [countries, setCountries] = useState<string[]>([]);
 
   const {
     register,
@@ -37,6 +39,16 @@ const ContentsSettingsProfile: React.FC = () => {
     setValue,
     formState: { errors },
   } = useForm<inputProps>();
+
+  const fetchCountries = async () => {
+    try {
+      const res = await axios.get("https://countriesnow.space/api/v0.1/countries/positions");
+      const countryList = res.data.data.map((country: any) => country.name);
+      setCountries(countryList);
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -68,6 +80,10 @@ const ContentsSettingsProfile: React.FC = () => {
     showToast("Edit profile successful!", "success");
     setPhoto({ file: null, preview: null });
   };
+
+  useEffect(() => {
+    fetchCountries();
+  }, []);
 
   useEffect(() => {
     if (userDetail) {
@@ -151,16 +167,23 @@ const ContentsSettingsProfile: React.FC = () => {
         />
       </div>
       <div className="mt-4">
-        <div className="font-bold font-heading text-[18px] text-black">
+        <div className="font-bold font-heading text-[18px] text-black mb-4">
           Location
         </div>
-        <CustomInput
-          {...register("country", {
-            required: "Please input your country!",
-          })}
-          placeholder="Country"
-          errorMessage={errors.country?.message}
+        <CustomSelect
+            label="Country"
+            value={watch("country")}
+            options={countries.map((country) => ({ label: country, value: country }))}
+            onChange={(val) => setValue("country", val)}
+            errorMessage={errors.country?.message}
         />
+        {/*<CustomInput*/}
+        {/*  {...register("country", {*/}
+        {/*    required: "Please input your country!",*/}
+        {/*  })}*/}
+        {/*  placeholder="Country"*/}
+        {/*  errorMessage={errors.country?.message}*/}
+        {/*/>*/}
         <CustomInput
           {...register("city", {
             required: "Please input your city!",

@@ -62,11 +62,11 @@ const ContentsSettingsProfile: React.FC = () => {
     });
 
     if (!result) {
-      showToast("Edit profile failed!", "error");
+      showToast({header: "Update Failed", message: "Couldn’t save your changes. Please try again.", type: "error"});
       return;
     }
 
-    showToast("Edit profile successful!", "success");
+    showToast({header: "Profile Updated", message: "Your profile information has been saved.", type: "success"});
     setPhoto({ file: null, preview: null });
   };
 

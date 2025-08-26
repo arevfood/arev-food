@@ -5,7 +5,7 @@ import { useHistory } from "react-router-dom";
 
 type propTypes = {
   name: string;
-  image: string;
+  image: string | undefined;
   age: string;
   gender: string;
 };

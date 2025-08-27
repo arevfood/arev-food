@@ -9,16 +9,15 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import {useUser} from "@/hooks/data/user";
 import {useToastAlert} from "@/hooks/ui/toast-alert";
 import {SubmitHandler, useForm} from "react-hook-form";
-import {useEffect, useState} from "react";
+import {useEffect} from "react";
 import {cyclePatternOptions} from "@/data/cycle-pattern";
 import CustomSelect from "@/components/common/select-option";
 import {pmsIntensityOptions} from "@/data/pms-intensity";
 import {IonSpinner} from "@ionic/react";
 import {useFoods} from "@/hooks/data/food";
-import {FoodQueryDataModel} from "@/models/food-query";
-import {getAge} from "@/utils/generate-age";
 import CardEmpty from "@/components/wrapper/card-empty";
-import {getMenstrualPhase} from "@/utils/calculate-menstrual-phase";
+import { getMenstrualPhase } from "@/utils/calculate-menstrual-phase";
+import { useRecommendation } from "@/hooks/data/recommendation";
 
 type inputProps = {
   menstrual_cycle: {
@@ -30,16 +29,16 @@ type inputProps = {
 };
 
 const ContentMenstrual: React.FC = () => {
-  const { data: userDetail, onUpdate, loading } = useUser();
+  const { data: userDetail, onUpdate } = useUser();
   const { showToast } = useToastAlert();
   const { onGetFoodRecommendation } = useFoods({});
-  const [foodRecommendationList, setFoodRecommendationList] = useState<FoodQueryDataModel[]>([]);
-  const isHaveRecommendationFood = !!userDetail?.health;
   const phaseInfo = userDetail?.menstrual_cycle
       ? getMenstrualPhase({
         lastPeriod: userDetail.menstrual_cycle.last_period_start_date,
         cycleLength: userDetail.menstrual_cycle.average_cycle_length
       }) : null;
+  const { data: foodRecommendations, loading } = useRecommendation(userDetail);
+  const isHaveRecommendationFood = !!userDetail?.health;
 
   const {
     register,
@@ -72,36 +71,6 @@ const ContentMenstrual: React.FC = () => {
   };
 
   useEffect(() => {
-    const fetchData = async () => {
-      if (!userDetail?.health) return;
-
-      try {
-        const foods = await onGetFoodRecommendation({
-          age: String(getAge(userDetail.dateBirth)),
-          country: userDetail.country,
-          city: userDetail.city,
-          gender: userDetail.gender,
-          height: String(userDetail.health.height),
-          weight: String(userDetail.health.weight),
-          blood_sugar_level: String(userDetail.health.blood_sugar_level),
-          blood_pressure: userDetail.health.blood_pressure,
-          dietary_preference: userDetail.health.dietary_preference,
-          health_condition: userDetail.health.health_conditions
-              .split(",")
-              .map((condition: string) => condition.trim()),
-          lifestyle: userDetail.health.lifestyle,
-        });
-
-        setFoodRecommendationList(foods || []);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchData();
-  }, [userDetail]);
-
-  useEffect(() => {
     if (userDetail) {
       setValue("menstrual_cycle.last_period_start_date", userDetail.menstrual_cycle?.last_period_start_date);
       setValue("menstrual_cycle.average_cycle_length", userDetail.menstrual_cycle?.average_cycle_length);
@@ -126,24 +95,28 @@ const ContentMenstrual: React.FC = () => {
         <IconTitle
           title="Recommendation Food"
           icon="/icons/meat.svg"
-          link={isHaveRecommendationFood || foodRecommendationList.length !== 0 ? '/recommendation' : ''}
+          link={isHaveRecommendationFood || (foodRecommendations?.length ?? 0) !== 0 ? '/recommendation' : ''}
         />
       </div>
       <div className="mt-4">
-        {!isHaveRecommendationFood || foodRecommendationList.length === 0 ? (
+        {loading ? (
+            <div className="w-full h-[160px] flex items-center justify-center text-center">
+              <IonSpinner name="crescent" style={{ "--color": "var(--color-black_color)", opacity: 0.62, } as React.CSSProperties}/>
+            </div>
+        ) : !isHaveRecommendationFood || (foodRecommendations?.length ?? 0) === 0 ? (
             <CardEmpty title="No Recommendation Food Data"/>
         ) : (
             <Swiper slidesPerView={2.2} spaceBetween={16} centeredSlides={false}>
-              {foodRecommendationList &&
-                  foodRecommendationList.map((item) => {
+              {foodRecommendations &&
+                  foodRecommendations.map((foodRecommendation) => {
                     return (
                         <SwiperSlide>
                           <FoodCard
-                              slug={item.id}
-                              image={item.image_url || ""}
-                              title={item.name}
-                              description={item.food_details?.description || ""}
-                              onFavorite={() => onGetFoodRecommendation({ food_id: item.id })}
+                              slug={foodRecommendation.id}
+                              image={foodRecommendation.image_url || ""}
+                              title={foodRecommendation.name}
+                              description={foodRecommendation.food_details?.description || ""}
+                              onFavorite={() => onGetFoodRecommendation({ food_id: foodRecommendation.id })}
                               isFav
                           />
                         </SwiperSlide>

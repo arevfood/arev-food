@@ -45,6 +45,7 @@ export const useFoods = ({
     mutationFn: useCallback(
       async (payload: { [key: string]: string | string[] }) => {
         const result = await axios.post(`${baseUrl}/query-by-user-info`, {
+          type: "food",
           metadata: payload,
         });
         return result.data.foods as FoodQueryDataModel[];

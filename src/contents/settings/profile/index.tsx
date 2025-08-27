@@ -8,6 +8,7 @@ import { useUser } from "@/hooks/data/user";
 import { useEffect, useState } from "react";
 import { genderOptions } from "@/data/gender";
 import CustomInputDate from "@/components/common/input-date";
+import CustomInputPhoneNumber from "@/components/common/input-phone-number";
 
 type inputProps = {
   fullname: string;
@@ -62,11 +63,11 @@ const ContentsSettingsProfile: React.FC = () => {
     });
 
     if (!result) {
-      showToast("Edit profile failed!", "error");
+      showToast({header: "Update Failed", message: "Couldn’t save your changes. Please try again.", type: "error"});
       return;
     }
 
-    showToast("Edit profile successful!", "success");
+    showToast({header: "Profile Updated", message: "Your profile information has been saved.", type: "success"});
     setPhoto({ file: null, preview: null });
   };
 
@@ -125,12 +126,11 @@ const ContentsSettingsProfile: React.FC = () => {
           type="email"
           errorMessage={errors.email?.message}
         />
-        <CustomInput
+        <CustomInputPhoneNumber
           {...register("phoneNumber", {
             required: "Please input your phone number!",
           })}
           label="Phone Number"
-          placeholder="Enter your phone number"
           errorMessage={errors.phoneNumber?.message}
         />
       </div>

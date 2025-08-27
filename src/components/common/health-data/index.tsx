@@ -24,10 +24,16 @@ const HealthData: React.FC<propTypes> = ({ title, value, unit, image }) => {
     const getBloodSugarStatus = (value: string): Status => {
         const valueParse = parseInt(value, 10);
 
-        if (valueParse < 70) return { type: "Not Good", color: "DANGER" };
-        if (valueParse >= 70 && valueParse <= 99) return { type: "Good", color: "SUCCESS" };
-        if (valueParse >= 100 && valueParse <= 125) return { type: "Normal", color: "NORMAL" };
-        return { type: "Not Good", color: "DANGER" };
+        switch (true) {
+            case valueParse < 70:
+                return { type: "Not Good", color: "DANGER" };
+            case valueParse >= 70 && valueParse <= 99:
+                return { type: "Good", color: "SUCCESS" };
+            case valueParse >= 100 && valueParse <= 125:
+                return { type: "Normal", color: "NORMAL" };
+            default:
+                return { type: "Not Good", color: "DANGER" };
+        }
     };
 
     const getBloodPressureStatus = (value: string): Status => {
@@ -35,10 +41,16 @@ const HealthData: React.FC<propTypes> = ({ title, value, unit, image }) => {
         const systolic = parseInt(systolicStr, 10);
         const diastolic = parseInt(diastolicStr, 10);
 
-        if (systolic < 90 || diastolic < 60) return { type: "Not Good", color: "DANGER" };
-        if (systolic <= 120 && diastolic <= 80) return { type: "Good", color: "SUCCESS" };
-        if (systolic <= 139 || diastolic <= 89) return { type: "Normal", color: "NORMAL" };
-        return { type: "Not Good", color: "DANGER" };
+        switch (true) {
+            case systolic < 90 || diastolic < 60:
+                return { type: "Not Good", color: "DANGER" };
+            case systolic <= 120 && diastolic <= 80:
+                return { type: "Good", color: "SUCCESS" };
+            case systolic <= 139 || diastolic <= 89:
+                return { type: "Normal", color: "NORMAL" };
+            default:
+                return { type: "Not Good", color: "DANGER" };
+        }
     };
 
     if (title.includes("Blood Sugar Level") && typeof value === "string") {
@@ -47,7 +59,7 @@ const HealthData: React.FC<propTypes> = ({ title, value, unit, image }) => {
         status = getBloodPressureStatus(value);
     }
 
-  return (
+    return (
     <div className="rounded-[8px] min-h-[180px] relative overflow-hidden">
       <IonImg
         className="absolute w-full h-full top-0 left-0 object-cover"

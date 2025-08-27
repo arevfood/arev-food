@@ -45,11 +45,11 @@ const ContentsSettingsMenstrualCycle: React.FC = () => {
         const result = await onUpdate({ payload: filteredPayload });
 
         if (!result) {
-            showToast("Setup menstrual cycle failed!", "error");
+            showToast({header: "Save Failed", message: "Couldn’t update cycle data. Please try again.", type: "error"});
             return;
         }
 
-        showToast("Setup menstrual cycle successful!", "success");
+        showToast({header: "Cycle Saved", message: "Your menstrual cycle data has been updated.", type: "success"});
     };
 
     useEffect(() => {

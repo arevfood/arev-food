@@ -1,0 +1,27 @@
+ion-toast.custom-toast {
+  --border-radius: 8px;
+  --background: var(--color-white_color);
+  --box-shadow: 0 8px 16px rgba(0,0,0,0.08);
+  --border-width: 0 0 0 4px;
+  --border-style: solid;
+}
+
+ion-toast.custom-toast::part(icon) {
+  font-size: 52px;
+}
+
+ion-toast.custom-toast::part(header) {
+  color: #171717;
+  font-size: 0.913rem;
+  margin: 0;
+}
+
+ion-toast.success-toast {
+  --color: rgba(6, 146, 62, 1);
+  --border-color: rgba(6, 146, 62, 1);
+}
+
+ion-toast.error-toast {
+  --color: rgba(231, 76, 60, 1);
+  --border-color: rgba(231, 76, 60, 1);
+}

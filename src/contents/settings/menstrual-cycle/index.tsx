@@ -72,7 +72,8 @@ const ContentsSettingsMenstrualCycle: React.FC = () => {
                     {...register("menstrual_cycle.last_period_start_date", {
                         required: "Please choose last period!"
                     })}
-                    placeholder="Last Period Start Date"
+                    label="Last Period Start Date"
+                    placeholder="Choose your last period start date"
                     type="date"
                     errorMessage={errors.menstrual_cycle?.last_period_start_date?.message}
                 />
@@ -82,7 +83,8 @@ const ContentsSettingsMenstrualCycle: React.FC = () => {
                     {...register("menstrual_cycle.average_cycle_length", {
                         required: "Please enter average cycle!"
                     })}
-                    placeholder="Average Cycle Length"
+                    label="Average Cycle Length"
+                    placeholder="days, e.g. 30"
                     type="number"
                     errorMessage={errors.menstrual_cycle?.average_cycle_length?.message}
                 />

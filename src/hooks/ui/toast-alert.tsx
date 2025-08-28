@@ -1,32 +1,23 @@
 import { useIonToast } from "@ionic/react";
+import "@/styles/toast.scss";
 
-type ToastType = "success" | "error" | "medium";
+type ToastType = "success" | "error";
 
 export function useToastAlert() {
     const [present] = useIonToast();
 
-    const typeColor: Record<ToastType, string> = {
-        success: "success",
-        error: "danger",
-        medium: "medium",
-    };
-
     const showToast = (
-        message: string,
-        type: ToastType = "medium",
-        duration: number = 2000
+        {header, message, type} :
+        {header: string, message: string, type: ToastType}
     ) => {
         present({
+            header,
             message,
-            duration,
-            color: typeColor[type],
-            position: "bottom",
-            buttons: [
-                {
-                    text: "Close",
-                    role: "cancel",
-                },
-            ],
+            duration: 2000,
+            position: "top",
+            layout: "stacked",
+            icon: type === 'success' ? "/icons/icon-toast-success.svg" : "/icons/icon-toast-error.svg",
+            cssClass: `custom-toast ${type}-toast`,
         });
     };
 

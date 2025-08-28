@@ -8,6 +8,7 @@ import { useUser } from "@/hooks/data/user";
 import { useEffect, useState } from "react";
 import { genderOptions } from "@/data/gender";
 import axios from "axios";
+import CustomInputPhoneNumber from "@/components/common/input-phone-number";
 
 type inputProps = {
   fullname: string;
@@ -73,11 +74,11 @@ const ContentsSettingsProfile: React.FC = () => {
     });
 
     if (!result) {
-      showToast("Edit profile failed!", "error");
+      showToast({header: "Update Failed", message: "Couldn’t save your changes. Please try again.", type: "error"});
       return;
     }
 
-    showToast("Edit profile successful!", "success");
+    showToast({header: "Profile Updated", message: "Your profile information has been saved.", type: "success"});
     setPhoto({ file: null, preview: null });
   };
 
@@ -99,26 +100,26 @@ const ContentsSettingsProfile: React.FC = () => {
   }, [userDetail, setValue]);
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="font-bold font-heading text-[22px] text-black">
-        Edit Profile
-      </div>
-      <label className="mx-auto flex items-center justify-center mt-10 w-fit rounded-full overflow-hidden cursor-pointer">
-        <IonImg
-          src={
-            photo.preview ||
-            userDetail?.photoUrl ||
-            "/images/user-placeholder.png"
-          }
-          className="w-[100px] h-[100px] rounded-full bg-[#FDEAC5] object-cover"
-        />
-        <input
-          type="file"
-          accept="image/*"
-          className="hidden"
-          onChange={handlePhotoChange}
-        />
-      </label>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className="font-bold font-heading text-[22px] text-black">
+          Edit Profile
+        </div>
+        <label className="mx-auto flex items-center justify-center mt-10 w-fit rounded-full overflow-hidden cursor-pointer">
+          <IonImg
+              src={
+                  photo.preview ||
+                  userDetail?.photoUrl ||
+                  "/images/user-placeholder.png"
+              }
+              className="w-[100px] h-[100px] rounded-full bg-[#FDEAC5] object-cover"
+          />
+          <input
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={handlePhotoChange}
+          />
+        </label>
       <div className="mt-10">
         <div className="font-bold font-heading text-[18px] text-black mb-4">
           Personal Information

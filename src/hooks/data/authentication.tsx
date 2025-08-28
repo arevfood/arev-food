@@ -7,6 +7,7 @@ import {
   onAuthStateChanged,
   signInWithEmailAndPassword,
   signOut,
+  updatePassword,
 } from "firebase/auth";
 import { useCallback } from "react";
 
@@ -36,9 +37,9 @@ export const useAuth = () => {
   const { mutateAsync: onSignin, isPending: onSigninLoading } = useMutation({
     mutationFn: useCallback(async (payload: UserLogin) => {
       const session = await signInWithEmailAndPassword(
-        firebaseAuth,
-        payload.email,
-        payload.password
+          firebaseAuth,
+          payload.email,
+          payload.password
       );
       return session;
     }, []),
@@ -86,12 +87,30 @@ export const useAuth = () => {
     },
   });
 
+  const { mutateAsync: onChangePassword, isPending: onChangePasswordLoading } = useMutation({
+    mutationFn: useCallback(async (newPassword: string) => {
+      const user = firebaseAuth.currentUser;
+      if (user) {
+        await updatePassword(user, newPassword);
+        return true;
+      }
+      throw new Error("User not authenticated.");
+    }, []),
+    onSuccess: () => {
+      MainNotification({ type: "success", entity: "password", action: "change" });
+    },
+    onError: () => {
+      MainNotification({ type: "error", entity: "password", action: "change" });
+    },
+  });
+
   return {
     session: data as SessionUser,
     loading:
-      fetchLoading || onSigninLoading || onSignOutLoading || onSignupLoading,
+        fetchLoading || onSigninLoading || onSignOutLoading || onSignupLoading || onChangePasswordLoading,
     onSignin,
     onSignOut,
     onSignup,
+    onChangePassword,
   };
 };

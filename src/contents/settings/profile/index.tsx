@@ -8,6 +8,7 @@ import { useUser } from "@/hooks/data/user";
 import { useEffect, useState } from "react";
 import { genderOptions } from "@/data/gender";
 import CustomInputDate from "@/components/common/input-date";
+import CustomInputPhoneNumber from "@/components/common/input-phone-number";
 
 type inputProps = {
   fullname: string;
@@ -62,11 +63,11 @@ const ContentsSettingsProfile: React.FC = () => {
     });
 
     if (!result) {
-      showToast("Edit profile failed!", "error");
+      showToast({header: "Update Failed", message: "Couldn’t save your changes. Please try again.", type: "error"});
       return;
     }
 
-    showToast("Edit profile successful!", "success");
+    showToast({header: "Profile Updated", message: "Your profile information has been saved.", type: "success"});
     setPhoto({ file: null, preview: null });
   };
 
@@ -110,24 +111,26 @@ const ContentsSettingsProfile: React.FC = () => {
         </div>
         <CustomInput
           {...register("fullname", {
-            required: "Please input your full name!",
+            required: "Please input your full name",
           })}
-          placeholder="Full Name"
+          label="Full Name"
+          placeholder="Enter your full name"
           errorMessage={errors.fullname?.message}
         />
         <CustomInput
           {...register("email", {
             required: "Please input your email!",
           })}
-          placeholder="Email"
+          label="Email"
+          placeholder="Enter your email"
           type="email"
           errorMessage={errors.email?.message}
         />
-        <CustomInput
+        <CustomInputPhoneNumber
           {...register("phoneNumber", {
             required: "Please input your phone number!",
           })}
-          placeholder="Phone Number"
+          label="Phone Number"
           errorMessage={errors.phoneNumber?.message}
         />
       </div>
@@ -144,7 +147,7 @@ const ContentsSettingsProfile: React.FC = () => {
           errorMessage={errors.dateBirth?.message}
         />
         <CustomSelect
-          placeholder="Gender"
+          placeholder="Enter your Gender"
           value={watch("gender")}
           options={genderOptions}
           onChange={(val) => setValue("gender", val)}
@@ -152,21 +155,23 @@ const ContentsSettingsProfile: React.FC = () => {
         />
       </div>
       <div className="mt-4">
-        <div className="font-bold font-heading text-[18px] text-black">
+        <div className="font-bold font-heading text-[18px] text-black mb-4">
           Location
         </div>
         <CustomInput
           {...register("country", {
             required: "Please input your country!",
           })}
-          placeholder="Country"
+          label="Country"
+          placeholder="Enter your country"
           errorMessage={errors.country?.message}
         />
         <CustomInput
           {...register("city", {
             required: "Please input your city!",
           })}
-          placeholder="City"
+          label="City"
+          placeholder="Enter your city"
           errorMessage={errors.city?.message}
         />
       </div>

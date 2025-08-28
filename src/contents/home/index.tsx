@@ -49,7 +49,7 @@ const ContentsHome: React.FC<propTypes> = () => {
   return (
     <>
       <div className="mt-2">
-        <ProfileBox {...userProfile} gender={userProfile.gender}/>
+        <ProfileBox {...userProfile} gender={userProfile.gender} image={userDetail?.photoUrl}/>
       </div>
       <div className="mt-6">
         <IconTitle title="User Info" icon="/icons/user.svg" />

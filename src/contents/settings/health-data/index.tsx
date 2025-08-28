@@ -46,11 +46,11 @@ const ContentsSettingsHealthData: React.FC = () => {
         const result = await onUpdate({ payload: filteredPayload });
 
         if (!result) {
-            showToast("Setup menstrual cycle failed!", "error");
+            showToast({header: "Save Failed", message: "Couldn’t save health data. Please try again.", type: "error"});
             return;
         }
 
-        showToast("Setup menstrual cycle successful!", "success");
+        showToast({header: "Data Saved", message: "Your health data has been successfully updated.", type: "success"});
     };
 
     useEffect(() => {
@@ -70,76 +70,69 @@ const ContentsSettingsHealthData: React.FC = () => {
         Edit Health Data
       </div>
       <div className="mt-10">
-        <div className="font-bold font-heading text-[18px] text-black">
+        <div className="font-bold font-heading text-[18px] text-black mb-4">
           Physical Details
         </div>
-        <div className="mt-6">
-            <CustomInput
-                {...register("health.height", {
-                    required: "Please enter height!"
-                })}
-                placeholder="Height"
-                type="number"
-                errorMessage={errors.health?.height?.message}
-            />
-        </div>
-        <div className="mt-6">
-            <CustomInput
-                {...register("health.weight", {
-                    required: "Please enter weight!"
-                })}
-                placeholder="Weight"
-                type="number"
-                errorMessage={errors.health?.weight?.message}
-            />
-        </div>
+          <CustomInput
+              {...register("health.height", {
+                  required: "Please enter height!"
+              })}
+              label="Height (Cm)"
+              placeholder="Enter your height"
+              type="number"
+              errorMessage={errors.health?.height?.message}
+          />
+          <CustomInput
+              {...register("health.weight", {
+                  required: "Please enter weight!"
+              })}
+              label="Weight (Kg)"
+              placeholder="Enter your weight"
+              type="number"
+              errorMessage={errors.health?.weight?.message}
+          />
       </div>
       <div className="mt-10">
-        <div className="font-bold font-heading text-[18px] text-black">
+        <div className="font-bold font-heading text-[18px] text-black mb-4">
           Health Information
         </div>
-        <div className="mt-6">
-            <CustomInput
-                {...register("health.blood_sugar_level", {
-                    required: "Please enter blood sugar level!"
-                })}
-                placeholder="Blood Sugar Level"
-                type="number"
-                errorMessage={errors.health?.blood_sugar_level?.message}
-            />
-        </div>
-        <div className="mt-6">
-            <CustomInput
-                {...register("health.blood_pressure", {
-                    required: "Please enter blood pressure!"
-                })}
-                placeholder="Blood Pressure"
-                errorMessage={errors.health?.blood_pressure?.message}
-            />
-        </div>
-        <div className="mt-6">
-            <CustomInput
-                {...register("health.health_conditions", {
-                    required: "Please enter health conditions!"
-                })}
-                placeholder="Health Conditions"
-                errorMessage={errors.health?.health_conditions?.message}
-            />
-        </div>
+          <CustomInput
+              {...register("health.blood_sugar_level", {
+                  required: "Please enter blood sugar level!"
+              })}
+              label="Blood Sugar Level (mg/dL)"
+              placeholder="e.g. 90"
+              type="number"
+              errorMessage={errors.health?.blood_sugar_level?.message}
+          />
+          <CustomInput
+              {...register("health.blood_pressure", {
+                  required: "Please enter blood pressure!"
+              })}
+              label="Blood Pressure (mmHg)"
+              placeholder="e.g. 120/80"
+              errorMessage={errors.health?.blood_pressure?.message}
+          />
+          <CustomInput
+              {...register("health.health_conditions", {
+                  required: "Please enter health conditions!"
+              })}
+              label="Health Conditions"
+              placeholder="e.g. Diabetes, Hypertension"
+              errorMessage={errors.health?.health_conditions?.message}
+          />
       </div>
       <div className="mt-10">
-        <div className="font-bold font-heading text-[18px] text-black">
+        <div className="font-bold font-heading text-[18px] text-black mb-4">
           Dietary Preference
         </div>
-        <div className="mt-6">
-            <CustomSelect
-                placeholder="Diet Type"
-                value={watch("health.diet_type")}
-                options={dietTypeOptions}
-                onChange={(val) => setValue("health.diet_type", val)}
-                errorMessage={errors.health?.diet_type?.message}
-            />
-        </div>
+          <CustomSelect
+              placeholder="Choose your diet type"
+              value={watch("health.diet_type")}
+              options={dietTypeOptions}
+              onChange={(val) => setValue("health.diet_type", val)}
+              errorMessage={errors.health?.diet_type?.message}
+          />
       </div>
       <div className="my-6">
           <MainButton

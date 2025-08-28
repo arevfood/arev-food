@@ -30,19 +30,19 @@ const ContentSignup: React.FC = () => {
   const onSubmit: SubmitHandler<inputProps> = async (data) => {
     const result = await onSignup(data);
     if (!result) {
-      showToast("Sign up failed!", "error");
+      showToast({header: "Registration Failed", message: "Something went wrong. Please check your details.", type: "error"});
       setValue('password', '')
       setValue('confirm_password', '')
       return;
     }
-    showToast("Sign up successful!", "success");
+    showToast({header: "Account Created", message: "Your account has been successfully registered.", type: "success"});
     router.replace("/");
   };
 
   const password = watch("password", "");
 
   return (
-    <LayoutBlank fullscreen={true} background="var(--color-bg_color_1)">
+    <LayoutBlank fullscreen={true} background="var(--color-bg_color_2)">
       <div className="h-full w-full flex items-center justify-center flex-col">
         <div className="flex items-center justify-center">
           <IonImg src="/arev-logo.png" className="w-[150px]" />
@@ -56,12 +56,14 @@ const ContentSignup: React.FC = () => {
               {...register("fullname", {
                 required: "Please input your full name!",
               })}
-              placeholder="Full Name"
+              label="Full Name"
+              placeholder="Enter your full name"
               errorMessage={errors.fullname?.message}
             />
             <CustomInput
               {...register("email", { required: "Please input your email!" })}
-              placeholder="Email"
+              label="Email"
+              placeholder="Enter your email"
               type="email"
               errorMessage={errors.email?.message}
             />
@@ -73,7 +75,8 @@ const ContentSignup: React.FC = () => {
                   message: "Password must be at least 6 characters!",
                 },
               })}
-              placeholder="Password"
+              label="Password"
+              placeholder="Enter your password"
               type="Password"
               errorMessage={errors.password?.message}
             />
@@ -84,7 +87,8 @@ const ContentSignup: React.FC = () => {
                   value === password || "Passwords do not match",
               })}
               type="password"
-              placeholder="Confirm Password!"
+              label="Confirm Password!"
+              placeholder="Confirm your password"
               errorMessage={errors.confirm_password?.message}
             />
           </form>

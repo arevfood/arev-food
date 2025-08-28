@@ -28,7 +28,6 @@ import "@ionic/react/css/display.css";
 import "@ionic/react/css/palettes/dark.system.css";
 
 /* Theme variables */
-import "@/styles/input-date.scss";
 import "@/styles/variables.scss";
 import "@/styles/global.scss";
 import MainRoute from "@/routes";

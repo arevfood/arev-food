@@ -3,6 +3,7 @@ import { FoodQueryDataModel, FoodQueryPayloadModel } from "@/models/food-query";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { useCallback } from "react";
+import {FoodReasonPayload, FoodReasonResponseModel} from "@/models/food-reason";
 
 const entity = "food";
 const queryKey = "foods";
@@ -78,4 +79,23 @@ export const useFood = ({ slug }: { slug?: string }) => {
   });
 
   return { data, loading: fetchLoading };
+};
+
+export const useFoodReason = (
+    slug?: string,
+    payload?: FoodReasonPayload
+) => {
+  const { data, isLoading } = useQuery<FoodReasonResponseModel>({
+    queryKey: [entity, slug, payload],
+    queryFn: async () => {
+      const result = await axios.post<FoodReasonResponseModel>(
+          `${baseUrl}/foods/${slug}/reason`,
+          payload,
+          { headers: { "Content-Type": "application/json" } }
+      );
+      return result.data;
+    },
+    enabled: !!slug && !!payload,
+  });
+  return { data, loading: isLoading };
 };

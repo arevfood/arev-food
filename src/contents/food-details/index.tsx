@@ -6,24 +6,26 @@ import { useFavorite } from "@/hooks/data/favorite";
 import { FoodDetailsModel } from "@/models/food-details";
 import { IonIcon } from "@ionic/react";
 import { useParams } from "react-router";
+import {FoodReasonResponseModel} from "@/models/food-reason";
 
 type propTypes = {
   data: FoodDetailsModel;
+  reason: FoodReasonResponseModel;
 };
 
-const ContentsFoodDetails: React.FC<propTypes> = ({ data }) => {
+const ContentsFoodDetails: React.FC<propTypes> = ({ data, reason }) => {
   const { id }: { id: string } = useParams();
   const { data: favoriteList, onFavorite } = useFavorite();
   const isFav = favoriteList?.findIndex((food) => food.id === id) !== -1;
 
-  const ContentItem = ({ title, value }: { title: string; value: string }) => {
+  const ContentItem = ({ title, value, type = 'row' }: { title: string; value: string; type?: string; }) => {
     return (
       <>
-        <div className="flex items-start justify-between text-black mb-6 last:mb-0 gap-4">
+        <div className={`flex ${type === 'column' ? 'flex-col gap-2' : 'flex-row gap-4'} items-start justify-between text-black mb-6 last:mb-0`}>
           <div className="font-bold font-heading text-[16px] w-[50%]">
             {title}
           </div>
-          <div className="text-black/40 text-[14px] w-[50%] text-right">
+          <div className={`text-black/40 text-[14px] ${type === 'row' ? 'w-[50%] text-right' : ''}`}>
             {value}
           </div>
         </div>
@@ -125,6 +127,36 @@ const ContentsFoodDetails: React.FC<propTypes> = ({ data }) => {
                     />
                   );
                 })}
+              </div>
+            </Card>
+          </div>
+        </div>
+        <div className="mt-8">
+          <IconTitle icon="/icons/food-health-insight.svg" title="Food Health Insights"/>
+          <div className="mt-4">
+            <Card>
+              <div className="py-6 px-3">
+                <ContentItem
+                    title="Best Use"
+                    value={reason.reasons[0].best_use}
+                />
+                <ContentItem
+                    title="Caution"
+                    value={reason.reasons[0].caution}
+                />
+                <ContentItem
+                    title="Evidence Grade"
+                    value={reason.reasons[0].evidence_grade}
+                />
+                <ContentItem
+                    title="Verdict"
+                    value={reason.reasons[0].verdict}
+                />
+                <ContentItem
+                    title="Why"
+                    value={reason.reasons[0].why}
+                    type="column"
+                />
               </div>
             </Card>
           </div>

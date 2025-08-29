@@ -19,19 +19,19 @@ export const useFoodReason = (slug?: string, userDetail?: UserDataModel) => {
 
             const payload = {
                 metadata: {
-                    age: String(getAge(userDetail.dateBirth)),
-                    country: userDetail.country,
-                    city: userDetail.city,
-                    gender: userDetail.gender,
+                    health_condition: userDetail.health.health_conditions
+                        .split(",")
+                        .map((condition: string) => condition.trim()),
                     height: String(userDetail.health.height),
                     weight: String(userDetail.health.weight),
                     blood_sugar_level: String(userDetail.health.blood_sugar_level),
                     blood_pressure: userDetail.health.blood_pressure,
                     dietary_preference: userDetail.health.dietary_preference,
-                    health_condition: userDetail.health.health_conditions
-                        .split(",")
-                        .map((condition: string) => condition.trim()),
                     lifestyle: userDetail.health.lifestyle,
+                    age: String(getAge(userDetail.dateBirth)),
+                    country: userDetail.country,
+                    city: userDetail.city,
+                    gender: userDetail.gender,
                 },
                 type: "recommend",
             };

@@ -57,6 +57,30 @@ const ContentsFoodDetails: React.FC<propTypes> = ({ data, reason }) => {
             />
           </div>
         </div>
+        <div className="mt-8 p-[20px] bg-white border border-black/[0.12] rounded-[8px]">
+          <h5 className="!text-[1.25rem] !font-bold !font-heading text-black leading-none !m-0 !mb-2">Food Health Insights</h5>
+          <p className="font-paragraph text-black/40 text-[14px]">{reason.reasons[0].why}</p>
+          <div className="mt-4 border border-black/[0.12] rounded-[8px]">
+            <div className="py-6 px-3">
+              <ContentItem
+                  title="Best Use"
+                  value={reason.reasons[0].best_use}
+              />
+              <ContentItem
+                  title="Caution"
+                  value={reason.reasons[0].caution}
+              />
+              <ContentItem
+                  title="Evidence Grade"
+                  value={reason.reasons[0].evidence_grade}
+              />
+              <ContentItem
+                  title="Verdict"
+                  value={reason.reasons[0].verdict}
+              />
+            </div>
+          </div>
+        </div>
         <div className="mt-8">
           <IconTitle icon="/icons/pin.svg" title="Nutritional Information" />
           <div className="mt-4">
@@ -127,36 +151,6 @@ const ContentsFoodDetails: React.FC<propTypes> = ({ data, reason }) => {
                     />
                   );
                 })}
-              </div>
-            </Card>
-          </div>
-        </div>
-        <div className="mt-8">
-          <IconTitle icon="/icons/food-health-insight.svg" title="Food Health Insights"/>
-          <div className="mt-4">
-            <Card>
-              <div className="py-6 px-3">
-                <ContentItem
-                    title="Best Use"
-                    value={reason.reasons[0].best_use}
-                />
-                <ContentItem
-                    title="Caution"
-                    value={reason.reasons[0].caution}
-                />
-                <ContentItem
-                    title="Evidence Grade"
-                    value={reason.reasons[0].evidence_grade}
-                />
-                <ContentItem
-                    title="Verdict"
-                    value={reason.reasons[0].verdict}
-                />
-                <ContentItem
-                    title="Why"
-                    value={reason.reasons[0].why}
-                    type="column"
-                />
               </div>
             </Card>
           </div>

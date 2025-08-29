@@ -13,7 +13,7 @@ const PageFoodDetails: React.FC = () => {
 
   return (
     <MainLayouts transparent fullWidth>
-      {foodDetails && <ContentsFoodDetails data={foodDetails} reason={foodReason}/>}
+      {foodDetails && foodReason && <ContentsFoodDetails data={foodDetails} reason={foodReason}/>}
     </MainLayouts>
   );
 };

@@ -4,7 +4,6 @@ import IconTitle from "@/components/common/icon-title";
 import CustomInput from "@/components/common/input";
 import MenstrualBanner from "@/components/common/menstrual-banner";
 import Card from "@/components/wrapper/card";
-import YellowBox from "@/components/wrapper/yellow-box";
 import { Swiper, SwiperSlide } from "swiper/react";
 import {useUser} from "@/hooks/data/user";
 import {useToastAlert} from "@/hooks/ui/toast-alert";
@@ -18,6 +17,7 @@ import {useFoods} from "@/hooks/data/food";
 import CardEmpty from "@/components/wrapper/card-empty";
 import { getMenstrualPhase } from "@/utils/calculate-menstrual-phase";
 import { useRecommendation } from "@/hooks/data/recommendation";
+import {useAvoid} from "@/hooks/data/avoid";
 
 type inputProps = {
   menstrual_cycle: {
@@ -29,7 +29,7 @@ type inputProps = {
 };
 
 const ContentMenstrual: React.FC = () => {
-  const { data: userDetail, onUpdate } = useUser();
+  const { data: userDetail, onUpdate, loading } = useUser();
   const { showToast } = useToastAlert();
   const { onGetFoodRecommendation } = useFoods({});
   const phaseInfo = userDetail?.menstrual_cycle
@@ -37,8 +37,9 @@ const ContentMenstrual: React.FC = () => {
         lastPeriod: userDetail.menstrual_cycle.last_period_start_date,
         cycleLength: userDetail.menstrual_cycle.average_cycle_length
       }) : null;
-  const { data: foodRecommendations, loading } = useRecommendation(userDetail);
-  const isHaveRecommendationFood = !!userDetail?.health;
+  const { data: foodRecommendations, loading: loadingGetFoodRecommendation } = useRecommendation(userDetail);
+  const { data: foodAvoids, loading: loadingGetFoodAvoid } = useAvoid(userDetail);
+  const isHaveHealthData = !!userDetail?.health;
 
   const {
     register,
@@ -50,7 +51,7 @@ const ContentMenstrual: React.FC = () => {
 
   const onSubmit: SubmitHandler<inputProps> = async (data) => {
     const filteredPayload = {
-      menstrual_cycle: Object.entries(data.menstrual_cycle).reduce<Record<string, any>>(
+      menstrual_cycle: Object.entries(data.menstrual_cycle).reduce<Record<string, string | number | boolean>>(
           (acc, [key, value]) => {
             if (value !== "" && value != null) {
               acc[key] = value;
@@ -95,15 +96,15 @@ const ContentMenstrual: React.FC = () => {
         <IconTitle
           title="Recommendation Food"
           icon="/icons/meat.svg"
-          link={isHaveRecommendationFood || (foodRecommendations?.length ?? 0) !== 0 ? '/recommendation' : ''}
+          link={isHaveHealthData || (foodRecommendations?.length ?? 0) !== 0 ? '/recommendation' : ''}
         />
       </div>
       <div className="mt-4">
-        {loading ? (
+        {loadingGetFoodRecommendation ? (
             <div className="w-full h-[160px] flex items-center justify-center text-center">
               <IonSpinner name="crescent" style={{ "--color": "var(--color-black_color)", opacity: 0.62, } as React.CSSProperties}/>
             </div>
-        ) : !isHaveRecommendationFood || (foodRecommendations?.length ?? 0) === 0 ? (
+        ) : !isHaveHealthData || (foodRecommendations?.length ?? 0) === 0 ? (
             <CardEmpty title="No Recommendation Food Data"/>
         ) : (
             <Swiper slidesPerView={2.2} spaceBetween={16} centeredSlides={false}>
@@ -116,7 +117,7 @@ const ContentMenstrual: React.FC = () => {
                               image={foodRecommendation.image_url || ""}
                               title={foodRecommendation.name}
                               description={foodRecommendation.food_details?.description || ""}
-                              onFavorite={() => onGetFoodRecommendation({ food_id: foodRecommendation.id })}
+                              onFavorite={() => onGetFoodRecommendation({ payload: {food_id: foodRecommendation.id} })}
                               isFav
                           />
                         </SwiperSlide>
@@ -126,72 +127,38 @@ const ContentMenstrual: React.FC = () => {
         )}
       </div>
       <div className="mt-6">
-        <IconTitle title="Food to Avoid" icon="/icons/stop.svg" />
+        <IconTitle
+            title="Avoid Food"
+            icon="/icons/caution-icon.svg"
+            link={isHaveHealthData || (foodRecommendations?.length ?? 0) !== 0 ? '/avoid' : ''}
+        />
       </div>
       <div className="mt-4">
-        <Card className="p-4">
-          <YellowBox>
-            <div className="p-4 text-black">
-              *These foods may increase discomfort or disrupt hormonal balance
-              during this phase. Try limiting them to feel your best.
+        {loadingGetFoodAvoid ? (
+            <div className="w-full h-[160px] flex items-center justify-center text-center">
+              <IonSpinner name="crescent" style={{ "--color": "var(--color-black_color)", opacity: 0.62, } as React.CSSProperties}/>
             </div>
-          </YellowBox>
-          <div className="mt-4 space-y-4 text-black">
-            <div className="flex items-center gap-2">
-              <div className="text-[#FF5722]">❌</div>
-              <div>Processed sugar – Can spike estrogen too much</div>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="text-[#FF5722]">❌</div>
-              <div>Too much caffeine – May affect hormone balance</div>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="text-[#FF5722]">❌</div>
-              <div>Refined carbs – Can mess with gut balance</div>
-            </div>
-          </div>
-          <div className="text-black mt-4">
-            <div className="font-bold font-heading text-[22px]">
-              What to Avoid Right Now
-            </div>
-            <ol className="mt-4 list-decimal list-outside pl-4 space-y-4">
-              <li className="font-semibold text-[16px]">
-                Refined Sugar <br />{" "}
-                <div className="text-[14px] font-paragraph font-normal text-black/40">
-                  Can worsen mood swings and spike blood sugar, leading to
-                  energy crashes.
-                </div>
-              </li>
-              <li className="font-semibold text-[16px]">
-                Refined Sugar <br />{" "}
-                <div className="text-[14px] font-paragraph font-normal text-black/40">
-                  Can worsen mood swings and spike blood sugar, leading to
-                  energy crashes.
-                </div>
-              </li>
-              <li className="font-semibold text-[16px]">
-                Refined Sugar <br />{" "}
-                <div className="text-[14px] font-paragraph font-normal text-black/40">
-                  Can worsen mood swings and spike blood sugar, leading to
-                  energy crashes.
-                </div>
-              </li>
-            </ol>
-          </div>
-          <div className="mt-6">
-            <YellowBox>
-              <div className="p-4 text-black">
-                <div className="font-bold font-heading text-[22px]">
-                  Helpful Tip
-                </div>
-                <div>
-                  Try soothing teas like peppermint or lemon balm to help ease
-                  cravings and calm your system.
-                </div>
-              </div>
-            </YellowBox>
-          </div>
-        </Card>
+        ) : !isHaveHealthData || (foodAvoids?.length ?? 0) === 0 ? (
+            <CardEmpty title="No Avoid Food Data"/>
+        ) : (
+            <Swiper slidesPerView={2.2} spaceBetween={16} centeredSlides={false}>
+              {foodAvoids &&
+                  foodAvoids.map((foodRecommendation) => {
+                    return (
+                        <SwiperSlide>
+                          <FoodCard
+                              slug={foodRecommendation.id}
+                              image={foodRecommendation.image_url || ""}
+                              title={foodRecommendation.name}
+                              description={foodRecommendation.food_details?.description || ""}
+                              onFavorite={() => onGetFoodRecommendation({ payload: {food_id: foodRecommendation.id} })}
+                              isFav
+                          />
+                        </SwiperSlide>
+                    );
+                  })}
+            </Swiper>
+        )}
       </div>
       <div className="mt-6">
         <IconTitle title="Update Menstrual Cycle" icon="/icons/calender.svg" />

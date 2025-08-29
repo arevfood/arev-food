@@ -34,6 +34,34 @@ const ContentsFoodDetails: React.FC<propTypes> = ({ data, reason }) => {
     );
   };
 
+  const ContentTitleFoodInsight = ({ title, description }: { title: string; description: string; }) => {
+    return (
+        <>
+          <h5 className="!text-[1.25rem] !font-bold !font-heading text-black leading-none !m-0 !mb-2">{title}</h5>
+          <p className="font-paragraph text-black/40 text-[14px]">{description}</p>
+        </>
+    );
+  };
+
+  const ContentFoodInsight = ({ title, value, icon }: { title: string; value: string; icon: string; }) => {
+    return (
+        <>
+          <div className="flex flex-col gap-2">
+            <div className="flex items-center gap-2">
+              <div className="w-[32px] h-[32px] rounded-full bg-[#FF6223]/[0.12] flex items-center justify-center">
+                <IonIcon
+                    icon={icon}
+                    className="text-[16px]"
+                />
+              </div>
+              <h6 className="!font-bold !font-heading text-black !m-0">{title}</h6>
+            </div>
+            <p className="font-paragraph text-black/40 text-[14px] !mt-0">{value}</p>
+          </div>
+        </>
+    );
+  };
+
   return (
     <>
       <div className="top-0 left-0 fixed">
@@ -58,59 +86,33 @@ const ContentsFoodDetails: React.FC<propTypes> = ({ data, reason }) => {
             />
           </div>
         </div>
-        <div className="mt-8 p-[20px] bg-white border border-black/[0.12] rounded-[8px]">
-          <h5 className="!text-[1.25rem] !font-bold !font-heading text-black leading-none !m-0 !mb-2">Food Health Insights</h5>
-          <p className="font-paragraph text-black/40 text-[14px]">{reason.reasons[0].why}</p>
+        <div className="mt-8 p-[20px] bg-white rounded-[8px]">
+          <ContentTitleFoodInsight
+              title="Food Health Insights"
+              description={reason.reasons[0].why}
+          />
           <div className="mt-4">
             <div className="py-2 flex flex-col gap-6">
-              <div className="flex flex-col gap-2">
-                <div className="flex items-center gap-2">
-                  <div className="w-[32px] h-[32px] rounded-full bg-[#FF6223]/[0.12] flex items-center justify-center">
-                    <IonIcon
-                        icon="/icons/best-use-icon.svg"
-                        className="text-[16px]"
-                    />
-                  </div>
-                  <h6 className="!font-bold !font-heading text-black !m-0">Best Use</h6>
-                </div>
-                <p className="font-paragraph text-black/40 text-[14px] !mt-0">{reason.reasons[0].best_use}</p>
-              </div>
-              <div className="flex flex-col gap-2">
-                <div className="flex items-center gap-2">
-                  <div className="w-[32px] h-[32px] rounded-full bg-[#FF6223]/[0.12] flex items-center justify-center">
-                    <IonIcon
-                        icon="/icons/coution-icon.svg"
-                        className="text-[16px]"
-                    />
-                  </div>
-                  <h6 className="!font-bold !font-heading text-black !m-0">Caution</h6>
-                </div>
-                <p className="font-paragraph text-black/40 text-[14px] !mt-0">{reason.reasons[0].caution}</p>
-              </div>
-              <div className="flex flex-col gap-2">
-                <div className="flex items-center gap-2">
-                  <div className="w-[32px] h-[32px] rounded-full bg-[#FF6223]/[0.12] flex items-center justify-center">
-                    <IonIcon
-                        icon="/icons/evidence-grade-icon.svg"
-                        className="text-[16px]"
-                    />
-                  </div>
-                  <h6 className="!font-bold !font-heading text-black !m-0">Evidence Grade</h6>
-                </div>
-                <p className="font-paragraph text-black/40 text-[14px] !mt-0">{reason.reasons[0].evidence_grade}</p>
-              </div>
-              <div className="flex flex-col gap-2">
-                <div className="flex items-center gap-2">
-                  <div className="w-[32px] h-[32px] rounded-full bg-[#FF6223]/[0.12] flex items-center justify-center">
-                    <IonIcon
-                        icon="/icons/verdict-icon.svg"
-                        className="text-[16px]"
-                    />
-                  </div>
-                  <h6 className="!font-bold !font-heading text-black !m-0">Verdict</h6>
-                </div>
-                <p className="font-paragraph text-black/40 text-[14px] !mt-0">{reason.reasons[0].verdict}</p>
-              </div>
+              <ContentFoodInsight
+                  title="Best Use"
+                  value={reason.reasons[0].best_use}
+                  icon="/icons/best-use-icon.svg"
+              />
+              <ContentFoodInsight
+                  title="Caution"
+                  value={reason.reasons[0].caution}
+                  icon="/icons/coution-icon.svg"
+              />
+              <ContentFoodInsight
+                  title="Evidence Grade"
+                  value={reason.reasons[0].evidence_grade}
+                  icon="/icons/evidence-grade-icon.svg"
+              />
+              <ContentFoodInsight
+                  title="Verdict"
+                  value={reason.reasons[0].verdict}
+                  icon="/icons/verdict-icon.svg"
+              />
             </div>
           </div>
         </div>

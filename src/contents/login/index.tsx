@@ -6,6 +6,8 @@ import {IonImg, IonSpinner} from "@ionic/react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useHistory } from "react-router";
 import { useToastAlert } from "@/hooks/ui/toast-alert";
+import { doc, getDoc, setDoc } from "firebase/firestore";
+import { firebaseDb } from "@/utils/connections/firebase";
 
 type inputProps = {
   email: string;
@@ -22,7 +24,7 @@ const ContentLogin: React.FC = () => {
     formState: { errors },
   } = useForm<inputProps>();
 
-  const { onSignin, loading } = useAuth();
+  const { onSignin, loading, loginWithGoogle } = useAuth();
 
   const onSubmit: SubmitHandler<inputProps> = async (data) => {
     await onSignin(data, {
@@ -35,6 +37,34 @@ const ContentLogin: React.FC = () => {
         setValue("password", "");
       }
     });
+  };
+
+  const onSubmitGoogle = async () => {
+    try {
+      const user = await loginWithGoogle();
+
+      if (user) {
+        const userRef = doc(firebaseDb, "users", user.uid);
+        const userSnap = await getDoc(userRef);
+
+        if (!userSnap.exists()) {
+          await setDoc(userRef, {
+            uid: user.uid,
+            fullname: user.displayName || "",
+            email: user.email,
+            photoURL: user.photoURL || null,
+            createdAt: new Date(),
+          });
+          showToast({header: "Account Created", message: "Welcome! Your account has been set up.", type: "success"});
+        } else {
+          showToast({header: "Login Successful", message: `Welcome back, ${user.displayName || "User"}!`, type: "success"});
+        }
+
+        router.replace("/");
+      }
+    } catch(_error) {
+      showToast({header: "Login Failed", message: "Something went wrong while signing in with Google.", type: "error"});
+    }
   };
 
   return (
@@ -103,9 +133,9 @@ const ContentLogin: React.FC = () => {
               <div className="w-[58px] h-[58px] rounded-full bg-white_color flex items-center justify-center text-black_color">
                 <IonImg src="/icons/facebook.png" className="w-auto h-[24px]" />
               </div>
-              <div className="w-[58px] h-[58px] rounded-full bg-white_color flex items-center justify-center text-black_color">
+              <button type="button" className="w-[58px] h-[58px] rounded-full bg-white_color flex items-center justify-center text-black_color" onClick={onSubmitGoogle}>
                 <IonImg src="/icons/google.png" className="w-auto h-[24px]" />
-              </div>
+              </button>
               <div className="w-[58px] h-[58px] rounded-full bg-white_color flex items-center justify-center text-black_color">
                 <IonImg src="/icons/apple.png" className="w-auto h-[24px]" />
               </div>

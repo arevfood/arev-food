@@ -1,14 +1,17 @@
 import MainNotification from "@/components/common/notifications";
 import { SessionUser, UserLogin, UserSignup } from "@/models/user";
 import { FIREBASE_SIGNUP } from "@/providers/firebase/user";
-import { firebaseAuth } from "@/utils/connections/firebase";
+import { firebaseAuth, googleProvider } from "@/utils/connections/firebase";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   onAuthStateChanged,
   signInWithEmailAndPassword,
   signOut,
+  signInWithPopup,
+  signInWithRedirect,
 } from "firebase/auth";
 import { useCallback } from "react";
+import { Capacitor } from "@capacitor/core";
 
 const entity = "session";
 const queryKey = "sessions";
@@ -36,9 +39,9 @@ export const useAuth = () => {
   const { mutateAsync: onSignin, isPending: onSigninLoading } = useMutation({
     mutationFn: useCallback(async (payload: UserLogin) => {
       const session = await signInWithEmailAndPassword(
-        firebaseAuth,
-        payload.email,
-        payload.password
+          firebaseAuth,
+          payload.email,
+          payload.password
       );
       return session;
     }, []),
@@ -86,12 +89,38 @@ export const useAuth = () => {
     },
   });
 
+  const { mutateAsync: loginWithGoogle, isPending: onGoogleLoading } = useMutation({
+    mutationFn: useCallback(async () => {
+      let result;
+      if (Capacitor.isNativePlatform()) {
+        result = await signInWithRedirect(firebaseAuth, googleProvider);
+      } else {
+        result = await signInWithPopup(firebaseAuth, googleProvider);
+      }
+
+      return result.user;
+    }, []),
+    onSuccess: (result) => {
+      queryClient.invalidateQueries({ queryKey: [queryKey] });
+      MainNotification({ type: "success", entity: entity, action: "signin" });
+      return result;
+    },
+    onError: () => {
+      MainNotification({ type: "error", entity: entity, action: "signin" });
+    },
+  });
+
   return {
     session: data as SessionUser,
     loading:
-      fetchLoading || onSigninLoading || onSignOutLoading || onSignupLoading,
+        fetchLoading ||
+        onSigninLoading ||
+        onSignOutLoading ||
+        onSignupLoading ||
+        onGoogleLoading,
     onSignin,
     onSignOut,
     onSignup,
+    loginWithGoogle,
   };
 };

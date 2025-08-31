@@ -1,8 +1,9 @@
-type propTypes = { label: string; status?: "SUCCESS" | "WARNING" | "DANGER" };
+type propTypes = { label: string; status?: "SUCCESS" | "NORMAL" | "WARNING" | "DANGER" };
 
 const Tags: React.FC<propTypes> = ({ label, status = "SUCCESS" }) => {
   const statusMapping = {
     SUCCESS: "bg-green-500",
+    NORMAL: "bg-blue-500",
     WARNING: "bg-yellow-500",
     DANGER: "bg-red-500",
   };

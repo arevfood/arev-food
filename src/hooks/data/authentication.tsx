@@ -9,6 +9,7 @@ import {
   signOut,
   signInWithPopup,
   signInWithRedirect,
+  updatePassword,
   deleteUser,
 } from "firebase/auth";
 import { useCallback } from "react";
@@ -112,6 +113,32 @@ export const useAuth = () => {
       },
     });
 
+  const { mutateAsync: onChangePassword, isPending: onChangePasswordLoading } =
+    useMutation({
+      mutationFn: useCallback(async (newPassword: string) => {
+        const user = firebaseAuth.currentUser;
+        if (user) {
+          await updatePassword(user, newPassword);
+          return true;
+        }
+        throw new Error("User not authenticated.");
+      }, []),
+      onSuccess: () => {
+        MainNotification({
+          type: "success",
+          entity: "password",
+          action: "change",
+        });
+      },
+      onError: () => {
+        MainNotification({
+          type: "error",
+          entity: "password",
+          action: "change",
+        });
+      },
+    });
+
   const { mutateAsync: onDeleteAccount, isPending: onDeleteLoading } =
     useMutation({
       mutationFn: useCallback(async () => {
@@ -150,11 +177,16 @@ export const useAuth = () => {
       onSignOutLoading ||
       onSignupLoading ||
       onGoogleLoading ||
+      onChangePasswordLoading ||
       onDeleteLoading,
     onSignin,
     onSignOut,
     onSignup,
     loginWithGoogle,
     onDeleteAccount,
+    onChangePassword,
+    onChangePasswordLoading,
+    onGoogleLoading,
+    onDeleteLoading,
   };
 };

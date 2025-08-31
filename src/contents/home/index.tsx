@@ -37,12 +37,12 @@ const ContentsHome: React.FC<propTypes> = () => {
   const userInfo = {
     info: [
       { title: "Gender", value: capitalize(userProfile.gender) },
-      { title: "Height", value: "175 cm" },
-      { title: "Weight", value: "72 kg" },
+      { title: "Height", value: userDetail?.health?.height ? userDetail?.health?.height + " Cm" : "-" },
+      { title: "Weight", value: userDetail?.health?.weight ? userDetail?.health?.weight + " Kg" : "-" },
     ],
     additional: [
-      { title: "Health Conditions", value: "None" },
-      { title: "Dietary Preference", value: "Balanced Diet" },
+      { title: "Health Conditions", value: userDetail?.health?.health_conditions ? capitalize(userDetail?.health?.health_conditions) : "None" },
+      { title: "Dietary Preference", value: userDetail?.health?.diet_type ? capitalize(userDetail?.health?.diet_type) : "None" },
     ],
   };
 
@@ -60,23 +60,27 @@ const ContentsHome: React.FC<propTypes> = () => {
           additionalInfo={userInfo.additional}
         />
       </div>
-      <div className="mt-6">
-        <IconTitle title="Health Data" icon="/icons/health-data.svg" />
-      </div>
-      <div className="grid grid-cols-2 gap-4 mt-4">
-        <HealthData
-          title="Blood Sugar Level"
-          value="98"
-          unit="mg/dL"
-          image="/images/health-condition.jpg"
-        />
-        <HealthData
-          title="Blood Sugar Level"
-          value="98"
-          unit="mg/dL"
-          image="/images/health-condition.jpg"
-        />
-      </div>
+        {!!userDetail?.health?.blood_sugar_level && !!userDetail?.health?.blood_pressure && (
+            <>
+                <div className="mt-6">
+                    <IconTitle title="Health Data" icon="/icons/health-data.svg" />
+                </div>
+                <div className="grid grid-cols-2 gap-4 mt-4">
+                    <HealthData
+                        title="Blood Sugar Level"
+                        value={userDetail?.health.blood_sugar_level}
+                        unit="mg/dL"
+                        image="/images/blood-sugar-level.jpg"
+                    />
+                    <HealthData
+                        title="Blood Pressure"
+                        value={userDetail?.health.blood_pressure}
+                        unit="mmHg"
+                        image="/images/blood-pressure.jpg"
+                    />
+                </div>
+            </>
+        )}
       <div className="mt-6">
         <IconTitle
           title="Recommendation Food"

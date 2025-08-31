@@ -40,7 +40,7 @@ const ContentsSettingsMenstrualCycle: React.FC = () => {
           acc[key] = value;
         }
         return acc;
-      }, {}),
+      }, {} as Record<string, string | number>),
     };
 
     const result = await onUpdate({ payload: filteredPayload });
@@ -142,7 +142,7 @@ const ContentsSettingsMenstrualCycle: React.FC = () => {
             }}
             isDisabled={loading}
           >
-            {loading ? (
+            {loading && (
               <div className="flex items-center gap-2">
                 Completed...
                 <IonSpinner
@@ -150,9 +150,8 @@ const ContentsSettingsMenstrualCycle: React.FC = () => {
                   className="text-white w-[20px] h-[20px] ms-[6px]"
                 />
               </div>
-            ) : (
-              "Complete Setup"
             )}
+            {!loading && "Complete Setup"}
           </MainButton>
         </div>
       </form>

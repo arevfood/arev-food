@@ -21,7 +21,6 @@ export function getMenstrualPhase({
 
   const daysUntilNext = cycleLength - diffDays;
 
-  // change to switch
   switch (true) {
     case diffDays >= 0 && diffDays <= 4:
       return {

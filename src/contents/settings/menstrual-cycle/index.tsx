@@ -34,7 +34,7 @@ const ContentsSettingsMenstrualCycle: React.FC = () => {
   const onSubmit: SubmitHandler<inputProps> = async (data) => {
     const filteredPayload = {
       menstrual_cycle: Object.entries(data.menstrual_cycle).reduce<
-        Record<string, any>
+        Record<string, string | number>
       >((acc, [key, value]) => {
         if (value !== "" && value != null) {
           acc[key] = value;

@@ -48,7 +48,7 @@ export const useFoods = ({
         type = "recommend",
       }: {
         payload: { [key: string]: string | string[] };
-        type?: "food" | "avoid" | "recommend";
+        type?: "avoid" | "recommend";
       }) => {
         const result = await axios.post(`${baseUrl}/query-by-user-info`, {
           type: type,

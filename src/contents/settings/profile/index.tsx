@@ -7,6 +7,7 @@ import CustomSelect from "@/components/common/select-option";
 import { useUser } from "@/hooks/data/user";
 import { useEffect, useState } from "react";
 import { genderOptions } from "@/data/gender";
+import CustomInputDate from "@/components/common/input-date";
 import CustomInputPhoneNumber from "@/components/common/input-phone-number";
 
 type inputProps = {
@@ -137,13 +138,12 @@ const ContentsSettingsProfile: React.FC = () => {
         <div className="font-bold font-heading text-[18px] text-black mb-4">
           Basic Details
         </div>
-        <CustomInput
+        <CustomInputDate
           {...register("dateBirth", {
             required: "Please input your date of birth!",
           })}
+          value={watch("dateBirth")}
           label="Date of Birth"
-          placeholder="Choose your date of birth"
-          type="date"
           errorMessage={errors.dateBirth?.message}
         />
         <CustomSelect

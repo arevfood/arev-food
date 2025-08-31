@@ -2,7 +2,7 @@ import MainButton from "@/components/common/button";
 import CustomInput from "@/components/common/input";
 import LayoutBlank from "@/layouts/blank";
 import { useAuth } from "@/hooks/data/authentication";
-import {IonImg, IonSpinner} from "@ionic/react";
+import { IonImg, IonSpinner } from "@ionic/react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useHistory } from "react-router";
 import { useToastAlert } from "@/hooks/ui/toast-alert";
@@ -29,13 +29,21 @@ const ContentLogin: React.FC = () => {
   const onSubmit: SubmitHandler<inputProps> = async (data) => {
     await onSignin(data, {
       onSuccess: () => {
-        showToast({header: "Login Successful", message: "Welcome back, you’re now signed in.", type: "success"});
+        showToast({
+          header: "Login Successful",
+          message: "Welcome back, you’re now signed in.",
+          type: "success",
+        });
         router.replace("/");
       },
       onError: () => {
-        showToast({header: "Login Failed", message: "Invalid email or password. Please try again.", type: "error"});
+        showToast({
+          header: "Login Failed",
+          message: "Invalid email or password. Please try again.",
+          type: "error",
+        });
         setValue("password", "");
-      }
+      },
     });
   };
 
@@ -55,15 +63,27 @@ const ContentLogin: React.FC = () => {
             photoURL: user.photoURL || null,
             createdAt: new Date(),
           });
-          showToast({header: "Account Created", message: "Welcome! Your account has been set up.", type: "success"});
+          showToast({
+            header: "Account Created",
+            message: "Welcome! Your account has been set up.",
+            type: "success",
+          });
         } else {
-          showToast({header: "Login Successful", message: `Welcome back, ${user.displayName || "User"}!`, type: "success"});
+          showToast({
+            header: "Login Successful",
+            message: `Welcome back, ${user.displayName || "User"}!`,
+            type: "success",
+          });
         }
 
         router.replace("/");
       }
-    } catch(_error) {
-      showToast({header: "Login Failed", message: "Something went wrong while signing in with Google.", type: "error"});
+    } catch (_error) {
+      showToast({
+        header: "Login Failed",
+        message: "Something went wrong while signing in with Google.",
+        type: "error",
+      });
     }
   };
 
@@ -80,7 +100,7 @@ const ContentLogin: React.FC = () => {
           <form onSubmit={handleSubmit(onSubmit)}>
             <CustomInput
               {...register("email", {
-                required: "Please input your email!"
+                required: "Please input your email!",
               })}
               label="Email"
               placeholder="Enter your email"
@@ -110,15 +130,15 @@ const ContentLogin: React.FC = () => {
               isDisabled={loading}
             >
               {loading ? (
-                  <div className="flex items-center gap-2">
-                    Logging In...
-                    <IonSpinner
-                        name="crescent"
-                        className="text-white w-[20px] h-[20px] ms-[6px]"
-                    />
-                  </div>
+                <div className="flex items-center gap-2">
+                  Logging In...
+                  <IonSpinner
+                    name="crescent"
+                    className="text-white w-[20px] h-[20px] ms-[6px]"
+                  />
+                </div>
               ) : (
-                  "Sign In"
+                "Sign In"
               )}
             </MainButton>
           </div>
@@ -130,13 +150,17 @@ const ContentLogin: React.FC = () => {
               or continue With
             </div>
             <div className="flex flex-wrap gap-2 justify-center items-center mt-6">
-              <div className="w-[58px] h-[58px] rounded-full bg-white_color flex items-center justify-center text-black_color">
+              <div className="w-[58px] h-[58px] rounded-full bg-white_color flex items-center justify-center text-black_color opacity-50">
                 <IonImg src="/icons/facebook.png" className="w-auto h-[24px]" />
               </div>
-              <button type="button" className="w-[58px] h-[58px] rounded-full bg-white_color flex items-center justify-center text-black_color" onClick={onSubmitGoogle}>
+              <button
+                type="button"
+                className="w-[58px] h-[58px] !rounded-full bg-white_color flex items-center justify-center text-black_color"
+                onClick={onSubmitGoogle}
+              >
                 <IonImg src="/icons/google.png" className="w-auto h-[24px]" />
               </button>
-              <div className="w-[58px] h-[58px] rounded-full bg-white_color flex items-center justify-center text-black_color">
+              <div className="w-[58px] h-[58px] rounded-full bg-white_color flex items-center justify-center text-black_color opacity-50">
                 <IonImg src="/icons/apple.png" className="w-auto h-[24px]" />
               </div>
             </div>

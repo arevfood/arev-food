@@ -9,6 +9,7 @@ import {
   signOut,
   signInWithPopup,
   signInWithRedirect,
+  deleteUser,
 } from "firebase/auth";
 import { useCallback } from "react";
 import { Capacitor } from "@capacitor/core";
@@ -39,9 +40,9 @@ export const useAuth = () => {
   const { mutateAsync: onSignin, isPending: onSigninLoading } = useMutation({
     mutationFn: useCallback(async (payload: UserLogin) => {
       const session = await signInWithEmailAndPassword(
-          firebaseAuth,
-          payload.email,
-          payload.password
+        firebaseAuth,
+        payload.email,
+        payload.password
       );
       return session;
     }, []),
@@ -89,38 +90,71 @@ export const useAuth = () => {
     },
   });
 
-  const { mutateAsync: loginWithGoogle, isPending: onGoogleLoading } = useMutation({
-    mutationFn: useCallback(async () => {
-      let result;
-      if (Capacitor.isNativePlatform()) {
-        result = await signInWithRedirect(firebaseAuth, googleProvider);
-      } else {
-        result = await signInWithPopup(firebaseAuth, googleProvider);
-      }
+  const { mutateAsync: loginWithGoogle, isPending: onGoogleLoading } =
+    useMutation({
+      mutationFn: useCallback(async () => {
+        let result;
+        if (Capacitor.isNativePlatform()) {
+          result = await signInWithRedirect(firebaseAuth, googleProvider);
+        } else {
+          result = await signInWithPopup(firebaseAuth, googleProvider);
+        }
 
-      return result.user;
-    }, []),
-    onSuccess: (result) => {
-      queryClient.invalidateQueries({ queryKey: [queryKey] });
-      MainNotification({ type: "success", entity: entity, action: "signin" });
-      return result;
-    },
-    onError: () => {
-      MainNotification({ type: "error", entity: entity, action: "signin" });
-    },
-  });
+        return result.user;
+      }, []),
+      onSuccess: (result) => {
+        queryClient.invalidateQueries({ queryKey: [queryKey] });
+        MainNotification({ type: "success", entity: entity, action: "signin" });
+        return result;
+      },
+      onError: () => {
+        MainNotification({ type: "error", entity: entity, action: "signin" });
+      },
+    });
+
+  const { mutateAsync: onDeleteAccount, isPending: onDeleteLoading } =
+    useMutation({
+      mutationFn: useCallback(async () => {
+        const user = firebaseAuth.currentUser;
+        if (user) {
+          await deleteUser(user);
+          return true;
+        }
+        throw new Error("User not authenticated.");
+      }, []),
+      onSuccess: (result) => {
+        if (result) {
+          queryClient.removeQueries({ queryKey: [queryKey] });
+          queryClient.removeQueries({ queryKey: ["user"] });
+        }
+        MainNotification({
+          type: "success",
+          entity: "account",
+          action: "delete",
+        });
+      },
+      onError: () => {
+        MainNotification({
+          type: "error",
+          entity: "account",
+          action: "delete",
+        });
+      },
+    });
 
   return {
     session: data as SessionUser,
     loading:
-        fetchLoading ||
-        onSigninLoading ||
-        onSignOutLoading ||
-        onSignupLoading ||
-        onGoogleLoading,
+      fetchLoading ||
+      onSigninLoading ||
+      onSignOutLoading ||
+      onSignupLoading ||
+      onGoogleLoading ||
+      onDeleteLoading,
     onSignin,
     onSignOut,
     onSignup,
     loginWithGoogle,
+    onDeleteAccount,
   };
 };

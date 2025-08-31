@@ -129,6 +129,7 @@ const ContentsSettingsProfile: React.FC = () => {
           {...register("fullname", {
             required: "Please input your full name!",
           })}
+          label="Full Name"
           placeholder="Full Name"
           errorMessage={errors.fullname?.message}
         />
@@ -136,6 +137,7 @@ const ContentsSettingsProfile: React.FC = () => {
           {...register("email", {
             required: "Please input your email!",
           })}
+          label="Email"
           placeholder="Email"
           type="email"
           errorMessage={errors.email?.message}
@@ -144,6 +146,7 @@ const ContentsSettingsProfile: React.FC = () => {
           {...register("phoneNumber", {
             required: "Please input your phone number!",
           })}
+          label="Phone Number"
           errorMessage={errors.phoneNumber?.message}
         />
       </div>
@@ -168,6 +171,7 @@ const ContentsSettingsProfile: React.FC = () => {
           errorMessage={errors.gender?.message}
         />
       </div>
+
       <div className="mt-4">
         <div className="font-bold font-heading text-[18px] text-black mb-4">
           Location

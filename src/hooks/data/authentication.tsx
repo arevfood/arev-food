@@ -7,14 +7,17 @@ import {
   onAuthStateChanged,
   signInWithEmailAndPassword,
   signOut,
+  deleteUser,
 } from "firebase/auth";
 import { useCallback } from "react";
+import {useHistory} from "react-router";
 
 const entity = "session";
 const queryKey = "sessions";
 
 export const useAuth = () => {
   const queryClient = useQueryClient();
+  const router = useHistory();
 
   const { data: data, isLoading: fetchLoading } = useQuery({
     queryKey: [queryKey],
@@ -86,12 +89,35 @@ export const useAuth = () => {
     },
   });
 
+  const { mutateAsync: onDeleteAccount, isPending: onDeleteLoading } = useMutation({
+    mutationFn: useCallback(async () => {
+      const user = firebaseAuth.currentUser;
+      if (user) {
+        await deleteUser(user);
+        return true
+      }
+      throw new Error("User not authenticated.");
+    }, []),
+    onSuccess: (result) => {
+      if (result) {
+        queryClient.removeQueries({ queryKey: [queryKey] });
+        queryClient.removeQueries({ queryKey: ["user"] });
+      }
+      MainNotification({ type: "success", entity: "account", action: "delete" });
+    },
+    onError: () => {
+      MainNotification({ type: "error", entity: "account", action: "delete" });
+    },
+  });
+
+
   return {
     session: data as SessionUser,
     loading:
-      fetchLoading || onSigninLoading || onSignOutLoading || onSignupLoading,
+      fetchLoading || onSigninLoading || onSignOutLoading || onSignupLoading || onDeleteLoading,
     onSignin,
     onSignOut,
     onSignup,
+    onDeleteAccount,
   };
 };

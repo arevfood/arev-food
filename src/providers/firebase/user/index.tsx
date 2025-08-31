@@ -1,3 +1,4 @@
+import { GeneralKeyValue } from "@/models/general-key-value";
 import { UserSignup } from "@/models/user";
 import { firebaseAuth, firebaseDb } from "@/utils/connections/firebase";
 import { errorHandler } from "@/utils/error-handler";
@@ -63,13 +64,17 @@ export const FIREBASE_UPDATE_USER = async ({
   payload,
 }: {
   id: string;
-  payload: { [key: string]: string };
+  payload: GeneralKeyValue<string>;
 }) => {
   try {
     const docRef = doc(firebaseDb, "users", id);
-    await setDoc(doc(firebaseDb, "users", id), {
-      ...payload, updatedAt: new Date().toISOString(),
-        }, { merge: true }
+    await setDoc(
+      doc(firebaseDb, "users", id),
+      {
+        ...payload,
+        updatedAt: new Date().toISOString(),
+      },
+      { merge: true }
     );
 
     const userData = await getDoc(docRef);

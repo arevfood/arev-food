@@ -6,13 +6,15 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "./authentication";
 import { UserDataModel } from "@/models/user";
 import { useCallback } from "react";
-import MainNotification from "@/components/common/notifications";
 import { uploadImageToStorage } from "@/utils/upload-image";
+import { useToastAlert } from "@/hooks/ui/toast-alert";
+import { GeneralKeyValue } from "@/models/general-key-value";
 
 const entity = "user";
 export const useUser = () => {
   const queryClient = useQueryClient();
   const { session } = useAuth();
+  const { showToast } = useToastAlert();
 
   const { data: data, isLoading: fetchLoading } = useQuery({
     queryKey: [entity, session.user.uid],
@@ -28,7 +30,7 @@ export const useUser = () => {
         payload,
         file,
       }: {
-        payload: { [key: string]: string };
+        payload: GeneralKeyValue<string>;
         file?: File | null;
       }) => {
         const finalPayload = { ...payload };
@@ -50,10 +52,18 @@ export const useUser = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [entity, session.user.uid] });
       queryClient.invalidateQueries({ queryKey: ["user"] });
-      MainNotification({ type: "success", entity: entity, action: "signin" });
+      showToast({
+        header: "Cycle Saved",
+        message: "Your menstrual cycle data has been updated.",
+        type: "success",
+      });
     },
     onError: () => {
-      MainNotification({ type: "error", entity: entity, action: "signin" });
+      showToast({
+        header: "Setup menstrual cycle failed!",
+        message: "Couldn’t update cycle data. Please try again.",
+        type: "error",
+      });
     },
   });
 

@@ -6,7 +6,6 @@ import MenstrualBanner from "@/components/common/menstrual-banner";
 import Card from "@/components/wrapper/card";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { useUser } from "@/hooks/data/user";
-import { useToastAlert } from "@/hooks/ui/toast-alert";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useEffect } from "react";
 import { cyclePatternOptions } from "@/data/cycle-pattern";
@@ -18,6 +17,7 @@ import CardEmpty from "@/components/wrapper/card-empty";
 import { getMenstrualPhase } from "@/utils/calculate-menstrual-phase";
 import { useRecommendation } from "@/hooks/data/recommendation";
 import { useAvoid } from "@/hooks/data/avoid";
+import CustomInputDate from "@/components/common/input-date";
 
 type inputProps = {
   menstrual_cycle: {
@@ -30,7 +30,6 @@ type inputProps = {
 
 const ContentMenstrual: React.FC = () => {
   const { data: userDetail, onUpdate, loading } = useUser();
-  const { showToast } = useToastAlert();
   const { onGetFoodRecommendation } = useFoods({});
   const phaseInfo = userDetail?.menstrual_cycle
     ? getMenstrualPhase({
@@ -38,6 +37,8 @@ const ContentMenstrual: React.FC = () => {
         cycleLength: userDetail.menstrual_cycle.average_cycle_length,
       })
     : null;
+  console.log("user", userDetail);
+  console.log("phaseInfo", phaseInfo);
   const { data: foodRecommendations, loading: loadingGetFoodRecommendation } =
     useRecommendation(userDetail);
   const { data: foodAvoids, loading: loadingGetFoodAvoid } =
@@ -54,31 +55,18 @@ const ContentMenstrual: React.FC = () => {
 
   const onSubmit: SubmitHandler<inputProps> = async (data) => {
     const filteredPayload = {
-      menstrual_cycle: Object.entries(data.menstrual_cycle).reduce<
-        Record<string, string | number | boolean>
-      >((acc, [key, value]) => {
-        if (value !== "" && value != null) {
-          acc[key] = value;
-        }
-        return acc;
-      }, {}),
+      menstrual_cycle: Object.entries(data.menstrual_cycle).reduce(
+        (acc: { [key: string]: string }, [key, value]) => {
+          if (value !== "" && value != null) {
+            acc[key] = `${value}`;
+          }
+          return acc;
+        },
+        {}
+      ),
     };
-
-    const result = await onUpdate({ payload: filteredPayload });
-
-    if (!result) {
-      showToast({
-        header: "Setup menstrual cycle failed!",
-        message: "Couldn’t update cycle data. Please try again.",
-        type: "error",
-      });
-      return;
-    }
-
-    showToast({
-      header: "Cycle Saved",
-      message: "Your menstrual cycle data has been updated.",
-      type: "success",
+    await onUpdate({
+      payload: { menstrual_cycle: filteredPayload.menstrual_cycle },
     });
   };
 
@@ -227,7 +215,7 @@ const ContentMenstrual: React.FC = () => {
       <form className="mt-4 mb-10" onSubmit={handleSubmit(onSubmit)}>
         <Card className="p-4">
           <div>
-            <CustomInput
+            <CustomInputDate
               {...register("menstrual_cycle.last_period_start_date", {
                 required: "Please choose last period!",
               })}

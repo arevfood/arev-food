@@ -11,9 +11,26 @@ export const useCountry = () => {
       const countryList = res.data.data.map(
         (country: { name: string }) => country.name
       );
-      console.log(countryList);
       return countryList as string[];
     },
   });
   return { countries };
+};
+
+export const useCity = ({ country }: { country: string }) => {
+  const { data: cities } = useQuery({
+    queryKey: ["cities", country],
+    queryFn: async () => {
+      const res = await axios.post(
+        "https://countriesnow.space/api/v0.1/countries/cities",
+        {
+          country,
+        }
+      );
+      const data = Array.isArray(res.data.data) ? res.data.data : [];
+      return data as string[];
+    },
+    enabled: !!country,
+  });
+  return { cities };
 };

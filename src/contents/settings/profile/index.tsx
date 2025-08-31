@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 import { genderOptions } from "@/data/gender";
 import CustomInputDate from "@/components/common/input-date";
 import CustomInputPhoneNumber from "@/components/common/input-phone-number";
-import { useCountry } from "@/hooks/data/city";
+import { useCity, useCountry } from "@/hooks/data/location";
 
 type inputProps = {
   fullname: string;
@@ -42,6 +42,7 @@ const ContentsSettingsProfile: React.FC = () => {
   } = useForm<inputProps>();
 
   const { countries } = useCountry();
+  const { cities } = useCity({ country: watch("country") || "" });
 
   const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -83,16 +84,20 @@ const ContentsSettingsProfile: React.FC = () => {
   };
 
   useEffect(() => {
-    if (userDetail) {
-      setValue("fullname", userDetail.fullname);
-      setValue("email", userDetail.email);
-      setValue("phoneNumber", userDetail.phoneNumber);
-      setValue("dateBirth", userDetail.dateBirth);
-      setValue("gender", userDetail.gender);
-      setValue("country", userDetail.country);
-      setValue("city", userDetail.city);
-      setValue("photoUrl", userDetail.photoUrl);
-    }
+    const loadData = async () => {
+      if (userDetail) {
+        setValue("fullname", userDetail.fullname);
+        setValue("email", userDetail.email);
+        setValue("phoneNumber", userDetail.phoneNumber);
+        setValue("dateBirth", userDetail.dateBirth);
+        setValue("gender", userDetail.gender);
+        setValue("country", userDetail.country);
+        setValue("city", userDetail.city);
+        setValue("photoUrl", userDetail.photoUrl);
+      }
+    };
+
+    loadData();
   }, [userDetail, setValue]);
 
   return (
@@ -156,6 +161,7 @@ const ContentsSettingsProfile: React.FC = () => {
         />
         <CustomSelect
           label="Gender"
+          placeholder="Choose your gender"
           value={watch("gender")}
           options={genderOptions}
           onChange={(val) => setValue("gender", val)}
@@ -168,23 +174,27 @@ const ContentsSettingsProfile: React.FC = () => {
         </div>
         <CustomSelect
           label="Country"
+          placeholder="Choose your country"
           value={watch("country")}
           options={
             countries
-              ? countries.map((country) => ({
-                  label: country,
-                  value: country,
-                }))
+              ? countries.map((country) => ({ label: country, value: country }))
               : []
           }
-          onChange={(val) => setValue("country", val)}
+          onChange={async (val) => {
+            setValue("country", val);
+            setValue("city", "");
+          }}
           errorMessage={errors.country?.message}
         />
-        <CustomInput
-          {...register("city", {
-            required: "Please input your city!",
-          })}
-          placeholder="City"
+        <CustomSelect
+          label="City"
+          placeholder="Choose your city"
+          value={watch("city")}
+          options={
+            cities ? cities.map((city) => ({ label: city, value: city })) : []
+          }
+          onChange={(val) => setValue("city", val)}
           errorMessage={errors.city?.message}
         />
       </div>

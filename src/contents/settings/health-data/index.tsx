@@ -128,6 +128,7 @@ const ContentsSettingsHealthData: React.FC = () => {
         </div>
         <CustomSelect
             label="Diet Type"
+            placeholder="Choose your diet type"
             value={watch("health.diet_type")}
             options={dietTypeOptions}
             onChange={(val) => setValue("health.diet_type", val)}

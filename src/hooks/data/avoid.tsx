@@ -5,9 +5,9 @@ import { getAge } from "@/utils/generate-age";
 import { useAuth } from "@/hooks/data/authentication";
 import { UserDataModel } from "@/models/user";
 
-const entity = "recommend";
+const entity = "avoid";
 
-export const useRecommendation = (userDetail?: UserDataModel) => {
+export const useAvoid = (userDetail?: UserDataModel) => {
     const { onGetFoodRecommendation } = useFoods({});
     const { session } = useAuth();
 

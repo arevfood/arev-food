@@ -44,9 +44,15 @@ export const useFoods = ({
     isPending: onGetFoodRecommendationLoading,
   } = useMutation({
     mutationFn: useCallback(
-      async (payload: { [key: string]: string | string[] }) => {
+      async ({
+        payload,
+        type = "recommend",
+      }: {
+        payload: { [key: string]: string | string[] };
+        type?: "avoid" | "recommend";
+      }) => {
         const result = await axios.post(`${baseUrl}/query-by-user-info`, {
-          type: "food",
+          type: type,
           metadata: payload,
         });
         return result.data.foods as FoodQueryDataModel[];

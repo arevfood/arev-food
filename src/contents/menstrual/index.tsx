@@ -221,7 +221,7 @@ const ContentMenstrual: React.FC = () => {
           </Swiper>
         )}
       </div>
-      <div className="mt-6">
+      <div className="mt-6 mb-4">
         <IconTitle title="Update Menstrual Cycle" icon="/icons/calender.svg" />
       </div>
       <form className="mt-4 mb-10" onSubmit={handleSubmit(onSubmit)}>

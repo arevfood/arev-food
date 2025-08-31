@@ -32,7 +32,7 @@ const MenstrualCycleLink: React.FC = () => {
         presentingElement={presentingElement!}
         className="px-[20px] bg-black/80"
         style={{
-          "--height": "350px",
+          "--height": "300px",
           "--border-radius": "24px",
         }}
         showBackdrop={true}

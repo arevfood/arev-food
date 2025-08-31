@@ -2,6 +2,7 @@ import SignoutLink from "@/components/common/signout-link";
 import { IonRouterLink } from "@ionic/react";
 import { IonImg } from "@ionic/react";
 import MenstrualCycleLink from "@/components/common/menstrual-cycle-link";
+import DeleteAccountLink from "@/components/common/delete-account-link";
 
 const ContentsSettings: React.FC = () => {
   return (
@@ -38,13 +39,7 @@ const ContentsSettings: React.FC = () => {
             <IonImg src="/icons/chevron-left.svg" className="ms-auto w-[14px] h-[14px] rotate-180"/>
           </div>
         </IonRouterLink>
-        <IonRouterLink routerLink="/setting/delete-account">
-          <div className="text-[16px] px-2 py-2.5 text-black flex items-center gap-[8px] opacity-[0.62] duration-300 rounded-[8px] active:opacity-100 active:bg-black/[0.04]">
-            <IonImg src="/icons/setting-delete-account.svg" className="w-[20px] h-[20px]"/>
-            Delete Account
-            <IonImg src="/icons/chevron-left.svg" className="ms-auto w-[14px] h-[14px] rotate-180"/>
-          </div>
-        </IonRouterLink>
+        <DeleteAccountLink/>
       </div>
 
       <div className="bg-white py-4 px-2 rounded-[12px] flex flex-col shadow-lg">

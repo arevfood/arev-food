@@ -5,6 +5,8 @@ import {useFoods} from "@/hooks/data/food";
 import {useEffect, useState} from "react";
 import {FoodQueryDataModel} from "@/models/food-query";
 import MainButton from "@/components/common/button";
+import {useUser} from "@/hooks/data/user";
+import {getAge} from "@/utils/generate-age";
 
 type propTypes = {};
 
@@ -14,16 +16,43 @@ const ContentRecommend: React.FC<propTypes> = () => {
   const [loadMore, setLoadMore] = useState(true);
   const limit = 10;
 
-  const { data, loading, onGetFoodRecommendation } = useFoods({limit, page});
+  const { onGetFoodRecommendation, loading } = useFoods({});
+  const { data: userDetail } = useUser();
 
   useEffect(() => {
-    if (data) {
-      setAllFoods((prev) => [...prev, ...data]);
-      if (data.length < limit) {
-        setLoadMore(false);
+    const fetchRecommendations = async () => {
+      if (!userDetail?.health) return;
+
+      try {
+        const foods = await onGetFoodRecommendation({
+          age: String(getAge(userDetail.dateBirth)),
+          country: userDetail.country,
+          city: userDetail.city,
+          gender: userDetail.gender,
+          height: String(userDetail.health.height),
+          weight: String(userDetail.health.weight),
+          blood_sugar_level: String(userDetail.health.blood_sugar_level),
+          blood_pressure: userDetail.health.blood_pressure,
+          dietary_preference: userDetail.health.dietary_preference,
+          health_condition: userDetail.health.health_conditions
+              .split(",")
+              .map((condition: string) => condition.trim()),
+          lifestyle: userDetail.health.lifestyle,
+          limit: String(limit),
+          page: String(page),
+        });
+
+        setAllFoods((prev) => [...prev, ...foods]);
+        if (foods.length < limit) {
+          setLoadMore(false);
+        }
+      } catch (err) {
+        console.error(err);
       }
-    }
-  }, [data]);
+    };
+
+    fetchRecommendations();
+  }, [page, userDetail]);
 
   const handleLoadMore = () => {
     setPage((prev) => prev + 1);
@@ -51,7 +80,7 @@ const ContentRecommend: React.FC<propTypes> = () => {
                               slug={item.id}
                               image={item.image_url || ""}
                               title={item.name}
-                              description={item.description || ""}
+                              description={item.food_details?.description || ""}
                               onFavorite={() => onGetFoodRecommendation({ food_id: item.id })}
                               isFav
                           />

@@ -79,19 +79,22 @@ const ContentsHome: React.FC<propTypes> = () => {
 
       try {
         const foods = await onGetFoodRecommendation({
-          age: String(getAge(userDetail.dateBirth)),
-          country: userDetail.country,
-          city: userDetail.city,
-          gender: userDetail.gender,
-          height: String(userDetail.health.height),
-          weight: String(userDetail.health.weight),
-          blood_sugar_level: String(userDetail.health.blood_sugar_level),
-          blood_pressure: userDetail.health.blood_pressure,
-          dietary_preference: userDetail.health.dietary_preference,
-          health_condition: userDetail.health.health_conditions
-            .split(",")
-            .map((condition: string) => condition.trim()),
-          lifestyle: userDetail.health.lifestyle,
+          payload: {
+            age: String(getAge(userDetail.dateBirth)),
+            country: userDetail.country,
+            city: userDetail.city,
+            gender: userDetail.gender,
+            height: String(userDetail.health.height),
+            weight: String(userDetail.health.weight),
+            blood_sugar_level: String(userDetail.health.blood_sugar_level),
+            blood_pressure: userDetail.health.blood_pressure,
+            dietary_preference: userDetail.health.dietary_preference,
+            health_condition: userDetail.health.health_conditions
+              .split(",")
+              .map((condition: string) => condition.trim()),
+            lifestyle: userDetail.health.lifestyle,
+          },
+          type: "recommend",
         });
 
         setFoodRecommendationList(foods || []);
@@ -169,7 +172,10 @@ const ContentsHome: React.FC<propTypes> = () => {
                       title={item.name}
                       description={item.food_details?.description || ""}
                       onFavorite={() =>
-                        onGetFoodRecommendation({ food_id: item.id })
+                        onGetFoodRecommendation({
+                          payload: { food_id: item.id },
+                          type: "recommend",
+                        })
                       }
                       isFav
                     />

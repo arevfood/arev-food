@@ -91,7 +91,7 @@ const ContentsSettingsMenstrualCycle: React.FC = () => {
             </div>
             <div>
                 <CustomSelect
-                    placeholder="Choose your Cycle Pattern (Optional)"
+                    label="Cycle Pattern (Optional)"
                     value={watch("menstrual_cycle.cycle_pattern")}
                     options={cyclePatternOptions}
                     onChange={(val) => setValue("menstrual_cycle.cycle_pattern", val)}
@@ -100,7 +100,7 @@ const ContentsSettingsMenstrualCycle: React.FC = () => {
             </div>
             <div>
                 <CustomSelect
-                    placeholder="Choose your PMS Intensity (Optional)"
+                    label="PMS Intensity (Optional)"
                     value={watch("menstrual_cycle.pms_intensity")}
                     options={pmsIntensityOptions}
                     onChange={(val) => setValue("menstrual_cycle.pms_intensity", val)}

@@ -1,0 +1,13 @@
+.list-ios {
+  background: transparent !important;
+}
+
+ion-list.custom-list ion-item {
+  --background: transparent !important;
+  --padding-start: 0;
+  --inner-padding-end: 0;
+  --inner-padding-start: 0;
+
+  --border-width: 0;
+  --inner-border-width: 0;
+}

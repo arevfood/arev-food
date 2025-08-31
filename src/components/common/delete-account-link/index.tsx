@@ -1,16 +1,15 @@
 import { useEffect, useRef, useState } from "react";
-import {IonModal, IonContent, IonSpinner, IonImg} from "@ionic/react";
-import {useAuth} from "@/hooks/data/authentication";
-import {useToastAlert} from "@/hooks/ui/toast-alert";
+import { IonModal, IonContent, IonSpinner, IonImg } from "@ionic/react";
+import { useAuth } from "@/hooks/data/authentication";
+import { useToastAlert } from "@/hooks/ui/toast-alert";
 import MainButton from "@/components/common/button";
-import {useHistory} from "react-router";
+import { FirebaseError } from "firebase/app";
 
 const DeleteAccountLink: React.FC = () => {
   const { showToast } = useToastAlert();
   const modal = useRef<HTMLIonModalElement>(null);
   const page = useRef(null);
   const { onDeleteAccount, loading } = useAuth();
-  const router = useHistory();
 
   const [presentingElement, setPresentingElement] =
     useState<HTMLElement | null>(null);
@@ -27,13 +26,27 @@ const DeleteAccountLink: React.FC = () => {
     try {
       await onDeleteAccount();
       window.location.reload();
-      showToast({header: "Account Deleted", message: "Your account has been removed.", type: "success"});
-    } catch (error: any) {
-      if (error.code === 'auth/requires-recent-login') {
-        showToast({header: "Delete Failed", message: "Please log in again to delete account.", type: "error"});
-        // router.push('/login');
+      showToast({
+        header: "Account Deleted",
+        message: "Your account has been removed.",
+        type: "success",
+      });
+    } catch (error) {
+      if (
+        error instanceof FirebaseError &&
+        error.code === "auth/requires-recent-login"
+      ) {
+        showToast({
+          header: "Delete Failed",
+          message: "Please log in again to delete account.",
+          type: "error",
+        });
       } else {
-        showToast({header: "Delete Failed", message: "Unable to delete account.", type: "error"});
+        showToast({
+          header: "Delete Failed",
+          message: "Unable to delete account.",
+          type: "error",
+        });
       }
     } finally {
       dismiss();
@@ -42,10 +55,19 @@ const DeleteAccountLink: React.FC = () => {
 
   return (
     <>
-      <div id="delete-account-modal" className="cursor-pointer text-[16px] px-2 py-2.5 text-black flex items-center gap-[8px] opacity-[0.62] duration-300 rounded-[8px] active:opacity-100 active:bg-black/[0.04]">
-        <IonImg src="/icons/setting-delete-account.svg" className="w-[20px] h-[20px]"/>
+      <div
+        id="delete-account-modal"
+        className="cursor-pointer text-[16px] px-2 py-2.5 text-black flex items-center gap-[8px] opacity-[0.62] duration-300 rounded-[8px] active:opacity-100 active:bg-black/[0.04]"
+      >
+        <IonImg
+          src="/icons/setting-delete-account.svg"
+          className="w-[20px] h-[20px]"
+        />
         Delete Account
-        <IonImg src="/icons/chevron-left.svg" className="ms-auto w-[14px] h-[14px] rotate-180"/>
+        <IonImg
+          src="/icons/chevron-left.svg"
+          className="ms-auto w-[14px] h-[14px] rotate-180"
+        />
       </div>
       <IonModal
         ref={modal}
@@ -74,20 +96,20 @@ const DeleteAccountLink: React.FC = () => {
               </div>
               <div className="mt-8">
                 <MainButton
-                    color="ORANGE"
-                    onClick={onSubmit}
-                    isDisabled={loading}
+                  color="ORANGE"
+                  onClick={onSubmit}
+                  isDisabled={loading}
                 >
                   {loading ? (
-                      <div className="flex items-center gap-2">
-                        Deleted...
-                        <IonSpinner
-                            name="crescent"
-                            className="text-white w-[20px] h-[20px] ms-[6px]"
-                        />
-                      </div>
+                    <div className="flex items-center gap-2">
+                      Deleted...
+                      <IonSpinner
+                        name="crescent"
+                        className="text-white w-[20px] h-[20px] ms-[6px]"
+                      />
+                    </div>
                   ) : (
-                      "Delete My Account"
+                    "Delete My Account"
                   )}
                 </MainButton>
               </div>

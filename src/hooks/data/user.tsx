@@ -24,19 +24,28 @@ export const useUser = () => {
 
   const { mutateAsync: onUpdate, isPending: onUpdateLoading } = useMutation({
     mutationFn: useCallback(
-        async ({ payload, file }: { payload: Record<string, any>; file?: File | null }) => {
-          const finalPayload = { ...payload };
+      async ({
+        payload,
+        file,
+      }: {
+        payload: { [key: string]: string };
+        file?: File | null;
+      }) => {
+        const finalPayload = { ...payload };
 
-          if (file) {
-            finalPayload.photoUrl = await uploadImageToStorage(file, `users/${file.name}`);
-          }
+        if (file) {
+          finalPayload.photoUrl = await uploadImageToStorage(
+            file,
+            `users/${file.name}`
+          );
+        }
 
-          return await FIREBASE_UPDATE_USER({
-            id: session.user.uid,
-            payload: finalPayload,
-          });
-        },
-        [session.user.uid]
+        return await FIREBASE_UPDATE_USER({
+          id: session.user.uid,
+          payload: finalPayload,
+        });
+      },
+      [session.user.uid]
     ),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [entity, session.user.uid] });

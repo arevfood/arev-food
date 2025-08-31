@@ -7,8 +7,9 @@ import CustomSelect from "@/components/common/select-option";
 import { useUser } from "@/hooks/data/user";
 import { useEffect, useState } from "react";
 import { genderOptions } from "@/data/gender";
-import axios from "axios";
+import CustomInputDate from "@/components/common/input-date";
 import CustomInputPhoneNumber from "@/components/common/input-phone-number";
+import { useCountry } from "@/hooks/data/city";
 
 type inputProps = {
   fullname: string;
@@ -31,7 +32,6 @@ const ContentsSettingsProfile: React.FC = () => {
     file: null,
     preview: null,
   });
-  const [countries, setCountries] = useState<string[]>([]);
 
   const {
     register,
@@ -41,15 +41,7 @@ const ContentsSettingsProfile: React.FC = () => {
     formState: { errors },
   } = useForm<inputProps>();
 
-  const fetchCountries = async () => {
-    try {
-      const res = await axios.get("https://countriesnow.space/api/v0.1/countries/positions");
-      const countryList = res.data.data.map((country: any) => country.name);
-      setCountries(countryList);
-    } catch (err) {
-      console.error(err);
-    }
-  };
+  const { countries } = useCountry();
 
   const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -74,17 +66,21 @@ const ContentsSettingsProfile: React.FC = () => {
     });
 
     if (!result) {
-      showToast({header: "Update Failed", message: "Couldn’t save your changes. Please try again.", type: "error"});
+      showToast({
+        header: "Update Failed",
+        message: "Couldn’t save your changes. Please try again.",
+        type: "error",
+      });
       return;
     }
 
-    showToast({header: "Profile Updated", message: "Your profile information has been saved.", type: "success"});
+    showToast({
+      header: "Profile Updated",
+      message: "Your profile information has been saved.",
+      type: "success",
+    });
     setPhoto({ file: null, preview: null });
   };
-
-  useEffect(() => {
-    fetchCountries();
-  }, []);
 
   useEffect(() => {
     if (userDetail) {
@@ -100,114 +96,120 @@ const ContentsSettingsProfile: React.FC = () => {
   }, [userDetail, setValue]);
 
   return (
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="font-bold font-heading text-[22px] text-black">
-          Edit Profile
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <div className="font-bold font-heading text-[22px] text-black">
+        Edit Profile
+      </div>
+      <label className="mx-auto flex items-center justify-center mt-10 w-fit rounded-full overflow-hidden cursor-pointer">
+        <IonImg
+          src={
+            photo.preview ||
+            userDetail?.photoUrl ||
+            "/images/user-placeholder.png"
+          }
+          className="w-[100px] h-[100px] rounded-full bg-[#FDEAC5] object-cover"
+        />
+        <input
+          type="file"
+          accept="image/*"
+          className="hidden"
+          onChange={handlePhotoChange}
+        />
+      </label>
+      <div className="mt-10">
+        <div className="font-bold font-heading text-[18px] text-black mb-4">
+          Personal Information
         </div>
-        <label className="mx-auto flex items-center justify-center mt-10 w-fit rounded-full overflow-hidden cursor-pointer">
-          <IonImg
-              src={
-                  photo.preview ||
-                  userDetail?.photoUrl ||
-                  "/images/user-placeholder.png"
-              }
-              className="w-[100px] h-[100px] rounded-full bg-[#FDEAC5] object-cover"
-          />
-          <input
-              type="file"
-              accept="image/*"
-              className="hidden"
-              onChange={handlePhotoChange}
-          />
-        </label>
-        <div className="mt-10">
-          <div className="font-bold font-heading text-[18px] text-black mb-4">
-            Personal Information
-          </div>
-          <CustomInput
-              {...register("fullname", {
-                required: "Please input your full name!",
-              })}
-              placeholder="Full Name"
-              errorMessage={errors.fullname?.message}
-          />
-          <CustomInput
-              {...register("email", {
-                required: "Please input your email!",
-              })}
-              placeholder="Email"
-              type="email"
-              errorMessage={errors.email?.message}
-          />
-          <CustomInput
-              {...register("phoneNumber", {
-                required: "Please input your phone number!",
-              })}
-              placeholder="Phone Number"
-              errorMessage={errors.phoneNumber?.message}
-          />
+        <CustomInput
+          {...register("fullname", {
+            required: "Please input your full name!",
+          })}
+          placeholder="Full Name"
+          errorMessage={errors.fullname?.message}
+        />
+        <CustomInput
+          {...register("email", {
+            required: "Please input your email!",
+          })}
+          placeholder="Email"
+          type="email"
+          errorMessage={errors.email?.message}
+        />
+        <CustomInputPhoneNumber
+          {...register("phoneNumber", {
+            required: "Please input your phone number!",
+          })}
+          errorMessage={errors.phoneNumber?.message}
+        />
+      </div>
+      <div className="mt-4">
+        <div className="font-bold font-heading text-[18px] text-black mb-4">
+          Basic Details
         </div>
-        <div className="mt-4">
-          <div className="font-bold font-heading text-[18px] text-black mb-4">
-            Basic Details
-          </div>
-          <CustomInput
-              {...register("dateBirth", {
-                required: "Please input your date of birth!",
-              })}
-              placeholder="Date of Birth"
-              type="date"
-              errorMessage={errors.dateBirth?.message}
-          />
-          <CustomSelect
-              label="Gender"
-              value={watch("gender")}
-              options={genderOptions}
-              onChange={(val) => setValue("gender", val)}
-              errorMessage={errors.gender?.message}
-          />
+        <CustomInputDate
+          {...register("dateBirth", {
+            required: "Please input your date of birth!",
+          })}
+          value={watch("dateBirth")}
+          label="Date of Birth"
+          errorMessage={errors.dateBirth?.message}
+        />
+        <CustomSelect
+          label="Gender"
+          value={watch("gender")}
+          options={genderOptions}
+          onChange={(val) => setValue("gender", val)}
+          errorMessage={errors.gender?.message}
+        />
+      </div>
+      <div className="mt-4">
+        <div className="font-bold font-heading text-[18px] text-black mb-4">
+          Location
         </div>
-        <div className="mt-4">
-          <div className="font-bold font-heading text-[18px] text-black mb-4">
-            Location
-          </div>
-          <CustomSelect
-              label="Country"
-              value={watch("country")}
-              options={countries.map((country) => ({ label: country, value: country }))}
-              onChange={(val) => setValue("country", val)}
-              errorMessage={errors.country?.message}
-          />
-          <CustomInput
-              {...register("city", {
-                required: "Please input your city!",
-              })}
-              placeholder="City"
-              errorMessage={errors.city?.message}
-          />
-        </div>
-        <div className="my-6">
-          <MainButton
-              color="ORANGE"
-              onClick={() => {
-                handleSubmit(onSubmit)();
-              }}
-              isDisabled={loading}
-          >
-            {loading ? (
-                <div className="flex items-center gap-2">
-                  Saving Changes...
-                  <IonSpinner
-                      name="crescent"
-                      className="text-white w-[20px] h-[20px] ms-[6px]"
-                  />
-                </div>
-            ) : (
-                "Save Changes"
-            )}
-          </MainButton>
-        </div>
-      </form>
+        <CustomSelect
+          label="Country"
+          value={watch("country")}
+          options={
+            countries
+              ? countries.map((country) => ({
+                  label: country,
+                  value: country,
+                }))
+              : []
+          }
+          onChange={(val) => setValue("country", val)}
+          errorMessage={errors.country?.message}
+        />
+        <CustomInput
+          {...register("city", {
+            required: "Please input your city!",
+          })}
+          placeholder="City"
+          errorMessage={errors.city?.message}
+        />
+      </div>
+      <div className="my-6">
+        <MainButton
+          color="ORANGE"
+          onClick={() => {
+            handleSubmit(onSubmit)();
+          }}
+          isDisabled={loading}
+        >
+          {loading ? (
+            <div className="flex items-center gap-2">
+              Saving Changes...
+              <IonSpinner
+                name="crescent"
+                className="text-white w-[20px] h-[20px] ms-[6px]"
+              />
+            </div>
+          ) : (
+            "Save Changes"
+          )}
+        </MainButton>
+      </div>
+    </form>
   );
 };
 

@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import { genderOptions } from "@/data/gender";
 import CustomInputDate from "@/components/common/input-date";
 import CustomInputPhoneNumber from "@/components/common/input-phone-number";
+import { useCountry } from "@/hooks/data/city";
 
 type inputProps = {
   fullname: string;
@@ -40,6 +41,8 @@ const ContentsSettingsProfile: React.FC = () => {
     formState: { errors },
   } = useForm<inputProps>();
 
+  const { countries } = useCountry();
+
   const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -63,11 +66,19 @@ const ContentsSettingsProfile: React.FC = () => {
     });
 
     if (!result) {
-      showToast({header: "Update Failed", message: "Couldn’t save your changes. Please try again.", type: "error"});
+      showToast({
+        header: "Update Failed",
+        message: "Couldn’t save your changes. Please try again.",
+        type: "error",
+      });
       return;
     }
 
-    showToast({header: "Profile Updated", message: "Your profile information has been saved.", type: "success"});
+    showToast({
+      header: "Profile Updated",
+      message: "Your profile information has been saved.",
+      type: "success",
+    });
     setPhoto({ file: null, preview: null });
   };
 
@@ -111,18 +122,16 @@ const ContentsSettingsProfile: React.FC = () => {
         </div>
         <CustomInput
           {...register("fullname", {
-            required: "Please input your full name",
+            required: "Please input your full name!",
           })}
-          label="Full Name"
-          placeholder="Enter your full name"
+          placeholder="Full Name"
           errorMessage={errors.fullname?.message}
         />
         <CustomInput
           {...register("email", {
             required: "Please input your email!",
           })}
-          label="Email"
-          placeholder="Enter your email"
+          placeholder="Email"
           type="email"
           errorMessage={errors.email?.message}
         />
@@ -130,7 +139,6 @@ const ContentsSettingsProfile: React.FC = () => {
           {...register("phoneNumber", {
             required: "Please input your phone number!",
           })}
-          label="Phone Number"
           errorMessage={errors.phoneNumber?.message}
         />
       </div>
@@ -158,20 +166,25 @@ const ContentsSettingsProfile: React.FC = () => {
         <div className="font-bold font-heading text-[18px] text-black mb-4">
           Location
         </div>
-        <CustomInput
-          {...register("country", {
-            required: "Please input your country!",
-          })}
+        <CustomSelect
           label="Country"
-          placeholder="Enter your country"
+          value={watch("country")}
+          options={
+            countries
+              ? countries.map((country) => ({
+                  label: country,
+                  value: country,
+                }))
+              : []
+          }
+          onChange={(val) => setValue("country", val)}
           errorMessage={errors.country?.message}
         />
         <CustomInput
           {...register("city", {
             required: "Please input your city!",
           })}
-          label="City"
-          placeholder="Enter your city"
+          placeholder="City"
           errorMessage={errors.city?.message}
         />
       </div>

@@ -126,13 +126,13 @@ const ContentsSettingsHealthData: React.FC = () => {
         <div className="font-bold font-heading text-[18px] text-black mb-4">
           Dietary Preference
         </div>
-          <CustomSelect
-              placeholder="Choose your diet type"
-              value={watch("health.diet_type")}
-              options={dietTypeOptions}
-              onChange={(val) => setValue("health.diet_type", val)}
-              errorMessage={errors.health?.diet_type?.message}
-          />
+        <CustomSelect
+            label="Diet Type"
+            value={watch("health.diet_type")}
+            options={dietTypeOptions}
+            onChange={(val) => setValue("health.diet_type", val)}
+            errorMessage={errors.health?.diet_type?.message}
+        />
       </div>
       <div className="my-6">
           <MainButton

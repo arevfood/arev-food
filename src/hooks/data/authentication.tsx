@@ -1,16 +1,19 @@
 import MainNotification from "@/components/common/notifications";
 import { SessionUser, UserLogin, UserSignup } from "@/models/user";
 import { FIREBASE_SIGNUP } from "@/providers/firebase/user";
-import { firebaseAuth } from "@/utils/connections/firebase";
+import { firebaseAuth, googleProvider } from "@/utils/connections/firebase";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   onAuthStateChanged,
   signInWithEmailAndPassword,
   signOut,
+  signInWithPopup,
+  signInWithRedirect,
   updatePassword,
   deleteUser,
 } from "firebase/auth";
 import { useCallback } from "react";
+import { Capacitor } from "@capacitor/core";
 
 const entity = "session";
 const queryKey = "sessions";
@@ -88,6 +91,28 @@ export const useAuth = () => {
     },
   });
 
+  const { mutateAsync: loginWithGoogle, isPending: onGoogleLoading } =
+    useMutation({
+      mutationFn: useCallback(async () => {
+        let result;
+        if (Capacitor.isNativePlatform()) {
+          result = await signInWithRedirect(firebaseAuth, googleProvider);
+        } else {
+          result = await signInWithPopup(firebaseAuth, googleProvider);
+        }
+
+        return result.user;
+      }, []),
+      onSuccess: (result) => {
+        queryClient.invalidateQueries({ queryKey: [queryKey] });
+        MainNotification({ type: "success", entity: entity, action: "signin" });
+        return result;
+      },
+      onError: () => {
+        MainNotification({ type: "error", entity: entity, action: "signin" });
+      },
+    });
+
   const { mutateAsync: onChangePassword, isPending: onChangePasswordLoading } =
     useMutation({
       mutationFn: useCallback(async (newPassword: string) => {
@@ -151,12 +176,17 @@ export const useAuth = () => {
       onSigninLoading ||
       onSignOutLoading ||
       onSignupLoading ||
-      onChangePasswordLoading,
+      onGoogleLoading ||
+      onChangePasswordLoading ||
+      onDeleteLoading,
     onSignin,
     onSignOut,
     onSignup,
-    onChangePassword,
+    loginWithGoogle,
     onDeleteAccount,
+    onChangePassword,
+    onChangePasswordLoading,
+    onGoogleLoading,
     onDeleteLoading,
   };
 };

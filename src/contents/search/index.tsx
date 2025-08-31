@@ -41,7 +41,10 @@ const ContentSearch: React.FC = () => {
 
   const handleFilter = useCallback(async () => {
     if (filterValue) {
-      const data = await onGetFoodRecommendation(filterValue);
+      const data = await onGetFoodRecommendation({
+        payload: filterValue,
+        type: "recommend",
+      });
       setSearchResult(data);
       setIsSearch(true);
     }

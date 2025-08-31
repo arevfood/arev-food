@@ -1,12 +1,12 @@
 import FoodCard from "@/components/common/food-card";
 import IconTitle from "@/components/common/icon-title";
-import {IonImg, IonSpinner} from "@ionic/react";
-import {useFoods} from "@/hooks/data/food";
-import {useEffect, useState} from "react";
-import {FoodQueryDataModel} from "@/models/food-query";
+import { IonImg, IonSpinner } from "@ionic/react";
+import { useFoods } from "@/hooks/data/food";
+import { useEffect, useState } from "react";
+import { FoodQueryDataModel } from "@/models/food-query";
 import MainButton from "@/components/common/button";
-import {useUser} from "@/hooks/data/user";
-import {getAge} from "@/utils/generate-age";
+import { useUser } from "@/hooks/data/user";
+import { getAge } from "@/utils/generate-age";
 
 type propTypes = {};
 
@@ -25,21 +25,24 @@ const ContentRecommend: React.FC<propTypes> = () => {
 
       try {
         const foods = await onGetFoodRecommendation({
-          age: String(getAge(userDetail.dateBirth)),
-          country: userDetail.country,
-          city: userDetail.city,
-          gender: userDetail.gender,
-          height: String(userDetail.health.height),
-          weight: String(userDetail.health.weight),
-          blood_sugar_level: String(userDetail.health.blood_sugar_level),
-          blood_pressure: userDetail.health.blood_pressure,
-          dietary_preference: userDetail.health.dietary_preference,
-          health_condition: userDetail.health.health_conditions
+          payload: {
+            age: String(getAge(userDetail.dateBirth)),
+            country: userDetail.country,
+            city: userDetail.city,
+            gender: userDetail.gender,
+            height: String(userDetail.health.height),
+            weight: String(userDetail.health.weight),
+            blood_sugar_level: String(userDetail.health.blood_sugar_level),
+            blood_pressure: userDetail.health.blood_pressure,
+            dietary_preference: userDetail.health.dietary_preference,
+            health_condition: userDetail.health.health_conditions
               .split(",")
               .map((condition: string) => condition.trim()),
-          lifestyle: userDetail.health.lifestyle,
-          limit: String(limit),
-          page: String(page),
+            lifestyle: userDetail.health.lifestyle,
+            limit: String(limit),
+            page: String(page),
+          },
+          type: "recommend",
         });
 
         setAllFoods((prev) => [...prev, ...foods]);
@@ -74,45 +77,50 @@ const ContentRecommend: React.FC<propTypes> = () => {
             <>
               <div className="grid grid-cols-2 gap-4 mt-4">
                 {allFoods &&
-                    allFoods.map((item) => {
-                      return (
-                          <FoodCard
-                              slug={item.id}
-                              image={item.image_url || ""}
-                              title={item.name}
-                              description={item.food_details?.description || ""}
-                              onFavorite={() => onGetFoodRecommendation({ food_id: item.id })}
-                              isFav
-                          />
-                      );
-                    })}
+                  allFoods.map((item) => {
+                    return (
+                      <FoodCard
+                        slug={item.id}
+                        image={item.image_url || ""}
+                        title={item.name}
+                        description={item.food_details?.description || ""}
+                        onFavorite={() =>
+                          onGetFoodRecommendation({
+                            payload: { food_id: item.id },
+                            type: "recommend",
+                          })
+                        }
+                        isFav
+                      />
+                    );
+                  })}
               </div>
               {loadMore && (
-                  <div className="w-fit mx-auto mt-4">
-                    <MainButton
-                        color="ORANGE"
-                        onClick={handleLoadMore}
-                        isDisabled={loading}
-                    >
-                      {loading ? (
-                          <div className="flex items-center gap-2">
-                            Loading...
-                            <IonSpinner
-                                name="crescent"
-                                className="text-white w-[20px] h-[20px] ms-[6px]"
-                            />
-                          </div>
-                      ) : (
-                          "Load More"
-                      )}
-                    </MainButton>
-                  </div>
+                <div className="w-fit mx-auto mt-4">
+                  <MainButton
+                    color="ORANGE"
+                    onClick={handleLoadMore}
+                    isDisabled={loading}
+                  >
+                    {loading ? (
+                      <div className="flex items-center gap-2">
+                        Loading...
+                        <IonSpinner
+                          name="crescent"
+                          className="text-white w-[20px] h-[20px] ms-[6px]"
+                        />
+                      </div>
+                    ) : (
+                      "Load More"
+                    )}
+                  </MainButton>
+                </div>
               )}
             </>
           ) : (
             <IonSpinner
-                name="crescent"
-                className="text-black/[0.42] w-[32px] h-[32px] ms-[6px] mx-auto"
+              name="crescent"
+              className="text-black/[0.42] w-[32px] h-[32px] ms-[6px] mx-auto"
             />
           )}
         </div>

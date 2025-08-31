@@ -8,6 +8,7 @@ import {
   signInWithEmailAndPassword,
   signOut,
   updatePassword,
+  deleteUser,
 } from "firebase/auth";
 import { useCallback } from "react";
 
@@ -37,9 +38,9 @@ export const useAuth = () => {
   const { mutateAsync: onSignin, isPending: onSigninLoading } = useMutation({
     mutationFn: useCallback(async (payload: UserLogin) => {
       const session = await signInWithEmailAndPassword(
-          firebaseAuth,
-          payload.email,
-          payload.password
+        firebaseAuth,
+        payload.email,
+        payload.password
       );
       return session;
     }, []),
@@ -87,30 +88,75 @@ export const useAuth = () => {
     },
   });
 
-  const { mutateAsync: onChangePassword, isPending: onChangePasswordLoading } = useMutation({
-    mutationFn: useCallback(async (newPassword: string) => {
-      const user = firebaseAuth.currentUser;
-      if (user) {
-        await updatePassword(user, newPassword);
-        return true;
-      }
-      throw new Error("User not authenticated.");
-    }, []),
-    onSuccess: () => {
-      MainNotification({ type: "success", entity: "password", action: "change" });
-    },
-    onError: () => {
-      MainNotification({ type: "error", entity: "password", action: "change" });
-    },
-  });
+  const { mutateAsync: onChangePassword, isPending: onChangePasswordLoading } =
+    useMutation({
+      mutationFn: useCallback(async (newPassword: string) => {
+        const user = firebaseAuth.currentUser;
+        if (user) {
+          await updatePassword(user, newPassword);
+          return true;
+        }
+        throw new Error("User not authenticated.");
+      }, []),
+      onSuccess: () => {
+        MainNotification({
+          type: "success",
+          entity: "password",
+          action: "change",
+        });
+      },
+      onError: () => {
+        MainNotification({
+          type: "error",
+          entity: "password",
+          action: "change",
+        });
+      },
+    });
+
+  const { mutateAsync: onDeleteAccount, isPending: onDeleteLoading } =
+    useMutation({
+      mutationFn: useCallback(async () => {
+        const user = firebaseAuth.currentUser;
+        if (user) {
+          await deleteUser(user);
+          return true;
+        }
+        throw new Error("User not authenticated.");
+      }, []),
+      onSuccess: (result) => {
+        if (result) {
+          queryClient.removeQueries({ queryKey: [queryKey] });
+          queryClient.removeQueries({ queryKey: ["user"] });
+        }
+        MainNotification({
+          type: "success",
+          entity: "account",
+          action: "delete",
+        });
+      },
+      onError: () => {
+        MainNotification({
+          type: "error",
+          entity: "account",
+          action: "delete",
+        });
+      },
+    });
 
   return {
     session: data as SessionUser,
     loading:
-        fetchLoading || onSigninLoading || onSignOutLoading || onSignupLoading || onChangePasswordLoading,
+      fetchLoading ||
+      onSigninLoading ||
+      onSignOutLoading ||
+      onSignupLoading ||
+      onChangePasswordLoading,
     onSignin,
     onSignOut,
     onSignup,
     onChangePassword,
+    onDeleteAccount,
+    onDeleteLoading,
   };
 };

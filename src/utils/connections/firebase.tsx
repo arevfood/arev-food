@@ -7,6 +7,7 @@ import {
   indexedDBLocalPersistence,
   initializeAuth,
   setPersistence,
+  GoogleAuthProvider,
 } from "firebase/auth";
 import { getStorage } from "firebase/storage";
 import { Capacitor } from "@capacitor/core";
@@ -32,17 +33,17 @@ if (Capacitor.isNativePlatform()) {
 } else {
   auth = getAuth(firebaseApp);
   setPersistence(auth, browserLocalPersistence)
-    .then(() => {
-      console.log("Persistance Firebase Auth set up for local (web).");
-    })
-    .catch((error) => {
-      console.error(
-        "Error while configuring Firebase Auth persistence:",
-        error
-      );
-    });
+      .then(() => {
+        console.log("[Firebase] 🌐 Auth set up for localStorage (web).");
+      })
+      .catch((error) => {
+        console.error("Error while configuring Firebase Auth persistence:", error);
+      });
 }
 
+export const firebaseAppInstance = firebaseApp;
 export const firebaseDb = getFirestore(firebaseApp);
-export const firebaseAuth = getAuth(firebaseApp);
+export const firebaseAuth = auth;
 export const firebaseStorage = getStorage(firebaseApp);
+
+export const googleProvider = new GoogleAuthProvider();

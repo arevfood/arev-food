@@ -46,6 +46,7 @@ export const useFoods = ({
       async (payload: { [key: string]: string | string[] }) => {
         const result = await axios.post(`${baseUrl}/query-by-user-info`, {
           metadata: payload,
+          type: "recommend",
         });
         return result.data.foods as FoodQueryDataModel[];
       },

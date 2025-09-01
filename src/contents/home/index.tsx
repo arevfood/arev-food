@@ -177,7 +177,7 @@ const ContentsHome: React.FC<propTypes> = () => {
                           type: "recommend",
                         })
                       }
-                      isFav
+                      isFav={favoriteList?.some((fav) => fav.id === item.id) ?? false}
                     />
                   </SwiperSlide>
                 );
@@ -189,11 +189,11 @@ const ContentsHome: React.FC<propTypes> = () => {
         <IconTitle
           title="Favorite Food"
           icon="/icons/thumbs-up.svg"
-          link="/favorite"
+          link={favoriteList && favoriteList.length > 0 ? "/favorite" : ""}
         />
       </div>
       <div className="mt-4 mb-6">
-        {!favoriteList ? (
+        {!favoriteList || favoriteList.length === 0 ? (
           <CardEmpty title="No Favorite Food Data" />
         ) : (
           <Swiper slidesPerView={2.2} spaceBetween={16} centeredSlides={false}>

@@ -19,13 +19,13 @@ const IconTitle: React.FC<propTypes> = ({
   return (
     <div>
       <div className="flex flex-wrap gap-2 items-center justify-between">
-        <div className="flex flex-wrap gap-2 items-center">
+        <div className="flex gap-2">
           <div>
             <div className="w-[32px] h-[32px] rounded-full bg-[#FDEAC5] flex items-center justify-center">
               <IonIcon src={icon} className="w-[18px] h-[18px]" />
             </div>
           </div>
-          <div className="font-bold font-heading text-[18px] text-black">
+          <div className="font-bold font-heading text-[18px] text-black leading-[120%] mt-1.5">
             {title}
           </div>
         </div>

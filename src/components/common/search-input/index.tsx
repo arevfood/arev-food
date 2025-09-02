@@ -82,18 +82,18 @@ const SearchInput: React.FC<propTypes> = ({
       <div className="relative">
         <CustomInput
           icon="/icons/search.svg"
-          iconClass="text-[24px] text-black/40 pr-3"
+          iconClass="text-[20px] text-black/[0.42] pr-2.5"
+          inputClass="!pr-[48px]"
           placeholder="Search..."
+          value={searchInput}
           onChange={handleChange}
           onKeyDown={handleSearch}
           disabled={openFilter}
         />{" "}
-        <div className="absolute translate-y-[-50%] top-[50%] right-[20px] flex items-center bg-white">
+        <div className={`absolute w-[40px] h-[40px] rounded-full -translate-y-1/2 top-1/2 right-[6px] flex items-center justify-center bg-primary_color ${openFilter ? 'contrast-200' : ''}`}>
           <IonIcon
             icon="/icons/filter.svg"
-            className={`text-[18px] ${
-              openFilter ? "text-black" : "text-black/40"
-            }`}
+            className={`text-[18px] text-white_color`}
             onClick={() => {
               setOpenFilter(!openFilter);
             }}

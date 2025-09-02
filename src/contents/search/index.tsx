@@ -8,7 +8,6 @@ import { useFoods } from "@/hooks/data/food";
 import { FoodQueryDataModel } from "@/models/food-query";
 import { useCallback, useEffect, useState } from "react";
 import { useLocation } from "react-router";
-import { Swiper, SwiperSlide } from "swiper/react";
 
 const ContentSearch: React.FC = () => {
   const location = useLocation();
@@ -54,6 +53,7 @@ const ContentSearch: React.FC = () => {
     if (query) {
       handleSearch(query);
     }
+    setIsSearch(!!(query && query.trim().length > 0));
   }, [handleSearch, query]);
 
   return (
@@ -70,54 +70,48 @@ const ContentSearch: React.FC = () => {
       />
       {!isSearch && (
         <>
-          <IconTitle title="Popular Result" icon="/icons/search-love.svg" />
-          <div className="mt-4">
-            <Swiper
-              slidesPerView={2.2}
-              spaceBetween={16}
-              centeredSlides={false}
-            >
-              {foodsData &&
+          <IconTitle title="Popular Result" icon="/icons/search-love.svg"/>
+          <div className="grid grid-cols-2 gap-[16px] my-4">
+            {foodsData &&
                 foodsData.map((food, index) => {
                   return (
-                    <SwiperSlide key={index}>
-                      <div className="w-full">
-                        <FoodCard
+                      <FoodCard
+                          key={index}
                           slug={food.id}
                           image={food.image_url}
                           title={food.name}
                           description={food.food_details?.description || "-"}
                           isFav={
-                            favoriteData?.findIndex(
-                              (findFood) => findFood.id === food.id
-                            ) !== -1 && Boolean(food.id)
+                              favoriteData?.findIndex(
+                                  (findFood) => findFood.id === food.id
+                              ) !== -1 && Boolean(food.id)
                           }
                           onFavorite={() => onFavorite({ food_id: food.id })}
                           loading={foodsLoading}
-                        />
-                      </div>
-                    </SwiperSlide>
+                      />
                   );
                 })}
-            </Swiper>
           </div>
         </>
       )}
 
       {isSearch && (
-        <div className="grid grid-cols-2 gap-4 pb-6">
-          {searchResult.map((food) => {
-            return (
-              <FoodCard
-                slug={food.id}
-                image={food.image_url}
-                title={food.name}
-                description={food.food_details?.description || "-"}
-                loading={foodsLoading}
-              />
-            );
-          })}
-        </div>
+        <>
+          <IconTitle title={`Showing results for "${query}"`} icon="/icons/search-love.svg" />
+          <div className="grid grid-cols-2 gap-[16px] my-4">
+            {searchResult.map((food) => {
+              return (
+                <FoodCard
+                  slug={food.id}
+                  image={food.image_url}
+                  title={food.name}
+                  description={food.food_details?.description || "-"}
+                  loading={foodsLoading}
+                />
+              );
+            })}
+          </div>
+        </>
       )}
     </>
   );

@@ -161,11 +161,11 @@ const ContentsHome: React.FC<propTypes> = () => {
         {!isHaveRecommendationFood || foodRecommendationList.length === 0 ? (
           <CardEmpty title="No Recommendation Food Data" />
         ) : (
-          <Swiper slidesPerView={2.2} spaceBetween={16} centeredSlides={false}>
+          <Swiper slidesPerView={2.2} spaceBetween={12} centeredSlides={false}>
             {foodRecommendationList &&
               foodRecommendationList.map((item) => {
                 return (
-                  <SwiperSlide>
+                  <SwiperSlide className="!h-[180px]">
                     <FoodCard
                       slug={item.id}
                       image={item.image_url || ""}
@@ -196,10 +196,10 @@ const ContentsHome: React.FC<propTypes> = () => {
         {!favoriteList ? (
           <CardEmpty title="No Favorite Food Data" />
         ) : (
-          <Swiper slidesPerView={2.2} spaceBetween={16} centeredSlides={false}>
+        <Swiper slidesPerView={2.2} spaceBetween={12} centeredSlides={false}>
             {favoriteList.map((item) => {
               return (
-                <SwiperSlide>
+              <SwiperSlide className="!h-[180px]">
                   <FoodCard
                     slug={item.id}
                     image={item.image_url || ""}

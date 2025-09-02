@@ -10,6 +10,7 @@ import { genderOptions } from "@/data/gender";
 import CustomInputDate from "@/components/common/input-date";
 import CustomInputPhoneNumber from "@/components/common/input-phone-number";
 import { useCity, useCountry } from "@/hooks/data/location";
+import {useHistory} from "react-router";
 
 type inputProps = {
   fullname: string;
@@ -25,6 +26,7 @@ type inputProps = {
 const ContentsSettingsProfile: React.FC = () => {
   const { data: userDetail, onUpdate, loading } = useUser();
   const { showToast } = useToastAlert();
+  const router = useHistory();
   const [photo, setPhoto] = useState<{
     file: File | null;
     preview: string | null;
@@ -81,6 +83,7 @@ const ContentsSettingsProfile: React.FC = () => {
       type: "success",
     });
     setPhoto({ file: null, preview: null });
+    router.push("/setting");
   };
 
   useEffect(() => {

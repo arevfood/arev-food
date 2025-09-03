@@ -74,6 +74,7 @@ const SearchInput: React.FC<propTypes> = ({
     setSelectedFilter({ health_conditions: [] });
     setFilterValue({});
     setOpenFilter(false);
+    setSearchInput('');
     onReset?.();
   };
 

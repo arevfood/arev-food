@@ -7,12 +7,13 @@ import { useFavorite } from "@/hooks/data/favorite";
 import { useFoods } from "@/hooks/data/food";
 import { FoodQueryDataModel } from "@/models/food-query";
 import { useCallback, useEffect, useState } from "react";
-import { useLocation } from "react-router";
+import {useHistory, useLocation} from "react-router";
 
 const ContentSearch: React.FC = () => {
   const location = useLocation();
   const query = new URLSearchParams(location.search).get("query");
   const [isSearch, setIsSearch] = useState(!!query);
+  const router = useHistory();
 
   const {
     data: foodsData,
@@ -66,6 +67,7 @@ const ContentSearch: React.FC = () => {
         onReset={() => {
           setSearchResult([]);
           setIsSearch(false);
+          router.replace("/search");
         }}
       />
       {!isSearch && (

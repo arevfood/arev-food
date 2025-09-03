@@ -130,7 +130,7 @@ const ContentsHome: React.FC<propTypes> = () => {
             <div className="mt-6">
               <IconTitle title="Health Data" icon="/icons/health-data.svg" />
             </div>
-            <div className="grid grid-cols-2 gap-4 mt-4">
+            <div className="grid grid-cols-2 gap-[16px] mt-4">
               <HealthData
                 title="Blood Sugar Level"
                 value={userDetail?.health.blood_sugar_level}

@@ -66,16 +66,16 @@ const HealthData: React.FC<propTypes> = ({ title, value, unit, image }) => {
         src={image}
       />
       <div className="bg-linear-to-t to-transparent from-[#F9B83F] absolute bottom-0 left-0 h-full w-full" />
-      <div className="z-10 absolute bottom-0 w-full px-[10px] pb-[16px]">
+      <div className="z-10 absolute bottom-0 w-full px-[12px] pb-[6px]">
         <div className="font-bold font-heading text-[16px] text-white">
           {title}
         </div>
-        <div className="font-paragraph font-light text-[32px] text-white ">
+        <div className="font-heading font-medium text-[26px] text-white">
           {value}
-          <span className="text-[12px] font-normal">{unit}</span>
+          <span className="text-[12px] font-paragraph font-normal">{unit}</span>
         </div>
       </div>
-      <div className="absolute top-[8px] left-[10px] ">
+      <div className="absolute top-[12px] left-[12px]">
         <Tags label={status.type} status={status.color}/>
       </div>
     </div>

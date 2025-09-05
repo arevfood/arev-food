@@ -130,11 +130,11 @@ const ContentMenstrual: React.FC = () => {
         ) : !isHaveHealthData || (foodRecommendations?.length ?? 0) === 0 ? (
           <CardEmpty title="No Recommendation Food Data" />
         ) : (
-          <Swiper slidesPerView={2.2} spaceBetween={16} centeredSlides={false}>
+        <Swiper slidesPerView={2.2} spaceBetween={12} centeredSlides={false}>
             {foodRecommendations &&
               foodRecommendations.map((foodRecommendation) => {
                 return (
-                  <SwiperSlide>
+                <SwiperSlide className="!h-[180px]">
                     <FoodCard
                       slug={foodRecommendation.id}
                       image={foodRecommendation.image_url || ""}
@@ -183,11 +183,11 @@ const ContentMenstrual: React.FC = () => {
         ) : !isHaveHealthData || (foodAvoids?.length ?? 0) === 0 ? (
           <CardEmpty title="No Avoid Food Data" />
         ) : (
-          <Swiper slidesPerView={2.2} spaceBetween={16} centeredSlides={false}>
+        <Swiper slidesPerView={2.2} spaceBetween={12} centeredSlides={false}>
             {foodAvoids &&
               foodAvoids.map((foodRecommendation) => {
                 return (
-                  <SwiperSlide>
+                <SwiperSlide className="!h-[180px]">
                     <FoodCard
                       slug={foodRecommendation.id}
                       image={foodRecommendation.image_url || ""}

@@ -27,7 +27,7 @@ const FoodCard: React.FC<propTypes> = ({
     <>
       {loading && <FoodCardSkeleton />}
       {!loading && (
-        <div className="relative w-full">
+        <div className="relative w-full h-full">
           <div className="absolute top-[8px] right-[8px] z-1">
             <IonIcon
               src="/icons/heart.svg"
@@ -41,10 +41,10 @@ const FoodCard: React.FC<propTypes> = ({
           </div>
           <IonRouterLink routerLink={`/food/${slug}`}>
             <Card className="cursor-pointer h-full">
-              <div className="h-[125px] relative">
+              <div className="relative aspect-video w-full">
                 <CustomImage image={image} />
               </div>
-              <div className="py-4 px-3 text-left">
+              <div className="p-3 text-left h-[102px]">
                 <TextDescription
                   title={title}
                   description={description}

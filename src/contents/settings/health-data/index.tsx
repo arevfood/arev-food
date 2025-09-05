@@ -35,13 +35,11 @@ const ContentsSettingsHealthData: React.FC = () => {
   const onSubmit: SubmitHandler<inputProps> = async (data) => {
     const filteredPayload = {
       health: Object.entries(data.health).reduce(
-        (acc: { [key: string]: string }, [key, value]) => {
-          if (value !== "" && value != null) {
-            acc[key] = `${value}`;
-          }
-          return acc;
-        },
-        {}
+          (acc: { [key: string]: string }, [key, value]) => {
+            acc[key] = value != null ? `${value}` : "";
+            return acc;
+          },
+          {}
       ),
     };
 
@@ -134,10 +132,8 @@ const ContentsSettingsHealthData: React.FC = () => {
           errorMessage={errors.health?.blood_pressure?.message}
         />
         <CustomInput
-          {...register("health.health_conditions", {
-            required: "Please enter health conditions!",
-          })}
-          label="Health Conditions"
+          {...register("health.health_conditions")}
+          label="Health Conditions (Optional)"
           placeholder="e.g. Diabetes, Hypertension"
           errorMessage={errors.health?.health_conditions?.message}
         />

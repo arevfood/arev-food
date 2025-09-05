@@ -34,13 +34,10 @@ const ContentsSettingsMenstrualCycle: React.FC = () => {
   const onSubmit: SubmitHandler<inputProps> = async (data) => {
     const filteredPayload = {
       menstrual_cycle: Object.entries(data.menstrual_cycle).reduce(
-        (acc: { [key: string]: string }, [key, value]) => {
-          if (value !== "" && value != null) {
-            acc[key] = `${value}`;
-          }
-          return acc;
-        },
-        {}
+          (acc: { [key: string]: string }, [key, value]) => {
+            acc[key] = value != null ? String(value) : "";
+            return acc;
+          }, {}
       ),
     };
 

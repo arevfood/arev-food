@@ -52,14 +52,12 @@ const ContentsSettingsProfile: React.FC = () => {
   };
 
   const onSubmit: SubmitHandler<inputProps> = async (data) => {
-    const filteredPayload = Object.entries(data).reduce<{
-      [key: string]: string;
-    }>((acc, [key, value]) => {
-      if (value !== "" && value != null) {
-        acc[key] = String(value);
-      }
-      return acc;
-    }, {});
+    const filteredPayload = Object.entries(data).reduce<{ [key: string]: string }>(
+        (acc, [key, value]) => {
+          acc[key] = value != null ? String(value) : "";
+          return acc;
+        }, {}
+    );
 
     const result = await onUpdate({
       payload: filteredPayload,

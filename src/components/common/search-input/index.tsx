@@ -140,6 +140,7 @@ const SearchInput: React.FC<propTypes> = ({
                 onClick={() => {
                   setOpenFilter(false);
                   handleSearchQuery();
+                  setSearchInput('');
                   onFilter?.();
                 }}
               >

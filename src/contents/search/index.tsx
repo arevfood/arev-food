@@ -25,6 +25,13 @@ const ContentSearch: React.FC = () => {
   const { value: filterValue } = useFoodFilterCtx();
 
   const [searchResult, setSearchResult] = useState<FoodQueryDataModel[]>([]);
+
+  const onResetPath = useCallback(() => {
+    const params = new URLSearchParams(location.search);
+    params.delete("query");
+    router.push(`${location.pathname}?${params.toString()}`);
+  }, [location, router]);
+
   const handleSearch = useCallback(
     async (search: string) => {
       if (query) {
@@ -41,6 +48,7 @@ const ContentSearch: React.FC = () => {
 
   const handleFilter = useCallback(async () => {
     if (filterValue) {
+      onResetPath();
       const data = await onGetFoodRecommendation({
         payload: filterValue,
         type: "recommend",
@@ -48,7 +56,7 @@ const ContentSearch: React.FC = () => {
       setSearchResult(data);
       setIsSearch(true);
     }
-  }, [filterValue, onGetFoodRecommendation]);
+  }, [onResetPath, filterValue, onGetFoodRecommendation]);
 
   useEffect(() => {
     if (query) {
@@ -67,6 +75,7 @@ const ContentSearch: React.FC = () => {
         onReset={() => {
           setSearchResult([]);
           setIsSearch(false);
+          onResetPath();
           router.replace("/search");
         }}
       />
@@ -99,7 +108,7 @@ const ContentSearch: React.FC = () => {
 
       {isSearch && (
         <>
-          <IconTitle title={`Showing results for "${query}"`} icon="/icons/search-love.svg" />
+          <IconTitle title={query ? `Showing results for "${query}"` : 'Filtered results'} icon="/icons/search-love.svg" />
           <div className="grid grid-cols-2 gap-[16px] my-4">
             {searchResult.map((food) => {
               return (

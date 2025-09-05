@@ -76,6 +76,7 @@ const ContentSearch: React.FC = () => {
           setSearchResult([]);
           setIsSearch(false);
           onResetPath();
+          router.replace("/search");
         }}
       />
       {!isSearch && (

@@ -7,7 +7,6 @@ import { FoodDetailsModel } from "@/models/food-details";
 import { IonIcon } from "@ionic/react";
 import { useParams } from "react-router";
 import {FoodReasonResponseModel} from "@/models/food-reason";
-import Image from "@/components/common/image";
 
 type propTypes = {
   data: FoodDetailsModel;
@@ -73,6 +72,7 @@ const ContentsFoodDetails: React.FC<propTypes> = ({ data, reason }) => {
             title={data.name || "Food Name"}
             description={data.description || "Description of the food"}
             titleSize="large"
+            withLinkRedirect={false}
           />
           <div
             className="absolute top-0 right-0"

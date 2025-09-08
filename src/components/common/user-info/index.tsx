@@ -37,6 +37,7 @@ const UserInfo: React.FC<propTypes> = ({ userInfo, additionalInfo }) => {
                   <TextDescription
                     title={item.title}
                     description={item.value}
+                    withLinkRedirect={false}
                   />
                 </div>
               );

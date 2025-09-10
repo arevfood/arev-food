@@ -16,6 +16,19 @@ ion-toast.custom-toast::part(header) {
   margin: 0;
 }
 
+ion-toast.custom-toast::part(message) {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  overflow: hidden;
+}
+
+ion-toast.custom-toast::part(container) {
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+}
+
 ion-toast.success-toast {
   --color: rgba(6, 146, 62, 1);
   --border-color: rgba(6, 146, 62, 1);

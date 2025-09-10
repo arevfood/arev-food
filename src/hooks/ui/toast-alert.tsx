@@ -13,7 +13,7 @@ export function useToastAlert() {
         present({
             header,
             message,
-            duration: 2000,
+            duration: 100000,
             position: "top",
             layout: "stacked",
             icon: type === 'success' ? "/icons/icon-toast-success.svg" : "/icons/icon-toast-error.svg",

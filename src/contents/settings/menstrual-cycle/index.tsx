@@ -9,6 +9,7 @@ import { IonSpinner } from "@ionic/react";
 import { cyclePatternOptions } from "@/data/cycle-pattern";
 import CustomInputDate from "@/components/common/input-date";
 import { pmsIntensityOptions } from "@/data/pms-intensity";
+import {useHistory} from "react-router";
 
 type inputProps = {
   menstrual_cycle: {
@@ -22,6 +23,7 @@ type inputProps = {
 const ContentsSettingsMenstrualCycle: React.FC = () => {
   const { data: userDetail, onUpdate, loading } = useUser();
   const { showToast } = useToastAlert();
+  const router = useHistory();
 
   const {
     register,
@@ -57,6 +59,7 @@ const ContentsSettingsMenstrualCycle: React.FC = () => {
       message: "Your menstrual cycle data has been updated.",
       type: "success",
     });
+    router.push("/setting");
   };
 
   useEffect(() => {

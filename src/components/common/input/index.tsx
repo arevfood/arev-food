@@ -4,7 +4,7 @@ import {InputHTMLAttributes} from "react";
 type props = {
   label?: string;
   placeholder?: string;
-  value?: string;
+  value?: string | number;
   type?: InputHTMLAttributes<HTMLInputElement>["type"];
   errorMessage?: string;
   icon?: string;
@@ -13,6 +13,7 @@ type props = {
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
   disabled?: boolean;
+  inputProps?: InputHTMLAttributes<HTMLInputElement>;
 };
 
 const CustomInput: React.FC<props> = ({
@@ -27,6 +28,7 @@ const CustomInput: React.FC<props> = ({
   onChange = (_e: React.ChangeEvent<HTMLInputElement>) => {},
   onKeyDown = (_e: React.KeyboardEvent<HTMLInputElement>) => {},
   disabled = false,
+  inputProps,
   ...props
 }) => {
   return (
@@ -38,6 +40,7 @@ const CustomInput: React.FC<props> = ({
         )}
         <input
           {...props}
+          {...inputProps}
           placeholder={placeholder || "Enter text"}
           value={value}
           type={type || "text"}

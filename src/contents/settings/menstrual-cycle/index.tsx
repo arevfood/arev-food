@@ -103,13 +103,23 @@ const ContentsSettingsMenstrualCycle: React.FC = () => {
         </div>
         <div>
           <CustomInput
-            {...register("menstrual_cycle.average_cycle_length", {
-              required: "Please enter average cycle!",
-            })}
-            label="Average Cycle Length"
-            placeholder="days, e.g. 30"
-            type="number"
-            errorMessage={errors.menstrual_cycle?.average_cycle_length?.message}
+              {...register("menstrual_cycle.average_cycle_length", {
+                required: "Please enter average cycle!",
+                min: {
+                  value: 1,
+                  message: "Cycle length must be at least 1 day",
+                },
+                max: {
+                  value: 99,
+                  message: "Cycle length cannot be more than 99 days",
+                },
+                valueAsNumber: true,
+              })}
+              label="Average Cycle Length"
+              placeholder="days, e.g. 30"
+              type="number"
+              inputProps={{ min: 1, max: 99 }}
+              errorMessage={errors.menstrual_cycle?.average_cycle_length?.message}
           />
         </div>
         <div>

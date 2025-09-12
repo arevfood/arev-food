@@ -9,6 +9,7 @@ type propTypes = {
   ellipsisDescription?: boolean;
   ellipsisTitle?: boolean;
   loading?: boolean;
+  withLinkRedirect?: boolean;
 };
 
 const TextDescription: React.FC<propTypes> = ({
@@ -19,6 +20,7 @@ const TextDescription: React.FC<propTypes> = ({
   titleSize = "normal",
   titleClassName,
   loading = false,
+  withLinkRedirect = true,
 }) => {
   const titleSizeMap = {
     normal: "text-[16px]",
@@ -38,16 +40,20 @@ const TextDescription: React.FC<propTypes> = ({
             {title}
           </div>
           <div
-            className={`font-paragraph text-black/40 text-[14px] leading-[128%] mb-[8px] ${
+            className={`font-paragraph text-black/40 text-[14px] leading-[128%] ${
               ellipsisDescription ? "line-clamp-1" : ""
+            } ${
+              withLinkRedirect ? "mb-[8px]" : ""
             }`}
           >
             {description}
           </div>
-          <div className="font-paragraph text-primary_color text-[13px] leading-[128%] flex items-center gap-[8px] mt-auto">
-            See Detail
-            <IonImg src="/icons/arrow-right-primary.svg" className="w-[20px]"/>
-          </div>
+          {withLinkRedirect && (
+            <div className="font-paragraph text-primary_color text-[13px] leading-[128%] flex items-center gap-[8px] mt-auto">
+              See Detail
+              <IonImg src="/icons/arrow-right-primary.svg" className="w-[20px]"/>
+            </div>
+          )}
         </div>
       )}
     </>

@@ -2,7 +2,10 @@
   background: transparent !important;
 }
 
+ion-list.custom-list,
 ion-list.custom-list ion-item {
+  background: transparent !important;
+
   --background: transparent !important;
   --padding-start: 0;
   --inner-padding-end: 0;

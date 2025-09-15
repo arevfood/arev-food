@@ -1,4 +1,5 @@
 import { IonItem, IonList, IonSelect, IonSelectOption } from '@ionic/react';
+import "@/styles/select-option.scss";
 
 type Option = {
     value: string;
@@ -37,7 +38,7 @@ const CustomSelect: React.FC<Props> = ({
                         onIonChange={(e) => onChange(e.detail.value)}
                         interface="popover"
                         disabled={disabled}
-                        className="w-full bg-white px-4 rounded-[100px] !text-black !font-semibold font-heading flex border-[3px] !border-bg_color_1"
+                        className="w-full bg-white px-4 py-1 rounded-[100px] !text-black !font-semibold font-heading flex border-[3px] !border-bg_color_1"
                     >
                         {options.map((opt) => (
                             <IonSelectOption key={opt.value} value={opt.value}>

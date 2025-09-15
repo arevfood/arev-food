@@ -7,6 +7,7 @@ import { useEffect } from "react";
 import CustomSelect from "@/components/common/select-option";
 import { dietaryPreferenceOptions } from "@/data/dietary-preference";
 import { IonSpinner } from "@ionic/react";
+import {useHistory} from "react-router";
 
 type inputProps = {
   health: {
@@ -23,6 +24,7 @@ type inputProps = {
 const ContentsSettingsHealthData: React.FC = () => {
   const { data: userDetail, onUpdate, loading } = useUser();
   const { showToast } = useToastAlert();
+  const router = useHistory();
 
   const {
     register,
@@ -59,6 +61,7 @@ const ContentsSettingsHealthData: React.FC = () => {
       message: "Your health data has been successfully updated.",
       type: "success",
     });
+    router.push("/setting");
   };
 
   useEffect(() => {

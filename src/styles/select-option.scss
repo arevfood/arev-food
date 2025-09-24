@@ -14,3 +14,25 @@ ion-list.custom-list ion-item {
   --border-width: 0;
   --inner-border-width: 0;
 }
+
+ion-popover.custom-select-popover ion-item::part(native) {
+  background: #ffffff !important;
+  color: #000000 !important;
+}
+
+ion-popover.custom-select-popover ion-item::part(native) {
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  border-left: none;
+  border-right: none;
+
+  --inner-border-width: 0;
+}
+
+ion-popover.custom-select-popover::part(arrow):after {
+  background: #fff !important;
+}
+
+ion-popover.custom-select-popover::part(content) {
+  background: #fff !important;
+}

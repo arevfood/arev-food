@@ -132,24 +132,6 @@ const ContentsFoodDetails: React.FC<propTypes> = ({ data, reason }) => {
           </div>
         </div>
         <div className="mt-8">
-          <IconTitle icon="/icons/pin.svg" title="Nutritional Information" />
-          <div className="mt-4">
-            <Card>
-              <div className="py-6 px-4">
-                {data.nutritional_information.map((item, index) => {
-                  return (
-                    <ContentItem
-                      title={item.title}
-                      value={`${item.value}${item.unit} / 100g`}
-                      key={index}
-                    />
-                  );
-                })}
-              </div>
-            </Card>
-          </div>
-        </div>
-        <div className="mt-8">
           <IconTitle icon="/icons/signal.svg" title="Health Benefit" />
           <div className="mt-4">
             <Card>
@@ -205,6 +187,28 @@ const ContentsFoodDetails: React.FC<propTypes> = ({ data, reason }) => {
             </Card>
           </div>
         </div>
+        {data.nutritional_information?.length ? (
+            <div className="mt-8">
+              <IconTitle icon="/icons/pin.svg" title="Nutritional Information" />
+              <div className="mt-4">
+                <Card>
+                  <div className="py-6 px-4">
+                    {data.nutritional_information
+                        .filter(item => Number(item.value) > 0)
+                        .map((item, index) => {
+                      return (
+                          <ContentItem
+                              title={item.title}
+                              value={`${item.value}${item.unit} / 100g`}
+                              key={index}
+                          />
+                      );
+                    })}
+                  </div>
+                </Card>
+              </div>
+            </div>
+        ) : null}
       </div>
     </>
   );

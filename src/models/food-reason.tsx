@@ -4,6 +4,7 @@ export interface FoodReasonModel {
   best_use: string;
   caution: string;
   evidence_grade: string;
+    general_benefit: string[];
 }
 
 export interface FoodReasonResponseModel {

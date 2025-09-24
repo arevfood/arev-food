@@ -4,7 +4,7 @@ import TextDescription from "@/components/common/text-description";
 import Card from "@/components/wrapper/card";
 import { useFavorite } from "@/hooks/data/favorite";
 import { FoodDetailsModel } from "@/models/food-details";
-import { IonIcon } from "@ionic/react";
+import { IonIcon, IonList, IonItem } from "@ionic/react";
 import { useParams } from "react-router";
 import {FoodReasonResponseModel} from "@/models/food-reason";
 
@@ -42,7 +42,7 @@ const ContentsFoodDetails: React.FC<propTypes> = ({ data, reason }) => {
     );
   };
 
-  const ContentFoodInsight = ({ title, value, icon }: { title: string; value: string; icon: string; }) => {
+  const ContentFoodInsight = ({ title, value, icon }: { title: string; value: string | string[]; icon: string; }) => {
     return (
         <>
           <div className="flex flex-col gap-2">
@@ -55,7 +55,17 @@ const ContentsFoodDetails: React.FC<propTypes> = ({ data, reason }) => {
               </div>
               <h6 className="!font-bold !font-heading text-black !m-0">{title}</h6>
             </div>
-            <p className="font-paragraph text-black/40 text-[14px] !mt-0">{value}</p>
+              {Array.isArray(value) ? (
+                  <ul className="!mt-0 list-disc ml-[16px]">
+                      {value.map((item, index) => (
+                          <li key={index} className="font-paragraph text-black/40 text-[14px]">
+                              {item}
+                          </li>
+                      ))}
+                  </ul>
+              ) : (
+                <p className="font-paragraph text-black/40 text-[14px] !mt-0">{value}</p>
+              )}
           </div>
         </>
     );
@@ -91,8 +101,8 @@ const ContentsFoodDetails: React.FC<propTypes> = ({ data, reason }) => {
               title="Food Health Insights"
               description={reason.reasons[0].why}
           />
-          <div className="mt-4">
-            <div className="py-2 flex flex-col gap-6">
+          <div className="mt-3">
+            <div className="py-2 flex flex-col gap-4">
               <ContentFoodInsight
                   title="Best Use"
                   value={reason.reasons[0].best_use}
@@ -113,6 +123,11 @@ const ContentsFoodDetails: React.FC<propTypes> = ({ data, reason }) => {
                   value={reason.reasons[0].verdict}
                   icon="/icons/verdict-icon.svg"
               />
+                <ContentFoodInsight
+                    title="General Benefit"
+                    value={reason.reasons[0].general_benefit.slice(0, 8)}
+                    icon="/icons/general-benefit-icon.svg"
+                />
             </div>
           </div>
         </div>

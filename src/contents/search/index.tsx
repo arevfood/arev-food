@@ -8,6 +8,7 @@ import { useFoods } from "@/hooks/data/food";
 import { FoodQueryDataModel } from "@/models/food-query";
 import { useCallback, useEffect, useState } from "react";
 import {useHistory, useLocation} from "react-router";
+import CardEmpty from "@/components/wrapper/card-empty";
 
 const ContentSearch: React.FC = () => {
   const location = useLocation();
@@ -109,18 +110,22 @@ const ContentSearch: React.FC = () => {
       {isSearch && (
         <>
           <IconTitle title={query ? `Showing results for "${query}"` : 'Filtered results'} icon="/icons/search-love.svg" />
-          <div className="grid grid-cols-2 gap-[16px] my-4">
-            {searchResult.map((food) => {
-              return (
-                <FoodCard
-                  slug={food.id}
-                  image={food.image_url}
-                  title={food.name}
-                  description={food.food_details?.description || "-"}
-                  loading={foodsLoading}
-                />
-              );
-            })}
+          <div className={`grid gap-[16px] my-4 ${searchResult.length === 0 ? 'grid-cols-1' : 'grid-cols-2'}`}>
+              {searchResult.length === 0 ? (
+                  <CardEmpty title="No results for your search"/>
+              ) : (
+                searchResult.map((food) => {
+                  return (
+                    <FoodCard
+                      slug={food.id}
+                      image={food.image_url}
+                      title={food.name}
+                      description={food.food_details?.description || "-"}
+                      loading={foodsLoading}
+                    />
+                  );
+                })
+              )}
           </div>
         </>
       )}

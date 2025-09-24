@@ -111,7 +111,6 @@ const ContentsHome: React.FC<propTypes> = () => {
       <div className="mt-2">
         <ProfileBox
           {...userProfile}
-          gender={userProfile.gender}
           image={userDetail?.photoUrl}
         />
       </div>

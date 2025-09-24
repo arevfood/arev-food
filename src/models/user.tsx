@@ -20,6 +20,7 @@ export interface UserMenstrualCycle {
   average_cycle_length: number;
   cycle_pattern: string;
   pms_intensity: string;
+  track_menstrual_cycle: string;
 }
 
 export interface UserHealth {

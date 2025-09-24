@@ -1,9 +1,11 @@
 import { useEffect, useRef, useState } from "react";
-import {IonModal, IonContent, IonImg} from "@ionic/react";
+import {IonModal, IonContent, IonImg, IonRouterLink} from "@ionic/react";
 import MainButton from "@/components/common/button";
 import {useHistory} from "react-router";
+import {useUser} from "@/hooks/data/user";
 
 const MenstrualCycleLink: React.FC = () => {
+  const { data: userDetail } = useUser();
   const modal = useRef<HTMLIonModalElement>(null);
   const page = useRef(null);
   const router = useHistory();
@@ -21,11 +23,22 @@ const MenstrualCycleLink: React.FC = () => {
 
   return (
     <>
-      <div id="menstrual-cycle-modal" className="cursor-pointer text-[16px] px-2 py-2.5 text-black flex items-center gap-[8px] opacity-[0.62] duration-300 rounded-[8px] active:opacity-100 active:bg-black/[0.04]">
-        <IonImg src="/icons/setting-edit-menstrual-cycle.svg" className="w-[20px] h-[20px]"/>
-        Edit Menstrual Cycle
-        <IonImg src="/icons/chevron-left.svg" className="ms-auto w-[14px] h-[14px] rotate-180"/>
-      </div>
+        {userDetail?.menstrual_cycle?.track_menstrual_cycle === 'yes' && (
+            <IonRouterLink routerLink="/setting/menstrual-cycle">
+                <div className="cursor-pointer text-[16px] px-2 py-2.5 text-black flex items-center gap-[8px] opacity-[0.62] duration-300 rounded-[8px] active:opacity-100 active:bg-black/[0.04]">
+                    <IonImg src="/icons/setting-edit-menstrual-cycle.svg" className="w-[20px] h-[20px]"/>
+                    Edit Menstrual Cycle
+                    <IonImg src="/icons/chevron-left.svg" className="ms-auto w-[14px] h-[14px] rotate-180"/>
+                </div>
+            </IonRouterLink>
+        )}
+        {userDetail?.menstrual_cycle?.track_menstrual_cycle === 'no' && (
+            <div id="menstrual-cycle-modal" className="cursor-pointer text-[16px] px-2 py-2.5 text-black flex items-center gap-[8px] opacity-[0.62] duration-300 rounded-[8px] active:opacity-100 active:bg-black/[0.04]">
+                <IonImg src="/icons/setting-edit-menstrual-cycle.svg" className="w-[20px] h-[20px]"/>
+                Edit Menstrual Cycle
+                <IonImg src="/icons/chevron-left.svg" className="ms-auto w-[14px] h-[14px] rotate-180"/>
+            </div>
+        )}
       <IonModal
         ref={modal}
         trigger="menstrual-cycle-modal"

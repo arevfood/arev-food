@@ -2,6 +2,7 @@ import OrangeBox from "@/components/wrapper/orange-box";
 import Avatar from "@/components/common/avatar";
 import MainButton from "@/components/common/button";
 import { useHistory } from "react-router-dom";
+import {useUser} from "@/hooks/data/user";
 
 type propTypes = {
   name: string;
@@ -14,8 +15,8 @@ const ProfileBox: React.FC<propTypes> = ({
   name,
   image,
   age,
-  gender,
 }) => {
+  const { data: userDetail } = useUser();
   const router = useHistory();
 
   return (
@@ -29,7 +30,7 @@ const ProfileBox: React.FC<propTypes> = ({
           <div className="text-[14px] font-paragraph">{age}</div>
         </div>
       </div>
-      {gender === 'female' && (
+      {userDetail?.menstrual_cycle.track_menstrual_cycle === 'yes' && (
         <div className="mt-6">
           <MainButton color="WHITE" onClick={() => router.push("/menstrual")}>
             Menstrual Cycle

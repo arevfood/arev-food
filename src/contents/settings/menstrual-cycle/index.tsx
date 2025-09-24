@@ -9,6 +9,7 @@ import { IonSpinner } from "@ionic/react";
 import { cyclePatternOptions } from "@/data/cycle-pattern";
 import CustomInputDate from "@/components/common/input-date";
 import { pmsIntensityOptions } from "@/data/pms-intensity";
+import {trackMenstrualCycleOptions} from "@/data/track-menstrual-cycle";
 import {useHistory} from "react-router";
 
 type inputProps = {
@@ -17,6 +18,7 @@ type inputProps = {
     average_cycle_length: number;
     cycle_pattern?: string;
     pms_intensity?: string;
+    track_menstrual_cycle?: string;
   };
 };
 
@@ -77,9 +79,13 @@ const ContentsSettingsMenstrualCycle: React.FC = () => {
         userDetail.menstrual_cycle?.cycle_pattern
       );
       setValue(
-        "menstrual_cycle.pms_intensity",
-        userDetail.menstrual_cycle?.pms_intensity
+          "menstrual_cycle.pms_intensity",
+          userDetail.menstrual_cycle?.pms_intensity
       );
+        setValue(
+            "menstrual_cycle.track_menstrual_cycle",
+            userDetail.menstrual_cycle?.track_menstrual_cycle ?? "yes"
+        );
     }
   }, [userDetail, setValue]);
 
@@ -143,6 +149,16 @@ const ContentsSettingsMenstrualCycle: React.FC = () => {
             options={pmsIntensityOptions}
             onChange={(val) => setValue("menstrual_cycle.pms_intensity", val)}
             errorMessage={errors.menstrual_cycle?.pms_intensity?.message}
+          />
+        </div>
+        <div>
+          <CustomSelect
+              label="Track Menstrual Cycle"
+              placeholder="Do you want to track your menstrual cycle?"
+              value={watch("menstrual_cycle.track_menstrual_cycle")}
+              options={trackMenstrualCycleOptions}
+              onChange={(val) => setValue("menstrual_cycle.track_menstrual_cycle", val)}
+              errorMessage={errors.menstrual_cycle?.track_menstrual_cycle?.message}
           />
         </div>
         <div className="mt-8">

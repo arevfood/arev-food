@@ -177,7 +177,11 @@ const ContentsHome: React.FC<propTypes> = () => {
                           type: "recommend",
                         })
                       }
-                      isFav={favoriteList?.some((fav) => fav.id === item.id) ?? false}
+                      isFav={
+                          favoriteList?.findIndex(
+                              (findFood) => findFood.id === item.id
+                          ) !== -1 && !!item.id
+                      }
                     />
                   </SwiperSlide>
                 );

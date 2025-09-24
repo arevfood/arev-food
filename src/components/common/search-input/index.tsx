@@ -1,12 +1,13 @@
 import { IonIcon } from "@ionic/react";
 import CustomInput from "../input";
-import { useState } from "react";
+import {useState} from "react";
 import { v4 as uuid } from "uuid";
 import { FilterListModel } from "@/models/filter-list";
 import CustomCheckbox from "@/components/common/checkbox";
 import MainButton from "@/components/common/button";
 import { useLocation, useHistory } from "react-router";
 import { useFoodFilterCtx } from "@/context/food-filter";
+import { useSearchFilterCtx } from "@/context/search-filter";
 
 type propTypes = {
   filterList: FilterListModel[];
@@ -22,9 +23,9 @@ const SearchInput: React.FC<propTypes> = ({
   const router = useHistory();
   const location = useLocation();
   const { setValue: setFilterValue } = useFoodFilterCtx();
+    const { openFilter, toggleFilter, setOpenFilter } = useSearchFilterCtx();
 
   const [searchInput, setSearchInput] = useState("");
-  const [openFilter, setOpenFilter] = useState(false);
   const [selectedFilter, setSelectedFilter] = useState<{
     [key: string]: string[];
   }>({ health_conditions: [] });
@@ -95,16 +96,14 @@ const SearchInput: React.FC<propTypes> = ({
           <IonIcon
             icon="/icons/filter.svg"
             className={`text-[18px] text-white_color`}
-            onClick={() => {
-              setOpenFilter(!openFilter);
-            }}
+            onClick={() => toggleFilter()}
           />
         </div>
       </div>
       {openFilter && (
-        <div className="px-4 bg-white text-black rounded-[8px] absolute w-full z-10  overflow-y-scroll">
-          <div className=" relative">
-            <div className="h-[40vh] overflow-y-scroll pt-6">
+        <div className="px-4 bg-white text-black rounded-[8px] fixed inset-0 w-full h-full z-[9999] overflow-y-scroll mt-[132px] pb-[200px]">
+          <div className="relative h-full flex flex-col justify-between pt-6">
+            <div className="h-full overflow-y-scroll">
               {filterList.map((item) => {
                 return (
                   <div key={uuid()} className="mb-6">

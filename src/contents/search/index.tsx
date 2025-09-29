@@ -8,6 +8,8 @@ import { useFoods } from "@/hooks/data/food";
 import { FoodQueryDataModel } from "@/models/food-query";
 import { useCallback, useEffect, useState } from "react";
 import {useHistory, useLocation} from "react-router";
+import {useUser} from "@/hooks/data/user";
+import {getAge} from "@/utils/generate-age";
 import {IonSpinner} from "@ionic/react";
 import MainButton from "@/components/common/button";
 import CardEmpty from "@/components/wrapper/card-empty";
@@ -17,6 +19,8 @@ const ContentSearch: React.FC = () => {
   const query = new URLSearchParams(location.search).get("query");
   const [isSearch, setIsSearch] = useState(!!query);
   const router = useHistory();
+    const { data: userDetail } = useUser();
+
     const [hideLoadMore, setHideLoadMore] = useState(false);
     const [isFilterMode, setIsFilterMode] = useState(false);
 
@@ -39,9 +43,25 @@ const ContentSearch: React.FC = () => {
 
   const handleSearch = useCallback(
       async (search: string, recentTemperature?: number) => {
-      if (query) {
+      if (query && userDetail) {
           const temperature = recentTemperature || 0;
           const data = await onSearch({
+             metadata: {
+                age: String(getAge(userDetail.dateBirth)),
+                country: userDetail.country,
+                city: userDetail.city,
+                gender: userDetail.gender,
+                height: String(userDetail.health.height),
+                weight: String(userDetail.health.weight),
+                blood_sugar_level: String(userDetail.health.blood_sugar_level),
+                blood_pressure: userDetail.health.blood_pressure,
+                dietary_preference: userDetail.health.dietary_preference,
+                health_condition: userDetail.health.health_conditions
+                    .split(",")
+                    .map((condition: string) => condition.trim()),
+                health_conditions: [search],
+                lifestyle: userDetail.health.lifestyle,
+              },
               query: search,
               query_type: "concept",
               temperature,
@@ -68,7 +88,7 @@ const ContentSearch: React.FC = () => {
         setIsSearch(true);
       }
     },
-    [onSearch, query]
+    [onSearch, query, userDetail]
   );
 
     const handleLoadMore = async () => {

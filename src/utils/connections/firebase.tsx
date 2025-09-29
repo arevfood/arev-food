@@ -8,6 +8,7 @@ import {
   initializeAuth,
   setPersistence,
   GoogleAuthProvider,
+    FacebookAuthProvider
 } from "firebase/auth";
 import { getStorage } from "firebase/storage";
 import { Capacitor } from "@capacitor/core";
@@ -47,3 +48,4 @@ export const firebaseAuth = auth;
 export const firebaseStorage = getStorage(firebaseApp);
 
 export const googleProvider = new GoogleAuthProvider();
+export const facebookProvider = new FacebookAuthProvider();

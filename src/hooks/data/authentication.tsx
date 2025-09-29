@@ -1,7 +1,7 @@
 import MainNotification from "@/components/common/notifications";
 import { SessionUser, UserLogin, UserSignup } from "@/models/user";
 import { FIREBASE_SIGNUP } from "@/providers/firebase/user";
-import { firebaseAuth, googleProvider } from "@/utils/connections/firebase";
+import { firebaseAuth, googleProvider, facebookProvider } from "@/utils/connections/firebase";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   onAuthStateChanged,
@@ -113,6 +113,26 @@ export const useAuth = () => {
       },
     });
 
+    const { mutateAsync: loginWithFacebook, isPending: onFacebookLoading } = useMutation({
+        mutationFn: useCallback(async () => {
+            let result;
+            if (Capacitor.isNativePlatform()) {
+                result = await signInWithRedirect(firebaseAuth, facebookProvider);
+            } else {
+                result = await signInWithPopup(firebaseAuth, facebookProvider);
+            }
+            return result.user;
+        }, []),
+        onSuccess: (result) => {
+            queryClient.invalidateQueries({ queryKey: [queryKey] });
+            MainNotification({ type: "success", entity: entity, action: "signin" });
+            return result;
+        },
+        onError: () => {
+            MainNotification({ type: "error", entity: entity, action: "signin" });
+        },
+    });
+
   const { mutateAsync: onChangePassword, isPending: onChangePasswordLoading } =
     useMutation({
       mutationFn: useCallback(async (newPassword: string) => {
@@ -177,16 +197,18 @@ export const useAuth = () => {
       onSignOutLoading ||
       onSignupLoading ||
       onGoogleLoading ||
+      onFacebookLoading ||
       onChangePasswordLoading ||
       onDeleteLoading,
     onSignin,
     onSignOut,
     onSignup,
     loginWithGoogle,
+    loginWithFacebook,
     onDeleteAccount,
     onChangePassword,
     onChangePasswordLoading,
-    onGoogleLoading,
+    onFacebookLoading,
     onDeleteLoading,
   };
 };

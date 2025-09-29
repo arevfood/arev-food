@@ -24,7 +24,7 @@ const ContentLogin: React.FC = () => {
     formState: { errors },
   } = useForm<inputProps>();
 
-  const { onSignin, loading, loginWithGoogle } = useAuth();
+  const { onSignin, loading, loginWithGoogle, loginWithFacebook } = useAuth();
 
   const onSubmit: SubmitHandler<inputProps> = async (data) => {
     await onSignin(data, {
@@ -86,6 +86,46 @@ const ContentLogin: React.FC = () => {
       });
     }
   };
+
+    const onSubmitFacebook = async () => {
+        try {
+            const user = await loginWithFacebook();
+
+            if (user) {
+                const userRef = doc(firebaseDb, "users", user.uid);
+                const userSnap = await getDoc(userRef);
+
+                if (!userSnap.exists()) {
+                    await setDoc(userRef, {
+                        uid: user.uid,
+                        fullname: user.displayName || "",
+                        email: user.email,
+                        photoURL: user.photoURL || null,
+                        createdAt: new Date(),
+                    });
+                    showToast({
+                        header: "Account Created",
+                        message: "Welcome! Your account has been set up.",
+                        type: "success",
+                    });
+                } else {
+                    showToast({
+                        header: "Login Successful",
+                        message: `Welcome back, ${user.displayName || "User"}!`,
+                        type: "success",
+                    });
+                }
+
+                router.replace("/");
+            }
+        } catch (error) {
+            showToast({
+                header: "Login Failed",
+                message: "Something went wrong while signing in with Facebook.",
+                type: "error",
+            });
+        }
+    };
 
   return (
     <LayoutBlank fullscreen={true} background="var(--color-bg_color_2)">
@@ -150,9 +190,13 @@ const ContentLogin: React.FC = () => {
               or continue With
             </div>
             <div className="flex flex-wrap gap-2 justify-center items-center mt-6">
-              <div className="w-[58px] h-[58px] rounded-full bg-white_color flex items-center justify-center text-black_color opacity-50">
+              <button
+                  type="button"
+                  className="w-[58px] h-[58px] !rounded-full bg-white_color flex items-center justify-center text-black_color"
+                  onClick={onSubmitFacebook}
+              >
                 <IonImg src="/icons/facebook.png" className="w-auto h-[24px]" />
-              </div>
+              </button>
               <button
                 type="button"
                 className="w-[58px] h-[58px] !rounded-full bg-white_color flex items-center justify-center text-black_color"

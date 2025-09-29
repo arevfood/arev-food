@@ -8,6 +8,8 @@ import { useFoods } from "@/hooks/data/food";
 import { FoodQueryDataModel } from "@/models/food-query";
 import { useCallback, useEffect, useState } from "react";
 import {useHistory, useLocation} from "react-router";
+import {IonSpinner} from "@ionic/react";
+import MainButton from "@/components/common/button";
 import CardEmpty from "@/components/wrapper/card-empty";
 
 const ContentSearch: React.FC = () => {
@@ -15,6 +17,8 @@ const ContentSearch: React.FC = () => {
   const query = new URLSearchParams(location.search).get("query");
   const [isSearch, setIsSearch] = useState(!!query);
   const router = useHistory();
+    const [hideLoadMore, setHideLoadMore] = useState(false);
+    const [isFilterMode, setIsFilterMode] = useState(false);
 
   const {
     data: foodsData,
@@ -34,30 +38,79 @@ const ContentSearch: React.FC = () => {
   }, [location, router]);
 
   const handleSearch = useCallback(
-    async (search: string) => {
+      async (search: string, recentTemperature?: number) => {
       if (query) {
-        const data = await onSearch({
-          query: search,
-          query_type: "concept",
-        });
-        setSearchResult(data);
+          const temperature = recentTemperature || 0;
+          const data = await onSearch({
+              query: search,
+              query_type: "concept",
+              temperature,
+          });
+          setSearchResult((prev) => {
+              if (recentTemperature) {
+                  const tempData: FoodQueryDataModel[] = [];
+                  for (let i = 0; i < data.length; i++) {
+                      const exists = prev.some(prevData => prevData.id === data[i].id);
+                      if (!exists) {
+                          tempData.push(data[i]);
+                      }
+                  }
+                  if (!tempData.length) {
+                      setHideLoadMore(true)
+                  }
+                  return [...prev, ...tempData];
+              } else {
+                  setHideLoadMore(false);
+                  setIsFilterMode(false);
+                  return data;
+              }
+          });
         setIsSearch(true);
       }
     },
     [onSearch, query]
   );
 
-  const handleFilter = useCallback(async () => {
-    if (filterValue) {
-      onResetPath();
-      const data = await onGetFoodRecommendation({
-        payload: filterValue,
-        type: "recommend",
-      });
-      setSearchResult(data);
-      setIsSearch(true);
-    }
-  }, [onResetPath, filterValue, onGetFoodRecommendation]);
+    const handleLoadMore = async () => {
+        if (isFilterMode) {
+            await handleFilter(1);
+        } else {
+            await handleSearch(query || "", 1);
+        }
+    };
+
+    const handleFilter = useCallback(
+        async (recentTemperature?: number) => {
+        if (filterValue) {
+            onResetPath();
+            const temperature = recentTemperature || 0;
+            const data = await onGetFoodRecommendation({
+                payload: filterValue,
+                type: "recommend",
+                temperature,
+            });
+            setSearchResult((prev) => {
+                if (recentTemperature) {
+                    const tempData: FoodQueryDataModel[] = [];
+                    for (let i = 0; i < data.length; i++) {
+                        const exists = prev.some((prevData) => prevData.id === data[i].id);
+                        if (!exists) {
+                            tempData.push(data[i]);
+                        }
+                    }
+                    if (!tempData.length) {
+                        setHideLoadMore(true);
+                    }
+                    return [...prev, ...tempData];
+                } else {
+                    setHideLoadMore(false);
+                    setIsFilterMode(true);
+                    return data;
+                }
+            });
+            setIsSearch(true);
+        }
+    }, [onResetPath, filterValue, onGetFoodRecommendation]);
 
   useEffect(() => {
     if (query) {
@@ -129,6 +182,28 @@ const ContentSearch: React.FC = () => {
           </div>
         </>
       )}
+
+        {isSearch && !hideLoadMore && (
+            <div className="w-fit mx-auto mt-8 mb-4">
+                <MainButton
+                    color="ORANGE"
+                    isDisabled={foodsLoading}
+                    onClick={handleLoadMore}
+                >
+                    {foodsLoading ? (
+                        <div className="flex items-center gap-2">
+                            Loading More...
+                            <IonSpinner
+                                name="crescent"
+                                className="text-white w-[20px] h-[20px] ms-[6px]"
+                            />
+                        </div>
+                    ) : (
+                        "Load More"
+                    )}
+                </MainButton>
+            </div>
+        )}
     </>
   );
 };

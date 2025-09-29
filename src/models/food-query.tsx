@@ -4,6 +4,7 @@ export interface FoodQueryPayloadModel {
   metadata?: {
     [key: string]: string | string[];
   };
+  temperature?: number;
 }
 
 export interface FoodQueryDataModel {

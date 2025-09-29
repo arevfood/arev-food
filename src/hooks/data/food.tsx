@@ -46,12 +46,15 @@ export const useFoods = ({
       async ({
         payload,
         type = "recommend",
+         temperature,
       }: {
         payload: { [key: string]: string | string[] };
         type?: "avoid" | "recommend";
+          temperature?: number;
       }) => {
         const result = await axios.post(`${baseUrl}/query-by-user-info`, {
           type: type,
+          temperature: temperature,
           metadata: payload,
         });
         return result.data.foods as FoodQueryDataModel[];

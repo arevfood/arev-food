@@ -4,7 +4,7 @@ import TextDescription from "@/components/common/text-description";
 import Card from "@/components/wrapper/card";
 import { useFavorite } from "@/hooks/data/favorite";
 import { FoodDetailsModel } from "@/models/food-details";
-import { IonIcon, IonList, IonItem } from "@ionic/react";
+import { IonIcon } from "@ionic/react";
 import { useParams } from "react-router";
 import {FoodReasonResponseModel} from "@/models/food-reason";
 

@@ -33,7 +33,7 @@ const TextDescription: React.FC<propTypes> = ({
       {!loading && (
         <div className="h-full flex flex-col">
           <div
-            className={`font-bold font-heading text-black leading-none mb-[4px] ${
+            className={`font-bold font-heading text-black leading-none mb-[8px] capitalize ${
               ellipsisTitle ? "line-clamp-2" : ""
             } ${titleSizeMap[titleSize]} ${titleClassName}`}
           >

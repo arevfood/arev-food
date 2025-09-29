@@ -1,6 +1,12 @@
 import { useState, useMemo, useCallback } from "react";
 import { diseaseData } from "@/data/disease";
 import { FilterDiseaseModel } from "@/models/filter-list";
+import { DiseaseDetailsModel } from "@/models/disease-details";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+
+const entity = "disease";
+const baseUrl = import.meta.env.VITE_AI_TOOLS_BASE_URL;
 
 export const useDiseases = ({
     limit = 10,
@@ -64,4 +70,17 @@ export const useDiseases = ({
         loading,
         onSearch,
     };
+};
+
+export const useDisease = ({ slug }: { slug?: string }) => {
+    const { data: data, isLoading: fetchLoading } = useQuery({
+        queryKey: [entity, slug],
+        queryFn: async () => {
+            const result = await axios.get(`${baseUrl}/disease/${slug}`);
+            return result.data.disease as DiseaseDetailsModel;
+        },
+        enabled: !!slug,
+    });
+
+    return { data, loading: fetchLoading };
 };

@@ -11,6 +11,7 @@ import PagesSearch from "@/pages/search";
 import PagesFavorite from "@/pages/favorite";
 import PagesSetting from "@/pages/setting";
 import PageFoodDetails from "@/pages/food-details";
+import PageDiseaseDetails from "@/pages/disease-details";
 import PagesRecommend from "@/pages/recommend";
 import PagesSettingProfile from "@/pages/setting/profile";
 import PagesSettingHealthData from "@/pages/setting/health-data";
@@ -92,6 +93,11 @@ const MainRoute: React.FC = () => {
           path={"/food/:id"}
           render={() => <PrivateRoute component={<PageFoodDetails />} />}
         />
+          <Route
+              exact
+              path={"/disease/:id"}
+              render={() => <PrivateRoute component={<PageDiseaseDetails />} />}
+          />
         <Route exact path={"/about"} component={PagesAbout} />
       </IonRouterOutlet>
     </IonReactRouter>

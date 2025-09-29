@@ -26,12 +26,11 @@ const SearchInput: React.FC<propTypes> = ({
   const router = useHistory();
   const location = useLocation();
   const { setValue: setFilterValue } = useFoodFilterCtx();
-    const { openFilter, toggleFilter, setOpenFilter } = useSearchFilterCtx();
+    const { openFilter, setOpenFilter } = useSearchFilterCtx();
 
   const { onSearch: onSearchFood } = useFoods({});
 
   const [searchInput, setSearchInput] = useState("");
-  const [openFilter, setOpenFilter] = useState(false);
   const [diseaseSuggestions, setDiseaseSuggestions] = useState<string[]>([]);
   const [foodSuggestions, setFoodSuggestions] = useState<FoodQueryDataModel[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -185,7 +184,10 @@ const SearchInput: React.FC<propTypes> = ({
                   {diseaseSuggestions.map((item) => (
                       <li
                           key={item}
-                          onClick={() => handleSelectSuggestion(item)}
+                          onClick={() => {
+                              handleSelectSuggestion(item);
+                              setShowSuggestions(false);
+                          }}
                           className="px-4 py-2 cursor-pointer text-[0.913rem] text-black_color/[0.62] hover:bg-black_color/[0.04] hover:text-black"
                       >
                         {item}

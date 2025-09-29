@@ -1,9 +1,7 @@
-import MainButton from "@/components/common/button";
-import { IonImg } from "@ionic/react";
+import MainButton from '@/components/common/button'
+import { IonImg } from '@ionic/react'
 
-const ContentsWelcomeIntroduction: React.FC<{ onClick?: () => void }> = ({
-  onClick,
-}) => {
+const ContentsWelcomeIntroduction: React.FC<{ onClick?: () => void }> = ({ onClick }) => {
   return (
     <div className="h-full relative">
       <IonImg src="/introduction.jpg" className="h-full object-cover" />
@@ -11,13 +9,12 @@ const ContentsWelcomeIntroduction: React.FC<{ onClick?: () => void }> = ({
       <div className="absolute bottom-[75px] p-4">
         <h1 className="mb-6 !font-bold">Feel Better, Eat Smarter</h1>
         <p className="mb-6">
-          Discover foods that fit your body and help you feel your best, every
-          day.
+          Discover foods that fit your body and help you feel your best, every day.
         </p>
         <MainButton onClick={onClick}>Get Started</MainButton>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ContentsWelcomeIntroduction;
+export default ContentsWelcomeIntroduction

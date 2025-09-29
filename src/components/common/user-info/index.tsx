@@ -1,11 +1,11 @@
-import Card from "@/components/wrapper/card";
-import TextDescription from "@/components/common/text-description";
-import YellowBox from "@/components/wrapper/yellow-box";
+import Card from '@/components/wrapper/card'
+import TextDescription from '@/components/common/text-description'
+import YellowBox from '@/components/wrapper/yellow-box'
 
 type propTypes = {
-  userInfo?: { title: string; value: string }[];
-  additionalInfo?: { title: string; value: string }[];
-};
+  userInfo?: { title: string; value: string }[]
+  additionalInfo?: { title: string; value: string }[]
+}
 
 const UserInfo: React.FC<propTypes> = ({ userInfo, additionalInfo }) => {
   return (
@@ -20,12 +20,10 @@ const UserInfo: React.FC<propTypes> = ({ userInfo, additionalInfo }) => {
                     <div className="font-bold text-[16px] font-heading text-primary_color">
                       {item.title}
                     </div>
-                    <div className="font-paragraph text-[14px] text-black">
-                      {item.value}
-                    </div>
+                    <div className="font-paragraph text-[14px] text-black">{item.value}</div>
                   </div>
                 </YellowBox>
-              );
+              )
             })}
           </div>
         )}
@@ -40,13 +38,13 @@ const UserInfo: React.FC<propTypes> = ({ userInfo, additionalInfo }) => {
                     withLinkRedirect={false}
                   />
                 </div>
-              );
+              )
             })}
           </div>
         )}
       </div>
     </Card>
-  );
-};
+  )
+}
 
-export default UserInfo;
+export default UserInfo

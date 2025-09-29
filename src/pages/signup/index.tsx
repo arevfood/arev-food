@@ -1,7 +1,7 @@
-import ContentSignup from "@/contents/signup";
+import ContentSignup from '@/contents/signup'
 
 const PagesSignup: React.FC = () => {
-  return <ContentSignup />;
-};
+  return <ContentSignup />
+}
 
-export default PagesSignup;
+export default PagesSignup

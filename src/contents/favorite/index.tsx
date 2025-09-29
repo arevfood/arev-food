@@ -1,12 +1,12 @@
-import FoodCard from "@/components/common/food-card";
-import IconTitle from "@/components/common/icon-title";
-import { useFavorite } from "@/hooks/data/favorite";
-import { IonImg } from "@ionic/react";
+import FoodCard from '@/components/common/food-card'
+import IconTitle from '@/components/common/icon-title'
+import { useFavorite } from '@/hooks/data/favorite'
+import { IonImg } from '@ionic/react'
 
-type propTypes = {};
+type propTypes = {}
 
 const ContentsFavorite: React.FC<propTypes> = () => {
-  const { data: favoriteList, onFavorite } = useFavorite();
+  const { data: favoriteList, onFavorite } = useFavorite()
 
   return (
     <>
@@ -26,19 +26,19 @@ const ContentsFavorite: React.FC<propTypes> = () => {
                 return (
                   <FoodCard
                     slug={food.id}
-                    image={food.image_url || ""}
+                    image={food.image_url || ''}
                     title={food.name}
                     description={food.description}
                     onFavorite={() => onFavorite({ food_id: food.id })}
                     isFav
                   />
-                );
+                )
               })}
           </div>
         </div>
       </div>
     </>
-  );
-};
+  )
+}
 
-export default ContentsFavorite;
+export default ContentsFavorite

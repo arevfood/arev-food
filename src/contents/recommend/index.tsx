@@ -1,27 +1,27 @@
-import FoodCard from "@/components/common/food-card";
-import IconTitle from "@/components/common/icon-title";
-import { IonImg, IonSpinner } from "@ionic/react";
-import { useFoods } from "@/hooks/data/food";
-import { useEffect, useState } from "react";
-import { FoodQueryDataModel } from "@/models/food-query";
-import MainButton from "@/components/common/button";
-import { useUser } from "@/hooks/data/user";
-import { getAge } from "@/utils/generate-age";
+import FoodCard from '@/components/common/food-card'
+import IconTitle from '@/components/common/icon-title'
+import { IonImg, IonSpinner } from '@ionic/react'
+import { useFoods } from '@/hooks/data/food'
+import { useEffect, useState } from 'react'
+import { FoodQueryDataModel } from '@/models/food-query'
+import MainButton from '@/components/common/button'
+import { useUser } from '@/hooks/data/user'
+import { getAge } from '@/utils/generate-age'
 
-type propTypes = {};
+type propTypes = {}
 
 const ContentRecommend: React.FC<propTypes> = () => {
-  const [page, setPage] = useState(1);
-  const [allFoods, setAllFoods] = useState<FoodQueryDataModel[]>([]);
-  const [loadMore, setLoadMore] = useState(true);
-  const limit = 10;
+  const [page, setPage] = useState(1)
+  const [allFoods, setAllFoods] = useState<FoodQueryDataModel[]>([])
+  const [loadMore, setLoadMore] = useState(true)
+  const limit = 10
 
-  const { onGetFoodRecommendation, loading } = useFoods({});
-  const { data: userDetail } = useUser();
+  const { onGetFoodRecommendation, loading } = useFoods({})
+  const { data: userDetail } = useUser()
 
   useEffect(() => {
     const fetchRecommendations = async () => {
-      if (!userDetail?.health) return;
+      if (!userDetail?.health) return
 
       try {
         const foods = await onGetFoodRecommendation({
@@ -36,30 +36,31 @@ const ContentRecommend: React.FC<propTypes> = () => {
             blood_pressure: userDetail.health.blood_pressure,
             dietary_preference: userDetail.health.dietary_preference,
             health_condition: userDetail.health.health_conditions
-              .split(",")
+              .split(',')
               .map((condition: string) => condition.trim()),
             lifestyle: userDetail.health.lifestyle,
             limit: String(limit),
             page: String(page),
           },
-          type: "recommend",
-        });
+          type: 'recommend',
+        })
 
-        setAllFoods((prev) => [...prev, ...foods]);
+        setAllFoods((prev) => [...prev, ...foods])
         if (foods.length < limit) {
-          setLoadMore(false);
+          setLoadMore(false)
         }
       } catch (err) {
-        console.error(err);
+        console.error(err)
       }
-    };
+    }
 
-    fetchRecommendations();
-  }, [page, userDetail]);
+    fetchRecommendations()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page, userDetail])
 
   const handleLoadMore = () => {
-    setPage((prev) => prev + 1);
-  };
+    setPage((prev) => prev + 1)
+  }
 
   return (
     <>
@@ -81,27 +82,23 @@ const ContentRecommend: React.FC<propTypes> = () => {
                     return (
                       <FoodCard
                         slug={item.id}
-                        image={item.image_url || ""}
+                        image={item.image_url || ''}
                         title={item.name}
-                        description={item.food_details?.description || ""}
+                        description={item.food_details?.description || ''}
                         onFavorite={() =>
                           onGetFoodRecommendation({
                             payload: { food_id: item.id },
-                            type: "recommend",
+                            type: 'recommend',
                           })
                         }
                         isFav
                       />
-                    );
+                    )
                   })}
               </div>
               {loadMore && (
                 <div className="w-fit mx-auto mt-4">
-                  <MainButton
-                    color="ORANGE"
-                    onClick={handleLoadMore}
-                    isDisabled={loading}
-                  >
+                  <MainButton color="ORANGE" onClick={handleLoadMore} isDisabled={loading}>
                     {loading ? (
                       <div className="flex items-center gap-2">
                         Loading...
@@ -111,7 +108,7 @@ const ContentRecommend: React.FC<propTypes> = () => {
                         />
                       </div>
                     ) : (
-                      "Load More"
+                      'Load More'
                     )}
                   </MainButton>
                 </div>
@@ -126,7 +123,7 @@ const ContentRecommend: React.FC<propTypes> = () => {
         </div>
       </div>
     </>
-  );
-};
+  )
+}
 
-export default ContentRecommend;
+export default ContentRecommend

@@ -1,45 +1,53 @@
-import MainButton from "@/components/common/button";
-import CustomInput from "@/components/common/input";
-import LayoutBlank from "@/layouts/blank";
-import { useAuth } from "@/hooks/data/authentication";
-import { IonImg, IonSpinner } from "@ionic/react";
-import { useForm, SubmitHandler } from "react-hook-form";
-import { useHistory } from "react-router";
-import { useToastAlert } from "@/hooks/ui/toast-alert";
+import MainButton from '@/components/common/button'
+import CustomInput from '@/components/common/input'
+import LayoutBlank from '@/layouts/blank'
+import { useAuth } from '@/hooks/data/authentication'
+import { IonImg, IonSpinner } from '@ionic/react'
+import { useForm, SubmitHandler } from 'react-hook-form'
+import { useHistory } from 'react-router'
+import { useToastAlert } from '@/hooks/ui/toast-alert'
 
 type inputProps = {
-  fullname: string;
-  email: string;
-  password: string;
-  confirm_password: string;
-};
+  fullname: string
+  email: string
+  password: string
+  confirm_password: string
+}
 
 const ContentSignup: React.FC = () => {
-  const { showToast } = useToastAlert();
-  const router = useHistory();
+  const { showToast } = useToastAlert()
+  const router = useHistory()
   const {
     register,
     handleSubmit,
     watch,
     setValue,
     formState: { errors },
-  } = useForm<inputProps>();
+  } = useForm<inputProps>()
 
-  const { onSignup, loading } = useAuth();
+  const { onSignup, loading } = useAuth()
 
   const onSubmit: SubmitHandler<inputProps> = async (data) => {
-    const result = await onSignup(data);
+    const result = await onSignup(data)
     if (!result) {
-      showToast({header: "Registration Failed", message: "Something went wrong. Please check your details.", type: "error"});
+      showToast({
+        header: 'Registration Failed',
+        message: 'Something went wrong. Please check your details.',
+        type: 'error',
+      })
       setValue('password', '')
       setValue('confirm_password', '')
-      return;
+      return
     }
-    showToast({header: "Account Created", message: "Your account has been successfully registered.", type: "success"});
-    router.replace("/");
-  };
+    showToast({
+      header: 'Account Created',
+      message: 'Your account has been successfully registered.',
+      type: 'success',
+    })
+    router.replace('/')
+  }
 
-  const password = watch("password", "");
+  const password = watch('password', '')
 
   return (
     <LayoutBlank fullscreen={true} background="var(--color-bg_color_2)">
@@ -48,31 +56,29 @@ const ContentSignup: React.FC = () => {
           <IonImg src="/arev-logo.png" className="w-[150px]" />
         </div>
         <div className="px-[20px] w-full">
-          <h1 className="text-black !font-bold font-heading">
-            Create Your Account
-          </h1>
+          <h1 className="text-black !font-bold font-heading">Create Your Account</h1>
           <form onSubmit={handleSubmit(onSubmit)}>
             <CustomInput
-              {...register("fullname", {
-                required: "Please input your full name!",
+              {...register('fullname', {
+                required: 'Please input your full name!',
               })}
               label="Full Name"
               placeholder="Enter your full name"
               errorMessage={errors.fullname?.message}
             />
             <CustomInput
-              {...register("email", { required: "Please input your email!" })}
+              {...register('email', { required: 'Please input your email!' })}
               label="Email"
               placeholder="Enter your email"
               type="email"
               errorMessage={errors.email?.message}
             />
             <CustomInput
-              {...register("password", {
-                required: "Please input your password!",
+              {...register('password', {
+                required: 'Please input your password!',
                 minLength: {
                   value: 6,
-                  message: "Password must be at least 6 characters!",
+                  message: 'Password must be at least 6 characters!',
                 },
               })}
               label="Password"
@@ -81,10 +87,9 @@ const ContentSignup: React.FC = () => {
               errorMessage={errors.password?.message}
             />
             <CustomInput
-              {...register("confirm_password", {
-                required: "Please confirm your password",
-                validate: (value) =>
-                  value === password || "Passwords do not match",
+              {...register('confirm_password', {
+                required: 'Please confirm your password',
+                validate: (value) => value === password || 'Passwords do not match',
               })}
               type="password"
               label="Confirm Password!"
@@ -96,20 +101,17 @@ const ContentSignup: React.FC = () => {
             <MainButton
               color="ORANGE"
               onClick={() => {
-                handleSubmit(onSubmit)();
+                handleSubmit(onSubmit)()
               }}
               isDisabled={loading}
             >
               {loading ? (
-                  <div className="flex items-center gap-2">
-                    Signing Up...
-                    <IonSpinner
-                        name="crescent"
-                        className="text-white w-[20px] h-[20px] ms-[6px]"
-                    />
-                  </div>
+                <div className="flex items-center gap-2">
+                  Signing Up...
+                  <IonSpinner name="crescent" className="text-white w-[20px] h-[20px] ms-[6px]" />
+                </div>
               ) : (
-                  "Sign Up"
+                'Sign Up'
               )}
             </MainButton>
           </div>
@@ -131,12 +133,12 @@ const ContentSignup: React.FC = () => {
           </div>
           <div className="mt-[80px] flex flex-wrap items-center justify-center">
             <div className="text-center opacity-30 text-[12px] text-black_color">
-              Already have an account?{" "}
+              Already have an account?{' '}
             </div>
             <div
               className="ml-1 font-bold text-primary_color"
               onClick={() => {
-                router.replace("/login");
+                router.replace('/login')
               }}
             >
               Login here
@@ -145,7 +147,7 @@ const ContentSignup: React.FC = () => {
         </div>
       </div>
     </LayoutBlank>
-  );
-};
+  )
+}
 
-export default ContentSignup;
+export default ContentSignup

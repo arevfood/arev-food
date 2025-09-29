@@ -1,6 +1,6 @@
-import GlobalContextProvider from "@/context";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ReactNode } from "react";
+import GlobalContextProvider from '@/context'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { ReactNode } from 'react'
 
 const GlobalProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const queryClient = new QueryClient({
@@ -9,7 +9,7 @@ const GlobalProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         staleTime: 1000 * 60 * 5,
       },
     },
-  });
+  })
 
   return (
     <>
@@ -17,7 +17,7 @@ const GlobalProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         <GlobalContextProvider>{children}</GlobalContextProvider>
       </QueryClientProvider>
     </>
-  );
-};
+  )
+}
 
-export default GlobalProvider;
+export default GlobalProvider

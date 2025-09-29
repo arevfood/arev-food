@@ -1,9 +1,9 @@
-import { IonImg } from "@ionic/react";
+import { IonImg } from '@ionic/react'
 
 type propTypes = {
-  background?: string;
-  image?: string;
-};
+  background?: string
+  image?: string
+}
 
 const Avatar: React.FC<propTypes> = ({ background, image }) => {
   return (
@@ -13,7 +13,7 @@ const Avatar: React.FC<propTypes> = ({ background, image }) => {
     >
       {image && <IonImg src={image} className="w-full h-full object-cover" />}
     </div>
-  );
-};
+  )
+}
 
-export default Avatar;
+export default Avatar

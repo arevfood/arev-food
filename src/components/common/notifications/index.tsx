@@ -1,5 +1,5 @@
 const MainNotification: React.FC = () => {
-  return <></>;
-};
+  return <></>
+}
 
-export default MainNotification;
+export default MainNotification

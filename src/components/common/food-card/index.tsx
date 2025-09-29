@@ -1,18 +1,18 @@
-import Card from "@/components/wrapper/card";
-import { IonIcon, IonRouterLink } from "@ionic/react";
-import TextDescription from "@/components/common/text-description";
-import FoodCardSkeleton from "./skeleton";
-import CustomImage from "@/components/common/image";
+import Card from '@/components/wrapper/card'
+import { IonIcon, IonRouterLink } from '@ionic/react'
+import TextDescription from '@/components/common/text-description'
+import FoodCardSkeleton from './skeleton'
+import CustomImage from '@/components/common/image'
 
 type propTypes = {
-  image: string;
-  title: string;
-  description: string;
-  isFav?: boolean;
-  onFavorite?: () => void;
-  slug: string;
-  loading?: boolean;
-};
+  image: string
+  title: string
+  description: string
+  isFav?: boolean
+  onFavorite?: () => void
+  slug: string
+  loading?: boolean
+}
 
 const FoodCard: React.FC<propTypes> = ({
   image,
@@ -31,11 +31,9 @@ const FoodCard: React.FC<propTypes> = ({
           <div className="absolute top-[8px] right-[8px] z-1">
             <IonIcon
               src="/icons/heart.svg"
-              className={`${
-                isFav ? "text-[#FF2323]" : "text-black_color/40"
-              } text-[24px]`}
+              className={`${isFav ? 'text-[#FF2323]' : 'text-black_color/40'} text-[24px]`}
               onClick={() => {
-                onFavorite?.();
+                onFavorite?.()
               }}
             />
           </div>
@@ -57,7 +55,7 @@ const FoodCard: React.FC<propTypes> = ({
         </div>
       )}
     </>
-  );
-};
+  )
+}
 
-export default FoodCard;
+export default FoodCard

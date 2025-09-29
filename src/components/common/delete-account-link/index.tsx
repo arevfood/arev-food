@@ -1,57 +1,53 @@
-import { useEffect, useRef, useState } from "react";
-import { IonModal, IonContent, IonSpinner, IonImg } from "@ionic/react";
-import { useAuth } from "@/hooks/data/authentication";
-import { useToastAlert } from "@/hooks/ui/toast-alert";
-import MainButton from "@/components/common/button";
-import { FirebaseError } from "firebase/app";
+import { useEffect, useRef, useState } from 'react'
+import { IonModal, IonContent, IonSpinner, IonImg } from '@ionic/react'
+import { useAuth } from '@/hooks/data/authentication'
+import { useToastAlert } from '@/hooks/ui/toast-alert'
+import MainButton from '@/components/common/button'
+import { FirebaseError } from 'firebase/app'
 
 const DeleteAccountLink: React.FC = () => {
-  const { showToast } = useToastAlert();
-  const modal = useRef<HTMLIonModalElement>(null);
-  const page = useRef(null);
-  const { onDeleteAccount, loading } = useAuth();
+  const { showToast } = useToastAlert()
+  const modal = useRef<HTMLIonModalElement>(null)
+  const page = useRef(null)
+  const { onDeleteAccount, loading } = useAuth()
 
-  const [presentingElement, setPresentingElement] =
-    useState<HTMLElement | null>(null);
+  const [presentingElement, setPresentingElement] = useState<HTMLElement | null>(null)
 
   useEffect(() => {
-    setPresentingElement(page.current);
-  }, []);
+    setPresentingElement(page.current)
+  }, [])
 
   function dismiss() {
-    modal.current?.dismiss();
+    modal.current?.dismiss()
   }
 
   const onSubmit = async () => {
     try {
-      await onDeleteAccount();
-      window.location.reload();
+      await onDeleteAccount()
+      window.location.reload()
       showToast({
-        header: "Account Deleted",
-        message: "Your account has been removed.",
-        type: "success",
-      });
+        header: 'Account Deleted',
+        message: 'Your account has been removed.',
+        type: 'success',
+      })
     } catch (error) {
-      if (
-        error instanceof FirebaseError &&
-        error.code === "auth/requires-recent-login"
-      ) {
+      if (error instanceof FirebaseError && error.code === 'auth/requires-recent-login') {
         showToast({
-          header: "Delete Failed",
-          message: "Please log in again to delete account.",
-          type: "error",
-        });
+          header: 'Delete Failed',
+          message: 'Please log in again to delete account.',
+          type: 'error',
+        })
       } else {
         showToast({
-          header: "Delete Failed",
-          message: "Unable to delete account.",
-          type: "error",
-        });
+          header: 'Delete Failed',
+          message: 'Unable to delete account.',
+          type: 'error',
+        })
       }
     } finally {
-      dismiss();
+      dismiss()
     }
-  };
+  }
 
   return (
     <>
@@ -59,15 +55,9 @@ const DeleteAccountLink: React.FC = () => {
         id="delete-account-modal"
         className="cursor-pointer text-[16px] px-2 py-2.5 text-black flex items-center gap-[8px] opacity-[0.62] duration-300 rounded-[8px] active:opacity-100 active:bg-black/[0.04]"
       >
-        <IonImg
-          src="/icons/setting-delete-account.svg"
-          className="w-[20px] h-[20px]"
-        />
+        <IonImg src="/icons/setting-delete-account.svg" className="w-[20px] h-[20px]" />
         Delete Account
-        <IonImg
-          src="/icons/chevron-left.svg"
-          className="ms-auto w-[14px] h-[14px] rotate-180"
-        />
+        <IonImg src="/icons/chevron-left.svg" className="ms-auto w-[14px] h-[14px] rotate-180" />
       </div>
       <IonModal
         ref={modal}
@@ -75,8 +65,8 @@ const DeleteAccountLink: React.FC = () => {
         presentingElement={presentingElement!}
         className="px-[20px] bg-black/80"
         style={{
-          "--height": "400px",
-          "--border-radius": "24px",
+          '--height': '400px',
+          '--border-radius': '24px',
         }}
         showBackdrop={true}
         mode="md"
@@ -91,15 +81,11 @@ const DeleteAccountLink: React.FC = () => {
                 Are you sure you want to delete your account?
               </div>
               <div className="font-paragraph text-[16px] text-black/40">
-                This action is permanent and cannot be undone. All your data,
-                including saved foods and health information, will be deleted.
+                This action is permanent and cannot be undone. All your data, including saved foods
+                and health information, will be deleted.
               </div>
               <div className="mt-8">
-                <MainButton
-                  color="ORANGE"
-                  onClick={onSubmit}
-                  isDisabled={loading}
-                >
+                <MainButton color="ORANGE" onClick={onSubmit} isDisabled={loading}>
                   {loading ? (
                     <div className="flex items-center gap-2">
                       Deleted...
@@ -109,7 +95,7 @@ const DeleteAccountLink: React.FC = () => {
                       />
                     </div>
                   ) : (
-                    "Delete My Account"
+                    'Delete My Account'
                   )}
                 </MainButton>
               </div>
@@ -123,7 +109,7 @@ const DeleteAccountLink: React.FC = () => {
         </IonContent>
       </IonModal>
     </>
-  );
-};
+  )
+}
 
-export default DeleteAccountLink;
+export default DeleteAccountLink

@@ -1,10 +1,10 @@
-import { Link } from "react-router-dom";
-import s from "./index.module.scss";
-import MainButton from "@/components/common/button";
-import { useAuth } from "@/hooks/data/authentication";
+import { Link } from 'react-router-dom'
+import s from './index.module.scss'
+import MainButton from '@/components/common/button'
+import { useAuth } from '@/hooks/data/authentication'
 
 const ExploreContainer = () => {
-  const { onSignOut } = useAuth();
+  const { onSignOut } = useAuth()
   return (
     <div className={s.container}>
       <strong>Arev Food - Applications</strong>
@@ -17,13 +17,13 @@ const ExploreContainer = () => {
       <MainButton
         color="ORANGE"
         onClick={() => {
-          onSignOut();
+          onSignOut()
         }}
       >
         Sign Out
       </MainButton>
     </div>
-  );
-};
+  )
+}
 
-export default ExploreContainer;
+export default ExploreContainer

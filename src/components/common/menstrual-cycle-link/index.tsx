@@ -1,52 +1,57 @@
-import { useEffect, useRef, useState } from "react";
-import {IonModal, IonContent, IonImg, IonRouterLink} from "@ionic/react";
-import MainButton from "@/components/common/button";
-import {useHistory} from "react-router";
-import {useUser} from "@/hooks/data/user";
+import { useEffect, useRef, useState } from 'react'
+import { IonModal, IonContent, IonImg, IonRouterLink } from '@ionic/react'
+import MainButton from '@/components/common/button'
+import { useHistory } from 'react-router'
+import { useUser } from '@/hooks/data/user'
 
 const MenstrualCycleLink: React.FC = () => {
-  const { data: userDetail } = useUser();
-  const modal = useRef<HTMLIonModalElement>(null);
-  const page = useRef(null);
-  const router = useHistory();
+  const { data: userDetail } = useUser()
+  const modal = useRef<HTMLIonModalElement>(null)
+  const page = useRef(null)
+  const router = useHistory()
 
-  const [presentingElement, setPresentingElement] =
-    useState<HTMLElement | null>(null);
+  const [presentingElement, setPresentingElement] = useState<HTMLElement | null>(null)
 
   useEffect(() => {
-    setPresentingElement(page.current);
-  }, []);
+    setPresentingElement(page.current)
+  }, [])
 
   function dismiss() {
-    modal.current?.dismiss();
+    modal.current?.dismiss()
   }
 
   return (
     <>
-        {userDetail?.menstrual_cycle?.track_menstrual_cycle === 'yes' && (
-            <IonRouterLink routerLink="/setting/menstrual-cycle">
-                <div className="cursor-pointer text-[16px] px-2 py-2.5 text-black flex items-center gap-[8px] opacity-[0.62] duration-300 rounded-[8px] active:opacity-100 active:bg-black/[0.04]">
-                    <IonImg src="/icons/setting-edit-menstrual-cycle.svg" className="w-[20px] h-[20px]"/>
-                    Edit Menstrual Cycle
-                    <IonImg src="/icons/chevron-left.svg" className="ms-auto w-[14px] h-[14px] rotate-180"/>
-                </div>
-            </IonRouterLink>
-        )}
-        {userDetail?.menstrual_cycle?.track_menstrual_cycle === 'no' && (
-            <div id="menstrual-cycle-modal" className="cursor-pointer text-[16px] px-2 py-2.5 text-black flex items-center gap-[8px] opacity-[0.62] duration-300 rounded-[8px] active:opacity-100 active:bg-black/[0.04]">
-                <IonImg src="/icons/setting-edit-menstrual-cycle.svg" className="w-[20px] h-[20px]"/>
-                Edit Menstrual Cycle
-                <IonImg src="/icons/chevron-left.svg" className="ms-auto w-[14px] h-[14px] rotate-180"/>
-            </div>
-        )}
+      {userDetail?.menstrual_cycle?.track_menstrual_cycle === 'yes' && (
+        <IonRouterLink routerLink="/setting/menstrual-cycle">
+          <div className="cursor-pointer text-[16px] px-2 py-2.5 text-black flex items-center gap-[8px] opacity-[0.62] duration-300 rounded-[8px] active:opacity-100 active:bg-black/[0.04]">
+            <IonImg src="/icons/setting-edit-menstrual-cycle.svg" className="w-[20px] h-[20px]" />
+            Edit Menstrual Cycle
+            <IonImg
+              src="/icons/chevron-left.svg"
+              className="ms-auto w-[14px] h-[14px] rotate-180"
+            />
+          </div>
+        </IonRouterLink>
+      )}
+      {userDetail?.menstrual_cycle?.track_menstrual_cycle === 'no' && (
+        <div
+          id="menstrual-cycle-modal"
+          className="cursor-pointer text-[16px] px-2 py-2.5 text-black flex items-center gap-[8px] opacity-[0.62] duration-300 rounded-[8px] active:opacity-100 active:bg-black/[0.04]"
+        >
+          <IonImg src="/icons/setting-edit-menstrual-cycle.svg" className="w-[20px] h-[20px]" />
+          Edit Menstrual Cycle
+          <IonImg src="/icons/chevron-left.svg" className="ms-auto w-[14px] h-[14px] rotate-180" />
+        </div>
+      )}
       <IonModal
         ref={modal}
         trigger="menstrual-cycle-modal"
         presentingElement={presentingElement!}
         className="px-[20px] bg-black/80"
         style={{
-          "--height": "300px",
-          "--border-radius": "24px",
+          '--height': '300px',
+          '--border-radius': '24px',
         }}
         showBackdrop={true}
         mode="md"
@@ -61,17 +66,24 @@ const MenstrualCycleLink: React.FC = () => {
                 This helps us give personalized food, health, and cycle recommendations.
               </div>
               <div className="mt-8">
-                <MainButton color="ORANGE" onClick={() => router.replace("/setting/menstrual-cycle")}>Yes</MainButton>
+                <MainButton
+                  color="ORANGE"
+                  onClick={() => router.replace('/setting/menstrual-cycle')}
+                >
+                  Yes
+                </MainButton>
               </div>
               <div className="mt-4">
-                <MainButton color="ORANGE_OUTLINE" onClick={dismiss}>No</MainButton>
+                <MainButton color="ORANGE_OUTLINE" onClick={dismiss}>
+                  No
+                </MainButton>
               </div>
             </div>
           </div>
         </IonContent>
       </IonModal>
     </>
-  );
-};
+  )
+}
 
-export default MenstrualCycleLink;
+export default MenstrualCycleLink

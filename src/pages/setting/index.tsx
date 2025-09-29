@@ -1,5 +1,5 @@
-import ContentsSettings from "@/contents/settings";
-import MainLayouts from "@/layouts/main";
+import ContentsSettings from '@/contents/settings'
+import MainLayouts from '@/layouts/main'
 
 const PagesSetting: React.FC = () => {
   return (
@@ -8,7 +8,7 @@ const PagesSetting: React.FC = () => {
         <ContentsSettings />
       </div>
     </MainLayouts>
-  );
-};
+  )
+}
 
-export default PagesSetting;
+export default PagesSetting

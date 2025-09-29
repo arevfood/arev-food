@@ -1,11 +1,11 @@
-import ContentsSettingDeleteAccount from "@/contents/settings/delete-account";
-import MainLayouts from "@/layouts/main";
+import ContentsSettingDeleteAccount from '@/contents/settings/delete-account'
+import MainLayouts from '@/layouts/main'
 
 const PagesSettingDeleteAccount = () => {
   return (
     <MainLayouts>
       <ContentsSettingDeleteAccount />
     </MainLayouts>
-  );
-};
-export default PagesSettingDeleteAccount;
+  )
+}
+export default PagesSettingDeleteAccount

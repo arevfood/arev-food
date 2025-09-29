@@ -1,17 +1,17 @@
-import ContentsWelcome from "@/contents/welcome";
-import { useAuth } from "@/hooks/data/authentication";
-import { Redirect } from "react-router";
+import ContentsWelcome from '@/contents/welcome'
+import { useAuth } from '@/hooks/data/authentication'
+import { Redirect } from 'react-router'
 
 const PagesWelcome: React.FC = () => {
-  const { session } = useAuth();
+  const { session } = useAuth()
 
   if (!session) {
-    return <ContentsWelcome />;
+    return <ContentsWelcome />
   }
 
   if (session) {
-    return <Redirect to={"/"} />;
+    return <Redirect to={'/'} />
   }
-};
+}
 
-export default PagesWelcome;
+export default PagesWelcome

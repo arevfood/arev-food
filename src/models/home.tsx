@@ -1,16 +1,16 @@
 export interface userProfileModel {
-  name: string;
-  age: number;
-  image: string;
-  active_menstrual_cycle: boolean;
+  name: string
+  age: number
+  image: string
+  active_menstrual_cycle: boolean
 }
 
 export interface userInfoModel {
-  info: userInfoItemModel[];
-  additional: userInfoItemModel[];
+  info: userInfoItemModel[]
+  additional: userInfoItemModel[]
 }
 
 interface userInfoItemModel {
-  title: string;
-  value: string;
+  title: string
+  value: string
 }

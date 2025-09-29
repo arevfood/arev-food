@@ -1,5 +1,5 @@
-import { Capacitor } from "@capacitor/core";
+import { Capacitor } from '@capacitor/core'
 
 export const useGetPlatform = () => {
-  return Capacitor.getPlatform();
-};
+  return Capacitor.getPlatform()
+}

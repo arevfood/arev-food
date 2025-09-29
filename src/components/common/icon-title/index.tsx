@@ -1,21 +1,15 @@
-import { IonIcon, IonRouterLink } from "@ionic/react";
-import MainButton from "@/components/common/button";
+import { IonIcon, IonRouterLink } from '@ionic/react'
+import MainButton from '@/components/common/button'
 
 type propTypes = {
-  title: string;
-  icon: string;
-  description?: string;
-  link?: string;
-  linkLabel?: string;
-};
+  title: string
+  icon: string
+  description?: string
+  link?: string
+  linkLabel?: string
+}
 
-const IconTitle: React.FC<propTypes> = ({
-  title,
-  icon,
-  description,
-  link,
-  linkLabel,
-}) => {
+const IconTitle: React.FC<propTypes> = ({ title, icon, description, link, linkLabel }) => {
   return (
     <div>
       <div className="flex flex-wrap gap-2 items-center justify-between">
@@ -31,17 +25,15 @@ const IconTitle: React.FC<propTypes> = ({
         </div>
         {link && (
           <IonRouterLink routerLink={link}>
-            <MainButton color="ORANGE">{linkLabel || "See All"}</MainButton>
+            <MainButton color="ORANGE">{linkLabel || 'See All'}</MainButton>
           </IonRouterLink>
         )}
       </div>
       {description && (
-        <div className="text-[12px] font-paragraph text-black mt-4">
-          {description}
-        </div>
+        <div className="text-[12px] font-paragraph text-black mt-4">{description}</div>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default IconTitle;
+export default IconTitle

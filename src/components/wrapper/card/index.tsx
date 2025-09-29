@@ -1,9 +1,9 @@
-import { ReactNode } from "react";
+import { ReactNode } from 'react'
 
 type propTypes = {
-  children: ReactNode;
-  className?: string;
-};
+  children: ReactNode
+  className?: string
+}
 
 const Card: React.FC<propTypes> = ({ children, className }) => {
   return (
@@ -12,7 +12,7 @@ const Card: React.FC<propTypes> = ({ children, className }) => {
     >
       {children}
     </div>
-  );
-};
+  )
+}
 
-export default Card;
+export default Card

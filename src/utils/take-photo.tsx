@@ -1,4 +1,4 @@
-import { Camera, CameraResultType, CameraSource } from "@capacitor/camera";
+import { Camera, CameraResultType, CameraSource } from '@capacitor/camera'
 
 const takePhoto = async () => {
   const image = await Camera.getPhoto({
@@ -6,9 +6,9 @@ const takePhoto = async () => {
     allowEditing: false,
     resultType: CameraResultType.Base64,
     source: CameraSource.Prompt, // CameraSource.Camera, CameraSource.Photos
-  });
+  })
 
-  return `data:image/${image.format};base64,${image.base64String}`;
-};
+  return `data:image/${image.format};base64,${image.base64String}`
+}
 
-export default takePhoto;
+export default takePhoto

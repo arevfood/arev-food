@@ -1,22 +1,22 @@
 /* eslint-disable react-refresh/only-export-components */
-import { createContext, useState, useContext } from "react";
+import { createContext, useState, useContext } from 'react'
 
 const TemplateContext = createContext({
-  value: "",
+  value: '',
   condition: false,
   someFunction: function () {},
   someFunctionWithVariable: function (_variable: string) {},
-});
+})
 
 export function TemplateContextProvider(props: { children: React.ReactNode }) {
-  const [isCondition, setIsCondition] = useState(false);
+  const [isCondition, setIsCondition] = useState(false)
   function thisSetCondition() {
-    setIsCondition(!isCondition);
+    setIsCondition(!isCondition)
   }
 
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState('')
   function thisSetValue(value: string) {
-    setValue(value);
+    setValue(value)
   }
 
   const context = {
@@ -24,14 +24,10 @@ export function TemplateContextProvider(props: { children: React.ReactNode }) {
     condition: isCondition,
     someFunction: thisSetCondition,
     someFunctionWithVariable: thisSetValue,
-  };
+  }
 
-  return (
-    <TemplateContext.Provider value={context}>
-      {props.children}
-    </TemplateContext.Provider>
-  );
+  return <TemplateContext.Provider value={context}>{props.children}</TemplateContext.Provider>
 }
-export default TemplateContextProvider;
+export default TemplateContextProvider
 
-export const useTemplateCtx = () => useContext(TemplateContext);
+export const useTemplateCtx = () => useContext(TemplateContext)

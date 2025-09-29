@@ -8,3 +8,10 @@ export interface FilterListModel {
   key: string;
   items: FilterListItemModel[];
 }
+
+export interface FilterDiseaseModel {
+  key: string;
+  label: string;
+  aliases?: string[];
+  description?: string;
+}

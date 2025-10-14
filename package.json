@@ -11,7 +11,7 @@
     "test.unit": "vitest",
     "lint": "eslint",
     "style-init": "tsx src/script/generate-sass-variable.ts",
-    "dev:android": "yarn ionic capacitor run android -l --external",
+    "dev:android": "yarn ionic capacitor run android -l --external --host=0.0.0.0",
     "dev:ios": "yarn ionic capacitor run ios -l --external",
     "build:android": "yarn ionic capacitor run android",
     "build:ios": "yarn ionic capacitor run ios",
@@ -38,6 +38,7 @@
     "dotenv": "^16.5.0",
     "firebase": "^11.9.1",
     "ionicons": "^7.4.0",
+    "lodash": "^4.17.21",
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "react-hook-form": "^7.58.1",
@@ -56,6 +57,7 @@
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^16.2.0",
     "@testing-library/user-event": "^14.4.3",
+    "@types/lodash": "^4.17.20",
     "@types/react": "19.0.10",
     "@types/react-dom": "19.0.4",
     "@vitejs/plugin-legacy": "^5.0.0",
@@ -67,15 +69,15 @@
     "eslint-plugin-react-hooks": "^5.1.0",
     "eslint-plugin-react-refresh": "^0.4.19",
     "globals": "^15.15.0",
+    "husky": "^9.0.11",
     "jsdom": "^22.1.0",
     "postcss": "^8.5.4",
+    "prettier": "^3.3.2",
     "tailwindcss": "^4.1.8",
     "terser": "^5.4.0",
     "typescript": "^5.1.6",
     "typescript-eslint": "^8.24.0",
     "vite": "~5.2.0",
-    "vitest": "^0.34.6",
-    "prettier": "^3.3.2",
-    "husky": "^9.0.11"
+    "vitest": "^0.34.6"
   }
 }

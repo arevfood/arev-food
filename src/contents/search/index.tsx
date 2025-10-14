@@ -71,7 +71,6 @@ const ContentSearch: React.FC = () => {
             lifestyle: userDetail.health.lifestyle,
           },
           query: search,
-          query_type: 'concept',
           temperature,
         })
         setSearchResult((prev) => {
@@ -165,14 +164,30 @@ const ContentSearch: React.FC = () => {
     },
     [onResetPath, filterValue, onGetFoodRecommendation],
   )
-
   useEffect(() => {
     handleSearch(query || '')
     handleSearchDisease(query || '')
-  }, [handleSearch, handleSearchDisease, query])
+  }, [query])
 
   return (
     <>
+      <div className="w-full flex items-center justify-center mb-4">
+        <div className="w-fit p-1 bg-white_color rounded-full flex mb-2">
+          <p
+            className={`text-center py-2 px-5 rounded-full text-[0.913rem] ${isSearchTab ? 'text-white_color bg-primary_color' : 'text-black_color/[0.6] bg-transparent hover:bg-black_color/[0.04]'}`}
+            onClick={() => setIsSearchTab(true)}
+          >
+            Food
+          </p>
+          <p
+            className={`text-center py-2 px-5 rounded-full text-[0.913rem] ${!isSearchTab ? 'text-white_color bg-primary_color' : 'text-black_color/[0.6] bg-transparent hover:bg-black_color/[0.04]'}`}
+            onClick={() => setIsSearchTab(false)}
+          >
+            Disease
+          </p>
+        </div>
+      </div>
+
       <SearchInput
         filterList={foodFilterData}
         onFilter={() => {
@@ -185,20 +200,6 @@ const ContentSearch: React.FC = () => {
           router.replace('/search')
         }}
       />
-      <div className="w-fit p-1 bg-white_color rounded-full flex mb-2">
-        <p
-          className={`text-center py-2 px-5 rounded-full text-[0.913rem] ${isSearchTab ? 'text-white_color bg-primary_color' : 'text-black_color/[0.6] bg-transparent hover:bg-black_color/[0.04]'}`}
-          onClick={() => setIsSearchTab(true)}
-        >
-          Food
-        </p>
-        <p
-          className={`text-center py-2 px-5 rounded-full text-[0.913rem] ${!isSearchTab ? 'text-white_color bg-primary_color' : 'text-black_color/[0.6] bg-transparent hover:bg-black_color/[0.04]'}`}
-          onClick={() => setIsSearchTab(false)}
-        >
-          Disease
-        </p>
-      </div>
 
       {!isSearch && (
         <>

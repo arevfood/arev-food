@@ -1,6 +1,6 @@
 import { IonIcon, IonImg } from '@ionic/react'
 import CustomInput from '../input'
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { v4 as uuid } from 'uuid'
 import { FilterListModel } from '@/models/filter-list'
 import CustomCheckbox from '@/components/common/checkbox'
@@ -11,6 +11,7 @@ import { useSearchFilterCtx } from '@/context/search-filter'
 import { diseaseSearch } from '@/hooks/data/disease-search'
 import { useFoods } from '@/hooks/data/food'
 import { FoodQueryDataModel } from '@/models/food-query'
+import debounce from 'lodash/debounce'
 
 type propTypes = {
   filterList: FilterListModel[]
@@ -61,6 +62,36 @@ const SearchInput: React.FC<propTypes> = ({ filterList, onFilter, onReset }) => 
     setFilterValue(newSelectedFilter)
   }
 
+  const debouncedSearch = useCallback(
+    debounce(async (value: string) => {
+      const diseaseResults = diseaseSearch(value).map((d) => d.label)
+      setDiseaseSuggestions(Array.from(new Set(diseaseResults)))
+
+      try {
+        const foods = await onSearchFood({
+          query: value,
+        })
+        setFoodSuggestions(foods || [])
+      } catch {
+        setFoodSuggestions([])
+      }
+    }, 400),
+    [],
+  )
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value
+    setSearchInput(value)
+    if (value.trim()) {
+      setShowSuggestions(true)
+      debouncedSearch(value)
+    } else {
+      setShowSuggestions(false)
+      setDiseaseSuggestions([])
+      setFoodSuggestions([])
+    }
+  }
+
   const handleSearchQuery = (value?: string) => {
     const query = (value !== undefined ? value : searchInput).trim()
 
@@ -89,32 +120,6 @@ const SearchInput: React.FC<propTypes> = ({ filterList, onFilter, onReset }) => 
   const handleSearch = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
       handleSearchQuery()
-    }
-  }
-
-  const handleChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value
-    setSearchInput(value)
-
-    if (value.trim()) {
-      const diseaseResults = diseaseSearch(value).map((disease) => disease.label)
-      setDiseaseSuggestions(Array.from(new Set(diseaseResults)))
-
-      try {
-        const foods = await onSearchFood({
-          query: value,
-          query_type: 'concept',
-        })
-        setFoodSuggestions(foods || [])
-      } catch (_error) {
-        setFoodSuggestions([])
-      }
-
-      setShowSuggestions(true)
-    } else {
-      setDiseaseSuggestions([])
-      setFoodSuggestions([])
-      setShowSuggestions(false)
     }
   }
 
@@ -163,7 +168,7 @@ const SearchInput: React.FC<propTypes> = ({ filterList, onFilter, onReset }) => 
       </div>
 
       {showSuggestions && (diseaseSuggestions.length > 0 || foodSuggestions.length > 0) && (
-        <ul className="absolute w-full bg-white -mt-1 rounded-[6px] shadow-lg max-h-72 overflow-y-auto z-[5] py-2">
+        <ul className="absolute w-full bg-white -mt-1 rounded-[6px] shadow-lg max-h-72 overflow-y-auto z-[100] py-2">
           {diseaseSuggestions.length > 0 && (
             <>
               <li className="px-4 py-2 text-[0.913rem] text-black_color font-medium border-b border-black_color/[0.12] flex items-center">
@@ -216,9 +221,9 @@ const SearchInput: React.FC<propTypes> = ({ filterList, onFilter, onReset }) => 
       )}
 
       {openFilter && (
-        <div className="px-4 bg-white text-black rounded-[8px] absolute w-full z-10 overflow-y-scroll">
+        <div className="px-4 bg-white text-black rounded-[8px] absolute w-full z-[100] overflow-y-scroll">
           <div className="relative">
-            <div className="h-[40vh] overflow-y-scroll pt-6">
+            <div className="h-[calc(50vh_+_10px)] overflow-y-scroll pt-6">
               {filterList.map((item) => {
                 return (
                   <div key={uuid()} className="mb-6">

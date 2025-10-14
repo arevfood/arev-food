@@ -125,7 +125,7 @@ const ContentMenstrual: React.FC = () => {
             {foodRecommendations &&
               foodRecommendations.map((foodRecommendation) => {
                 return (
-                  <SwiperSlide className="!h-[180px]">
+                  <SwiperSlide className="!h-[200px]">
                     <FoodCard
                       slug={foodRecommendation.id}
                       image={foodRecommendation.image_url || ''}
@@ -172,7 +172,7 @@ const ContentMenstrual: React.FC = () => {
             {foodAvoids &&
               foodAvoids.map((foodRecommendation) => {
                 return (
-                  <SwiperSlide className="!h-[180px]">
+                  <SwiperSlide className="!h-[200px]">
                     <FoodCard
                       slug={foodRecommendation.id}
                       image={foodRecommendation.image_url || ''}

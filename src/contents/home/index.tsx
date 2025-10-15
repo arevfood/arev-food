@@ -147,7 +147,7 @@ const ContentsHome: React.FC<propTypes> = () => {
             {foodRecommendationList &&
               foodRecommendationList.map((item) => {
                 return (
-                  <SwiperSlide className="!h-[200px]">
+                  <SwiperSlide className="!min-h-[200px]">
                     <FoodCard
                       slug={item.id}
                       image={item.image_url || ''}
@@ -184,7 +184,7 @@ const ContentsHome: React.FC<propTypes> = () => {
           <Swiper slidesPerView={2.2} spaceBetween={12} centeredSlides={false}>
             {favoriteList.map((item) => {
               return (
-                <SwiperSlide className="!h-[200px]" key={item.id}>
+                <SwiperSlide className="!min-h-[200px]" key={item.id}>
                   <FoodCard
                     slug={item.id}
                     image={item.image_url || ''}

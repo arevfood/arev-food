@@ -1,6 +1,6 @@
 import { IonIcon, IonImg } from '@ionic/react'
 import CustomInput from '../input'
-import { useState, useEffect, useRef, useCallback } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { v4 as uuid } from 'uuid'
 import { FilterListModel } from '@/models/filter-list'
 import CustomCheckbox from '@/components/common/checkbox'
@@ -25,7 +25,7 @@ const SearchInput: React.FC<propTypes> = ({ filterList, onFilter, onReset }) => 
   const { setValue: setFilterValue } = useFoodFilterCtx()
   const { openFilter, setOpenFilter } = useSearchFilterCtx()
 
-  const { onSearch: onSearchFood } = useFoods({})
+  const { onSuggest: onSuggestFood } = useFoods({})
 
   const [searchInput, setSearchInput] = useState('')
   const [diseaseSuggestions, setDiseaseSuggestions] = useState<string[]>([])
@@ -62,22 +62,19 @@ const SearchInput: React.FC<propTypes> = ({ filterList, onFilter, onReset }) => 
     setFilterValue(newSelectedFilter)
   }
 
-  const debouncedSearch = useCallback(
-    debounce(async (value: string) => {
-      const diseaseResults = diseaseSearch(value).map((d) => d.label)
-      setDiseaseSuggestions(Array.from(new Set(diseaseResults)))
+  const debouncedSearch = debounce(async (value: string) => {
+    const diseaseResults = diseaseSearch(value).map((d) => d.label)
+    setDiseaseSuggestions(Array.from(new Set(diseaseResults)))
 
-      try {
-        const foods = await onSearchFood({
-          query: value,
-        })
-        setFoodSuggestions(foods || [])
-      } catch {
-        setFoodSuggestions([])
-      }
-    }, 400),
-    [],
-  )
+    try {
+      const foods = (await onSuggestFood({
+        name: value,
+      })) as FoodQueryDataModel[]
+      setFoodSuggestions(foods || [])
+    } catch {
+      setFoodSuggestions([])
+    }
+  }, 400)
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value

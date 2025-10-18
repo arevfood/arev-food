@@ -1,5 +1,6 @@
 import { FoodDetailsModel } from '@/models/food-details'
 import { FoodQueryDataModel, FoodQueryPayloadModel } from '@/models/food-query'
+import { GET_FOODS } from '@/providers/firebase/food'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import axios from 'axios'
 import { useCallback } from 'react'
@@ -32,6 +33,20 @@ export const useFoods = ({ limit = 10, page = 1 }: { limit?: number; page?: numb
     onError: () => {},
   })
 
+  const { mutateAsync: onSuggest, isPending: onSuggestLoading } = useMutation({
+    mutationFn: useCallback(async (payload: { name: string }) => {
+      const result = await GET_FOODS({ name: payload.name })
+      return result
+    }, []),
+    onSuccess: (result) => {
+      queryClient.invalidateQueries({ queryKey: [queryKey] })
+      return result
+    },
+    onError: (e) => {
+      console.log(e)
+    },
+  })
+
   const { mutateAsync: onGetFoodRecommendation, isPending: onGetFoodRecommendationLoading } =
     useMutation({
       mutationFn: useCallback(
@@ -62,8 +77,9 @@ export const useFoods = ({ limit = 10, page = 1 }: { limit?: number; page?: numb
 
   return {
     data,
-    loading: fetchLoading || onSearchLoading || onGetFoodRecommendationLoading,
+    loading: fetchLoading || onSearchLoading || onGetFoodRecommendationLoading || onSuggestLoading,
     onSearch,
+    onSuggest,
     onGetFoodRecommendation,
   }
 }

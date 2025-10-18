@@ -1,14 +1,37 @@
 import IconTitle from '@/components/common/icon-title'
 import TextDescription from '@/components/common/text-description'
 import Card from '@/components/wrapper/card'
-import { IonIcon } from '@ionic/react'
+import { IonIcon, IonImg } from '@ionic/react'
 import { DiseaseDetailsModel } from '@/models/disease-details'
+import { useFoods } from '@/hooks/data/food'
+import { useCallback, useEffect, useState } from 'react'
+import { FoodQueryDataModel } from '@/models/food-query'
+import FoodCard from '@/components/common/food-card'
+import CardEmpty from '@/components/wrapper/card-empty'
+import { Swiper, SwiperSlide } from 'swiper/react'
+import { useFavorite } from '@/hooks/data/favorite'
+import { useHistory } from 'react-router'
 
 type propTypes = {
   data: DiseaseDetailsModel
 }
 
 const ContentsDiseaseDetails: React.FC<propTypes> = ({ data }) => {
+  const router = useHistory()
+  const [foodRecommendation, setFoodRecommendation] = useState<FoodQueryDataModel[]>([])
+
+  const { onSearch: searchFood } = useFoods({})
+  const { data: favoriteList, onFavorite } = useFavorite()
+
+  const getFoodRecommendation = useCallback(async () => {
+    const result = await searchFood({ query: `${data.name}`, query_type: 'concept' })
+    setFoodRecommendation(result)
+  }, [data.name, searchFood])
+
+  useEffect(() => {
+    getFoodRecommendation()
+  }, [getFoodRecommendation])
+
   const ContentFoodInsight = ({
     title,
     value,
@@ -64,7 +87,7 @@ const ContentsDiseaseDetails: React.FC<propTypes> = ({ data }) => {
           </div>
         </div>
         <div className="mt-6">
-          <IconTitle icon="/icons/meat.svg" title="Recommendation Food" />
+          <IconTitle icon="/icons/spoon-plate.svg" title="Suggestion Foods" />
           <div className="mt-4">
             <Card>
               <div className="py-4 px-4">
@@ -72,9 +95,15 @@ const ContentsDiseaseDetails: React.FC<propTypes> = ({ data }) => {
                   return (
                     <div
                       key={index}
-                      className="text-black mb-3 last:mb-0 capitalize flex gap-3 items-start"
+                      className="text-black mb-3 last:mb-0 capitalize flex gap-3 items-center"
+                      onClick={() => router.push(`/search?query=${item}&type=concept`)}
                     >
-                      <div>✔</div> <div className="self-center capitalize">{item}</div>
+                      <div className="flex items-start gap-2">
+                        <div>✔</div> <div className="self-center capitalize">{item}</div>
+                      </div>
+                      <div className="font-paragraph text-primary_color text-[13px] flex items-center gap-[8px]">
+                        <IonImg src="/icons/arrow-right-primary.svg" className="w-[20px]" />
+                      </div>
                     </div>
                   )
                 })}
@@ -91,15 +120,50 @@ const ContentsDiseaseDetails: React.FC<propTypes> = ({ data }) => {
                   return (
                     <div
                       key={index}
-                      className="text-black mb-3 last:mb-0 capitalize flex gap-3 items-start"
+                      className="text-black mb-3 last:mb-0 capitalize flex gap-3 items-center justify-between"
+                      onClick={() => router.push(`/search?query=${item}&type=concept`)}
                     >
-                      <div>✔</div> <div className="self-center capitalize">{item}</div>
+                      <div className="flex items-start gap-2">
+                        <div>✔</div> <div className="self-center capitalize">{item}</div>
+                      </div>
+                      <div className="font-paragraph text-primary_color text-[13px] flex items-center gap-[8px]">
+                        <IonImg src="/icons/arrow-right-primary.svg" className="w-[20px]" />
+                      </div>
                     </div>
                   )
                 })}
               </div>
             </Card>
           </div>
+        </div>
+        <div className="mt-6">
+          <IconTitle title="Recommendation Food" icon="/icons/meat.svg" />
+        </div>
+        <div className="mt-4">
+          {foodRecommendation.length === 0 ? (
+            <CardEmpty title="No Recommendation Food Data" />
+          ) : (
+            <Swiper slidesPerView={2.2} spaceBetween={12} centeredSlides={false}>
+              {foodRecommendation &&
+                foodRecommendation.map((item) => {
+                  return (
+                    <SwiperSlide className="!min-h-[200px]">
+                      <FoodCard
+                        slug={item.id}
+                        image={item.image_url || ''}
+                        title={item.name}
+                        description={item.food_details?.description || ''}
+                        onFavorite={() => onFavorite({ food_id: item.id })}
+                        isFav={
+                          favoriteList?.findIndex((findFood) => findFood.id === item.id) !== -1 &&
+                          !!item.id
+                        }
+                      />
+                    </SwiperSlide>
+                  )
+                })}
+            </Swiper>
+          )}
         </div>
       </div>
     </>

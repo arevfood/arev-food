@@ -96,7 +96,7 @@ const ContentsFoodDetails: React.FC<propTypes> = ({ data, reason }) => {
 
   return (
     <>
-      <div className="top-0 left-0 fixed">
+      <div className="top-0 left-0 fixed w-full">
         <CustomImage image={data.image_url} />
       </div>
       <div className="rounded-tl-[24px] rounded-tr-[24px] bg-bg_color_1 px-4 py-6 mt-[180px] z-[10] relative">

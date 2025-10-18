@@ -153,12 +153,7 @@ const ContentsHome: React.FC<propTypes> = () => {
                       image={item.image_url || ''}
                       title={item.name}
                       description={item.food_details?.description || ''}
-                      onFavorite={() =>
-                        onGetFoodRecommendation({
-                          payload: { food_id: item.id },
-                          type: 'recommend',
-                        })
-                      }
+                      onFavorite={() => onFavorite({ food_id: item.id })}
                       isFav={
                         favoriteList?.findIndex((findFood) => findFood.id === item.id) !== -1 &&
                         !!item.id

@@ -7,6 +7,7 @@ import { FoodQueryDataModel } from '@/models/food-query'
 import MainButton from '@/components/common/button'
 import { useUser } from '@/hooks/data/user'
 import { getAge } from '@/utils/generate-age'
+import { useFavorite } from '@/hooks/data/favorite'
 
 type propTypes = {}
 
@@ -17,6 +18,7 @@ const ContentRecommend: React.FC<propTypes> = () => {
   const limit = 10
 
   const { onGetFoodRecommendation, loading } = useFoods({})
+  const { data: favoriteList, onFavorite: onFavoriteFood } = useFavorite()
   const { data: userDetail } = useUser()
 
   useEffect(() => {
@@ -85,13 +87,11 @@ const ContentRecommend: React.FC<propTypes> = () => {
                         image={item.image_url || ''}
                         title={item.name}
                         description={item.food_details?.description || ''}
-                        onFavorite={() =>
-                          onGetFoodRecommendation({
-                            payload: { food_id: item.id },
-                            type: 'recommend',
-                          })
+                        onFavorite={() => onFavoriteFood({ food_id: item.id })}
+                        isFav={
+                          favoriteList?.findIndex((findFood) => findFood.id === item.id) !== -1 &&
+                          !!item.id
                         }
-                        isFav
                       />
                     )
                   })}

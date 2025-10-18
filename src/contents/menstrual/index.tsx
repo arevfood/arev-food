@@ -12,12 +12,12 @@ import { cyclePatternOptions } from '@/data/cycle-pattern'
 import CustomSelect from '@/components/common/select-option'
 import { pmsIntensityOptions } from '@/data/pms-intensity'
 import { IonSpinner } from '@ionic/react'
-import { useFoods } from '@/hooks/data/food'
 import CardEmpty from '@/components/wrapper/card-empty'
 import { getMenstrualPhase } from '@/utils/calculate-menstrual-phase'
 import { useRecommendation } from '@/hooks/data/recommendation'
 import { useAvoid } from '@/hooks/data/avoid'
 import CustomInputDate from '@/components/common/input-date'
+import { useFavorite } from '@/hooks/data/favorite'
 
 type inputProps = {
   menstrual_cycle: {
@@ -30,18 +30,17 @@ type inputProps = {
 
 const ContentMenstrual: React.FC = () => {
   const { data: userDetail, onUpdate, loading } = useUser()
-  const { onGetFoodRecommendation } = useFoods({})
+  const { data: foodRecommendations, loading: loadingGetFoodRecommendation } =
+    useRecommendation(userDetail)
+  const { data: foodAvoids, loading: loadingGetFoodAvoid } = useAvoid(userDetail)
+  const { data: favoriteList, onFavorite: onFavoriteFood } = useFavorite()
+
   const phaseInfo = userDetail?.menstrual_cycle
     ? getMenstrualPhase({
         lastPeriod: userDetail.menstrual_cycle.last_period_start_date,
         cycleLength: userDetail.menstrual_cycle.average_cycle_length,
       })
     : null
-  console.log('user', userDetail)
-  console.log('phaseInfo', phaseInfo)
-  const { data: foodRecommendations, loading: loadingGetFoodRecommendation } =
-    useRecommendation(userDetail)
-  const { data: foodAvoids, loading: loadingGetFoodAvoid } = useAvoid(userDetail)
   const isHaveHealthData = !!userDetail?.health
 
   const {
@@ -131,13 +130,12 @@ const ContentMenstrual: React.FC = () => {
                       image={foodRecommendation.image_url || ''}
                       title={foodRecommendation.name}
                       description={foodRecommendation.food_details?.description || ''}
-                      onFavorite={() =>
-                        onGetFoodRecommendation({
-                          payload: { food_id: foodRecommendation.id },
-                          type: 'recommend',
-                        })
+                      onFavorite={() => onFavoriteFood({ food_id: foodRecommendation.id })}
+                      isFav={
+                        favoriteList?.findIndex(
+                          (findFood) => findFood.id === foodRecommendation.id,
+                        ) !== -1 && !!foodRecommendation.id
                       }
-                      isFav
                     />
                   </SwiperSlide>
                 )
@@ -146,11 +144,7 @@ const ContentMenstrual: React.FC = () => {
         )}
       </div>
       <div className="mt-6">
-        <IconTitle
-          title="Avoid Food"
-          icon="/icons/caution-icon.svg"
-          link={isHaveHealthData || (foodRecommendations?.length ?? 0) !== 0 ? '/avoid' : ''}
-        />
+        <IconTitle title="Avoid Food" icon="/icons/caution-icon.svg" />
       </div>
       <div className="mt-4">
         {loadingGetFoodAvoid ? (
@@ -178,13 +172,12 @@ const ContentMenstrual: React.FC = () => {
                       image={foodRecommendation.image_url || ''}
                       title={foodRecommendation.name}
                       description={foodRecommendation.food_details?.description || ''}
-                      onFavorite={() =>
-                        onGetFoodRecommendation({
-                          payload: { food_id: foodRecommendation.id },
-                          type: 'avoid',
-                        })
+                      onFavorite={() => onFavoriteFood({ food_id: foodRecommendation.id })}
+                      isFav={
+                        favoriteList?.findIndex(
+                          (findFood) => findFood.id === foodRecommendation.id,
+                        ) !== -1 && !!foodRecommendation.id
                       }
-                      isFav
                     />
                   </SwiperSlide>
                 )

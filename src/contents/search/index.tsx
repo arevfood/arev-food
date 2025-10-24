@@ -167,7 +167,7 @@ const ContentSearch: React.FC = () => {
   useEffect(() => {
     handleSearch(query || '')
     handleSearchDisease(query || '')
-  }, [query])
+  }, [query, handleSearch, handleSearchDisease])
 
   return (
     <>

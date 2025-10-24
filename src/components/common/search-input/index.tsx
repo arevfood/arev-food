@@ -142,7 +142,7 @@ const SearchInput: React.FC<propTypes> = ({ filterList, onFilter, onReset }) => 
           icon="/icons/search.svg"
           iconClass="text-[20px] text-black/[0.42] pr-2.5"
           inputClass="!pr-[48px]"
-          placeholder="Search diseases or foods..."
+          placeholder="Search foods or conditions..."
           value={searchInput}
           onChange={handleChange}
           onKeyDown={handleSearch}

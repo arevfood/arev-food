@@ -80,7 +80,7 @@ const ContentsDiseaseDetails: React.FC<propTypes> = ({ data }) => {
         <div className="mt-6 py-[12px] px-[20px] bg-white rounded-[8px]">
           <div className="py-2 flex flex-col gap-4">
             <ContentFoodInsight
-              title="Cause of Disease"
+              title="Causes"
               value={data.indicator}
               icon="/icons/coution-icon.svg"
             />
@@ -112,7 +112,7 @@ const ContentsDiseaseDetails: React.FC<propTypes> = ({ data }) => {
           </div>
         </div>
         <div className="mt-6">
-          <IconTitle icon="/icons/pin.svg" title="Recommendation Nutritional" />
+          <IconTitle icon="/icons/pin.svg" title="Recommended Nutrients" />
           <div className="mt-4">
             <Card>
               <div className="py-4 px-4">
@@ -137,7 +137,7 @@ const ContentsDiseaseDetails: React.FC<propTypes> = ({ data }) => {
           </div>
         </div>
         <div className="mt-6">
-          <IconTitle title="Recommendation Food" icon="/icons/meat.svg" />
+          <IconTitle title="Food Recommendations" icon="/icons/meat.svg" />
         </div>
         <div className="mt-4">
           {foodRecommendation.length === 0 ? (

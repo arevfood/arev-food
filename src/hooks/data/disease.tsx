@@ -37,6 +37,9 @@ export const useDiseases = ({ limit = 10, page = 1 }: { limit?: number; page?: n
         result = filtered.slice(start, start + limit)
       }
 
+      // ⏱️ Tambahkan delay 500 ms agar efek loading tetap muncul sebentar
+      await new Promise((resolve) => setTimeout(resolve, 500))
+
       setLoading(false)
       return result
     },

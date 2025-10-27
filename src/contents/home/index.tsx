@@ -15,13 +15,14 @@ import { FoodQueryDataModel } from '@/models/food-query'
 import { useEffect, useState } from 'react'
 import { IonIcon } from '@ionic/react'
 import { useHistory } from 'react-router-dom'
+import CardLoading from '@/components/wrapper/card-loading'
 
 type propTypes = {}
 
 const ContentsHome: React.FC<propTypes> = () => {
   const { data: userDetail } = useUser()
-  const { data: favoriteList, onFavorite } = useFavorite()
-  const { onGetFoodRecommendation } = useFoods({})
+  const { data: favoriteList, onFavorite, loading: favoriteLoading } = useFavorite()
+  const { onGetFoodRecommendation, loading: onGetFoodRecommendationLoading } = useFoods({})
   const [foodRecommendationList, setFoodRecommendationList] = useState<FoodQueryDataModel[]>([])
   const isHaveRecommendationFood = !!userDetail?.health
   const router = useHistory()
@@ -149,9 +150,11 @@ const ContentsHome: React.FC<propTypes> = () => {
         />
       </div>
       <div className="mt-4">
-        {(!isHaveRecommendationFood || foodRecommendationList.length === 0) && (
-          <CardEmpty title="Ready for tailored food suggestions? Let’s get started." />
-        )}
+        {onGetFoodRecommendationLoading && <CardLoading />}
+        {!onGetFoodRecommendationLoading &&
+          (!isHaveRecommendationFood || foodRecommendationList.length === 0) && (
+            <CardEmpty title="Ready for tailored food suggestions? Let’s get started." />
+          )}
         {isHaveRecommendationFood && foodRecommendationList.length > 0 && (
           <Swiper slidesPerView={2.2} spaceBetween={12} centeredSlides={false}>
             {foodRecommendationList.map((item) => (
@@ -180,7 +183,8 @@ const ContentsHome: React.FC<propTypes> = () => {
         />
       </div>
       <div className="mt-4 mb-6">
-        {(!favoriteList || favoriteList.length === 0) && (
+        {favoriteLoading && <CardLoading />}
+        {!favoriteLoading && (!favoriteList || favoriteList.length === 0) && (
           <CardEmpty title="Nothing saved yet — tap the heart icon to keep your favorites close." />
         )}
         {favoriteList && favoriteList.length > 0 && (

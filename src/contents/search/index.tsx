@@ -10,12 +10,12 @@ import { useCallback, useEffect, useState } from 'react'
 import { useHistory, useLocation } from 'react-router'
 import { useUser } from '@/hooks/data/user'
 import { getAge } from '@/utils/generate-age'
-import { IonSpinner } from '@ionic/react'
 import MainButton from '@/components/common/button'
 import CardEmpty from '@/components/wrapper/card-empty'
 import DiseaseCard from '@/components/common/disease-card'
 import { useDiseases } from '@/hooks/data/disease'
 import { FilterDiseaseModel } from '@/models/filter-list'
+import CardLoading from '@/components/wrapper/card-loading'
 
 const ContentSearch: React.FC = () => {
   const location = useLocation()
@@ -48,6 +48,24 @@ const ContentSearch: React.FC = () => {
     params.delete('query')
     router.push(`${location.pathname}?${params.toString()}`)
   }, [location, router])
+
+  const handleSearchDisease = useCallback(
+    async (search: string, recentPage?: number) => {
+      const diseasesDataSearch = await diseasesSearch(search, recentPage)
+      if (!recentPage) {
+        setShowLoadMoreDisease(diseasesDataSearch.length >= 10)
+      } else {
+        setShowLoadMoreDisease(diseasesDataSearch.length > 0)
+      }
+      setSearchResultDisease((prev) =>
+        recentPage ? [...prev, ...diseasesDataSearch] : diseasesDataSearch,
+      )
+      if (search) {
+        setIsSearch(true)
+      }
+    },
+    [diseasesSearch],
+  )
 
   const handleSearch = useCallback(
     async (search: string, recentTemperature?: number) => {
@@ -92,28 +110,14 @@ const ContentSearch: React.FC = () => {
             return data
           }
         })
+        if (data.length === 0) {
+          setIsSearchTab(false)
+          await handleSearchDisease(search)
+        }
         setIsSearch(true)
       }
     },
-    [foodsSearch, query, userDetail],
-  )
-
-  const handleSearchDisease = useCallback(
-    async (search: string, recentPage?: number) => {
-      const diseasesDataSearch = await diseasesSearch(search, recentPage)
-      if (!recentPage) {
-        setShowLoadMoreDisease(diseasesDataSearch.length >= 10)
-      } else {
-        setShowLoadMoreDisease(diseasesDataSearch.length > 0)
-      }
-      setSearchResultDisease((prev) =>
-        recentPage ? [...prev, ...diseasesDataSearch] : diseasesDataSearch,
-      )
-      if (search) {
-        setIsSearch(true)
-      }
-    },
-    [diseasesSearch],
+    [foodsSearch, query, userDetail, handleSearchDisease],
   )
 
   const handleLoadMore = async () => {
@@ -171,7 +175,7 @@ const ContentSearch: React.FC = () => {
 
   return (
     <>
-      <div className="w-full flex items-center justify-center mb-4">
+      <div className="w-full flex items-center justify-center mb-2">
         <div className="w-fit p-1 bg-white_color rounded-full flex mb-2">
           <p
             className={`text-center py-2 px-5 rounded-full text-[0.913rem] ${isSearchTab ? 'text-white_color bg-primary_color' : 'text-black_color/[0.6] bg-transparent hover:bg-black_color/[0.04]'}`}
@@ -254,22 +258,20 @@ const ContentSearch: React.FC = () => {
             <div
               className={`grid gap-[16px] my-4 ${searchResult.length === 0 ? 'grid-cols-1' : 'grid-cols-2'}`}
             >
-              {searchResult.length === 0 ? (
+              {!foodsLoading && searchResult.length === 0 && (
                 <CardEmpty title="No results for your search" />
-              ) : (
-                searchResult.map((food, index) => {
-                  return (
-                    <FoodCard
-                      key={index}
-                      slug={food.id}
-                      image={food.image_url}
-                      title={food.name}
-                      description={food.food_details?.description || '-'}
-                      loading={foodsLoading}
-                    />
-                  )
-                })
               )}
+              {searchResult.length > 0 &&
+                searchResult.map((food, index) => (
+                  <FoodCard
+                    key={index}
+                    slug={food.id}
+                    image={food.image_url}
+                    title={food.name}
+                    description={food.food_details?.description || '-'}
+                    loading={foodsLoading}
+                  />
+                ))}
             </div>
           )}
 
@@ -277,21 +279,19 @@ const ContentSearch: React.FC = () => {
             <div
               className={`grid gap-[16px] my-4 ${searchResultDisease.length === 0 ? 'grid-cols-1' : 'grid-cols-2'}`}
             >
-              {searchResultDisease.length === 0 ? (
+              {!diseasesLoading && searchResultDisease.length === 0 && (
                 <CardEmpty title="No results for your search" />
-              ) : (
-                searchResultDisease.map((disease, index) => {
-                  return (
-                    <DiseaseCard
-                      key={index}
-                      slug={disease.key}
-                      title={disease.label}
-                      description={disease.description || '-'}
-                      loading={diseasesLoading}
-                    />
-                  )
-                })
               )}
+              {searchResultDisease.length > 0 &&
+                searchResultDisease.map((disease, index) => (
+                  <DiseaseCard
+                    key={index}
+                    slug={disease.key}
+                    title={disease.label}
+                    description={disease.description || '-'}
+                    loading={diseasesLoading}
+                  />
+                ))}
             </div>
           )}
         </>
@@ -299,31 +299,23 @@ const ContentSearch: React.FC = () => {
 
       {isSearch && isSearchTab && !hideLoadMore && (
         <div className="w-fit mx-auto mt-8 mb-4">
-          <MainButton color="ORANGE" isDisabled={foodsLoading} onClick={handleLoadMore}>
-            {foodsLoading ? (
-              <div className="flex items-center gap-2">
-                Loading More...
-                <IonSpinner name="crescent" className="text-white w-[20px] h-[20px] ms-[6px]" />
-              </div>
-            ) : (
-              'Load More'
-            )}
-          </MainButton>
+          {foodsLoading && <CardLoading />}
+          {!foodsLoading && (
+            <MainButton color="ORANGE" onClick={handleLoadMore}>
+              Load More
+            </MainButton>
+          )}
         </div>
       )}
 
       {isSearch && !isSearchTab && showLoadMoreDisease && (
         <div className="w-fit mx-auto mt-8 mb-4">
-          <MainButton color="ORANGE" isDisabled={diseasesLoading} onClick={handleLoadMore}>
-            {diseasesLoading ? (
-              <div className="flex items-center gap-2">
-                Loading More...
-                <IonSpinner name="crescent" className="text-white w-[20px] h-[20px] ms-[6px]" />
-              </div>
-            ) : (
-              'Load More'
-            )}
-          </MainButton>
+          {diseasesLoading && <CardLoading />}
+          {!diseasesLoading && (
+            <MainButton color="ORANGE" onClick={handleLoadMore}>
+              Load More
+            </MainButton>
+          )}
         </div>
       )}
     </>

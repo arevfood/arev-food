@@ -84,7 +84,8 @@ const ContentMenstrual: React.FC = () => {
   }, [userDetail, setValue])
 
   const isEmpty =
-    !foodRecommendations || !isHaveHealthData || (foodRecommendations?.length ?? 0) === 0
+    !loadingGetFoodRecommendation &&
+    (!foodRecommendations || !isHaveHealthData || (foodRecommendations?.length ?? 0) === 0)
 
   return (
     <div>
@@ -121,14 +122,12 @@ const ContentMenstrual: React.FC = () => {
             />
           </div>
         )}
-
         {isEmpty && (
           <CardEmpty title="Your personalized food matches will appear here once we know you better." />
         )}
-
         {!isEmpty && (
           <Swiper slidesPerView={2.2} spaceBetween={12} centeredSlides={false}>
-            {foodRecommendations.map((foodRecommendation) => (
+            {foodRecommendations?.map((foodRecommendation) => (
               <SwiperSlide key={foodRecommendation.id} className="!min-h-[200px]">
                 <FoodCard
                   slug={foodRecommendation.id}

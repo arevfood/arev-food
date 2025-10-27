@@ -26,7 +26,7 @@ const ProfileBox: React.FC<propTypes> = ({ name, image, age }) => {
           <div className="text-[14px] font-paragraph">{age}</div>
         </div>
       </div>
-      {userDetail?.menstrual_cycle.track_menstrual_cycle === 'yes' && (
+      {userDetail?.menstrual_cycle?.track_menstrual_cycle === 'yes' && (
         <div className="mt-6">
           <MainButton color="WHITE" onClick={() => router.push('/menstrual')}>
             Menstrual Cycle

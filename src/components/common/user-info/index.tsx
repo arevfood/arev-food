@@ -11,6 +11,13 @@ const UserInfo: React.FC<propTypes> = ({ userInfo, additionalInfo }) => {
   return (
     <Card>
       <div className="px-4 py-6">
+        {!userInfo && (
+          <div className="w-full h-[100px] gap-2 mb-4 flex items-center justify-center bg-black_color/[0.03] rounded-[4px]">
+            <p className="text-[0.875rem] text-black_color/[0.6] text-center">
+              Add your details to personalize your nutrition journey.
+            </p>
+          </div>
+        )}
         {userInfo && (
           <div className="grid grid-cols-3 gap-2 mb-4">
             {userInfo.map((item, index) => {

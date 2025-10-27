@@ -71,7 +71,7 @@ const ContentsDiseaseDetails: React.FC<propTypes> = ({ data }) => {
       <div className="px-4 py-4">
         <div className="relative">
           <TextDescription
-            title={data.name.replace('_', ' ')}
+            title={data.name.replaceAll('_', ' ')}
             description={data.description}
             titleSize="large"
             withLinkRedirect={false}
@@ -140,28 +140,26 @@ const ContentsDiseaseDetails: React.FC<propTypes> = ({ data }) => {
           <IconTitle title="Food Recommendations" icon="/icons/meat.svg" />
         </div>
         <div className="mt-4">
-          {foodRecommendation.length === 0 ? (
-            <CardEmpty title="No Recommendation Food Data" />
-          ) : (
+          {foodRecommendation.length === 0 && (
+            <CardEmpty title="Your personalized food matches will appear here once we know you better." />
+          )}
+          {foodRecommendation.length > 0 && (
             <Swiper slidesPerView={2.2} spaceBetween={12} centeredSlides={false}>
-              {foodRecommendation &&
-                foodRecommendation.map((item) => {
-                  return (
-                    <SwiperSlide className="!min-h-[200px]">
-                      <FoodCard
-                        slug={item.id}
-                        image={item.image_url || ''}
-                        title={item.name}
-                        description={item.food_details?.description || ''}
-                        onFavorite={() => onFavorite({ food_id: item.id })}
-                        isFav={
-                          favoriteList?.findIndex((findFood) => findFood.id === item.id) !== -1 &&
-                          !!item.id
-                        }
-                      />
-                    </SwiperSlide>
-                  )
-                })}
+              {foodRecommendation.map((item) => (
+                <SwiperSlide key={item.id} className="!min-h-[200px]">
+                  <FoodCard
+                    slug={item.id}
+                    image={item.image_url || ''}
+                    title={item.name}
+                    description={item.food_details?.description || ''}
+                    onFavorite={() => onFavorite({ food_id: item.id })}
+                    isFav={
+                      favoriteList?.findIndex((findFood) => findFood.id === item.id) !== -1 &&
+                      !!item.id
+                    }
+                  />
+                </SwiperSlide>
+              ))}
             </Swiper>
           )}
         </div>

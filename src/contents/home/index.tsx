@@ -13,6 +13,8 @@ import { getAge } from '@/utils/generate-age'
 import CardEmpty from '@/components/wrapper/card-empty'
 import { FoodQueryDataModel } from '@/models/food-query'
 import { useEffect, useState } from 'react'
+import { IonIcon } from '@ionic/react'
+import { useHistory } from 'react-router-dom'
 
 type propTypes = {}
 
@@ -22,6 +24,7 @@ const ContentsHome: React.FC<propTypes> = () => {
   const { onGetFoodRecommendation } = useFoods({})
   const [foodRecommendationList, setFoodRecommendationList] = useState<FoodQueryDataModel[]>([])
   const isHaveRecommendationFood = !!userDetail?.health
+  const router = useHistory()
 
   const userProfile = userDetail
     ? {
@@ -54,13 +57,13 @@ const ContentsHome: React.FC<propTypes> = () => {
         title: 'Health Conditions',
         value: userDetail?.health?.health_conditions
           ? capitalize(userDetail?.health?.health_conditions)
-          : 'None',
+          : 'Tell us how your body feels — we’ll find foods that truly support you.',
       },
       {
         title: 'Dietary Preference',
         value: userDetail?.health?.dietary_preference
           ? capitalize(userDetail?.health?.dietary_preference)
-          : 'None',
+          : 'Share how you like to eat — we’ll keep your suggestions aligned with it.',
       },
     ],
   }
@@ -103,8 +106,14 @@ const ContentsHome: React.FC<propTypes> = () => {
       <div className="mt-2">
         <ProfileBox {...userProfile} image={userDetail?.photoUrl} />
       </div>
-      <div className="mt-6">
+      <div className="mt-6 flex justify-between items-center">
         <IconTitle title="User Info" icon="/icons/user.svg" />
+        <div
+          className="w-[32px] h-[32px] aspect-square rounded-[4px] bg-white flex items-center justify-center"
+          onClick={() => router.push('/setting/health-data')}
+        >
+          <IonIcon src="/icons/pen.svg" className="w-[14px] h-[14px] opacity-[0.6]" />
+        </div>
       </div>
       <div className="mt-4">
         <UserInfo userInfo={userInfo.info} additionalInfo={userInfo.additional} />
@@ -140,28 +149,26 @@ const ContentsHome: React.FC<propTypes> = () => {
         />
       </div>
       <div className="mt-4">
-        {!isHaveRecommendationFood || foodRecommendationList.length === 0 ? (
-          <CardEmpty title="No Recommendation Food Data" />
-        ) : (
+        {(!isHaveRecommendationFood || foodRecommendationList.length === 0) && (
+          <CardEmpty title="Ready for tailored food suggestions? Let’s get started." />
+        )}
+        {isHaveRecommendationFood && foodRecommendationList.length > 0 && (
           <Swiper slidesPerView={2.2} spaceBetween={12} centeredSlides={false}>
-            {foodRecommendationList &&
-              foodRecommendationList.map((item) => {
-                return (
-                  <SwiperSlide className="!min-h-[200px]">
-                    <FoodCard
-                      slug={item.id}
-                      image={item.image_url || ''}
-                      title={item.name}
-                      description={item.food_details?.description || ''}
-                      onFavorite={() => onFavorite({ food_id: item.id })}
-                      isFav={
-                        favoriteList?.findIndex((findFood) => findFood.id === item.id) !== -1 &&
-                        !!item.id
-                      }
-                    />
-                  </SwiperSlide>
-                )
-              })}
+            {foodRecommendationList.map((item) => (
+              <SwiperSlide key={item.id} className="!min-h-[200px]">
+                <FoodCard
+                  slug={item.id}
+                  image={item.image_url || ''}
+                  title={item.name}
+                  description={item.food_details?.description || ''}
+                  onFavorite={() => onFavorite({ food_id: item.id })}
+                  isFav={
+                    favoriteList?.findIndex((findFood) => findFood.id === item.id) !== -1 &&
+                    !!item.id
+                  }
+                />
+              </SwiperSlide>
+            ))}
           </Swiper>
         )}
       </div>
@@ -173,24 +180,23 @@ const ContentsHome: React.FC<propTypes> = () => {
         />
       </div>
       <div className="mt-4 mb-6">
-        {!favoriteList || favoriteList.length === 0 ? (
-          <CardEmpty title="No Favorite Food Data" />
-        ) : (
+        {(!favoriteList || favoriteList.length === 0) && (
+          <CardEmpty title="Nothing saved yet — tap the heart icon to keep your favorites close." />
+        )}
+        {favoriteList && favoriteList.length > 0 && (
           <Swiper slidesPerView={2.2} spaceBetween={12} centeredSlides={false}>
-            {favoriteList.map((item) => {
-              return (
-                <SwiperSlide className="!min-h-[200px]" key={item.id}>
-                  <FoodCard
-                    slug={item.id}
-                    image={item.image_url || ''}
-                    title={item.name}
-                    description={item.description}
-                    onFavorite={() => onFavorite({ food_id: item.id })}
-                    isFav
-                  />
-                </SwiperSlide>
-              )
-            })}
+            {favoriteList.map((item) => (
+              <SwiperSlide key={item.id} className="!min-h-[200px]">
+                <FoodCard
+                  slug={item.id}
+                  image={item.image_url || ''}
+                  title={item.name}
+                  description={item.description}
+                  onFavorite={() => onFavorite({ food_id: item.id })}
+                  isFav
+                />
+              </SwiperSlide>
+            ))}
           </Swiper>
         )}
       </div>

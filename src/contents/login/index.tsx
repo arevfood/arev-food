@@ -154,7 +154,7 @@ const ContentLogin: React.FC = () => {
                 },
               })}
               label="Password"
-              placeholder="Enter your email"
+              placeholder="Enter your password"
               type="password"
               errorMessage={errors.password?.message}
             />

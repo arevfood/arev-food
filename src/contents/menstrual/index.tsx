@@ -83,6 +83,9 @@ const ContentMenstrual: React.FC = () => {
     }
   }, [userDetail, setValue])
 
+  const isEmpty =
+    !foodRecommendations || !isHaveHealthData || (foodRecommendations?.length ?? 0) === 0
+
   return (
     <div>
       <div className="mt-6">
@@ -105,7 +108,7 @@ const ContentMenstrual: React.FC = () => {
         />
       </div>
       <div className="mt-4">
-        {loadingGetFoodRecommendation ? (
+        {loadingGetFoodRecommendation && (
           <div className="w-full h-[160px] flex items-center justify-center text-center">
             <IonSpinner
               name="crescent"
@@ -117,29 +120,29 @@ const ContentMenstrual: React.FC = () => {
               }
             />
           </div>
-        ) : !isHaveHealthData || (foodRecommendations?.length ?? 0) === 0 ? (
-          <CardEmpty title="No Recommendation Food Data" />
-        ) : (
+        )}
+
+        {isEmpty && (
+          <CardEmpty title="Your personalized food matches will appear here once we know you better." />
+        )}
+
+        {!isEmpty && (
           <Swiper slidesPerView={2.2} spaceBetween={12} centeredSlides={false}>
-            {foodRecommendations &&
-              foodRecommendations.map((foodRecommendation) => {
-                return (
-                  <SwiperSlide className="!min-h-[200px]">
-                    <FoodCard
-                      slug={foodRecommendation.id}
-                      image={foodRecommendation.image_url || ''}
-                      title={foodRecommendation.name}
-                      description={foodRecommendation.food_details?.description || ''}
-                      onFavorite={() => onFavoriteFood({ food_id: foodRecommendation.id })}
-                      isFav={
-                        favoriteList?.findIndex(
-                          (findFood) => findFood.id === foodRecommendation.id,
-                        ) !== -1 && !!foodRecommendation.id
-                      }
-                    />
-                  </SwiperSlide>
-                )
-              })}
+            {foodRecommendations.map((foodRecommendation) => (
+              <SwiperSlide key={foodRecommendation.id} className="!min-h-[200px]">
+                <FoodCard
+                  slug={foodRecommendation.id}
+                  image={foodRecommendation.image_url || ''}
+                  title={foodRecommendation.name}
+                  description={foodRecommendation.food_details?.description || ''}
+                  onFavorite={() => onFavoriteFood({ food_id: foodRecommendation.id })}
+                  isFav={
+                    favoriteList?.findIndex((findFood) => findFood.id === foodRecommendation.id) !==
+                      -1 && !!foodRecommendation.id
+                  }
+                />
+              </SwiperSlide>
+            ))}
           </Swiper>
         )}
       </div>

@@ -1,6 +1,8 @@
 import Card from '@/components/wrapper/card'
 import TextDescription from '@/components/common/text-description'
 import YellowBox from '@/components/wrapper/yellow-box'
+import { IonImg } from '@ionic/react'
+import { useHistory } from 'react-router'
 
 type propTypes = {
   userInfo?: { title: string; value: string }[]
@@ -8,6 +10,8 @@ type propTypes = {
 }
 
 const UserInfo: React.FC<propTypes> = ({ userInfo, additionalInfo }) => {
+  const router = useHistory()
+
   return (
     <Card>
       <div className="px-4 py-6">
@@ -23,7 +27,14 @@ const UserInfo: React.FC<propTypes> = ({ userInfo, additionalInfo }) => {
             {userInfo.map((item, index) => {
               return (
                 <YellowBox withGradient key={index}>
-                  <div className="py-4 flex flex-col items-center justify-center">
+                  <div
+                    className="py-4 flex flex-col items-center justify-center"
+                    onClick={() =>
+                      router.push(
+                        item.title === 'Gender' ? '/setting/profile' : '/setting/health-data',
+                      )
+                    }
+                  >
                     <div className="font-bold text-[16px] font-heading text-primary_color">
                       {item.title}
                     </div>
@@ -35,10 +46,16 @@ const UserInfo: React.FC<propTypes> = ({ userInfo, additionalInfo }) => {
           </div>
         )}
         {additionalInfo && (
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-4" onClick={() => router.push('/setting/health-data')}>
             {additionalInfo.map((item, index) => {
               return (
-                <div key={index}>
+                <div key={index} className="flex gap-[12px]">
+                  <div className="w-[28px] h-[28px] aspect-square flex items-center justify-center rounded-[4px] bg-[#ff6223]/[0.12]">
+                    <IonImg
+                      src={!index ? '/icons/stethoscope-primary.svg' : '/icons/lemon-primary.svg'}
+                      className="w-[14px] h-[14px] aspect-square"
+                    />
+                  </div>
                   <TextDescription
                     title={item.title}
                     description={item.value}

@@ -25,7 +25,9 @@ const ContentsWelcomeContent: React.FC = () => {
           <div className="absolute top-0 w-full h-full bg-linear-to-b from-primary_color/0 to-primary_color" />
           <div className="absolute bottom-[75px] p-4 text-left text-white_color">
             <h1 className="mb-6 !font-bold">Discover Foods That Fit You</h1>
-            <p className="mb-6">Get nutrition suggestions based on your body and health goals.</p>
+            <p className="mb-6 !font-heading">
+              Get nutrition suggestions based on your body and health goals.
+            </p>
           </div>
         </SwiperSlide>
         <SwiperSlide>
@@ -33,7 +35,7 @@ const ContentsWelcomeContent: React.FC = () => {
           <div className="absolute top-0 w-full h-full bg-linear-to-b from-primary_color/0 to-primary_color" />
           <div className="absolute bottom-[75px] p-4 text-left text-white_color">
             <h1 className="mb-6 !font-bold">Smarter Food, Better Energy</h1>
-            <p className="mb-6">
+            <p className="mb-6 !font-heading">
               Fuel your day with foods that help you stay energized, focused, and balanced.
             </p>
           </div>
@@ -43,7 +45,7 @@ const ContentsWelcomeContent: React.FC = () => {
           <div className="absolute top-0 w-full h-full bg-linear-to-b from-primary_color/0 to-primary_color" />
           <div className="absolute bottom-[75px] p-4 text-left text-white_color">
             <h1 className="mb-6 !font-bold">Health Insights That Matter</h1>
-            <p className="mb-6">
+            <p className="mb-6 !font-heading">
               Track your progress and get daily tips for feeling your best, every day.
             </p>
             <MainButton
@@ -53,6 +55,9 @@ const ContentsWelcomeContent: React.FC = () => {
             >
               Start Your Journey
             </MainButton>
+            <p className="mt-4 !font-heading text-[0.875rem] italic text-center">
+              "Your path to smarter eating begins here."
+            </p>
           </div>
         </SwiperSlide>
       </Swiper>

@@ -17,7 +17,7 @@ const ProfileBox: React.FC<propTypes> = ({ name, image, age }) => {
 
   return (
     <OrangeBox withBackground>
-      <div className="flex flex-wrap gap-4 items-center">
+      <div className="flex flex-wrap gap-4 items-center relative">
         <div>
           <Avatar image={image || '/images/user-placeholder.png'} />
         </div>

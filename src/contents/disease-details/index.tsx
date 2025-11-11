@@ -11,6 +11,7 @@ import CardEmpty from '@/components/wrapper/card-empty'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { useFavorite } from '@/hooks/data/favorite'
 import { useHistory } from 'react-router'
+import { capitalize } from '@/utils/capitalize-text'
 
 type propTypes = {
   data: DiseaseDetailsModel
@@ -53,8 +54,8 @@ const ContentsDiseaseDetails: React.FC<propTypes> = ({ data }) => {
           {Array.isArray(value) ? (
             <ul className="!mt-0 list-disc ml-[16px]">
               {value.map((item, index) => (
-                <li key={index} className="font-paragraph text-black/40 text-[14px] capitalize">
-                  {item}
+                <li key={index} className="font-paragraph text-black/40 text-[14px] mb-2">
+                  {capitalize(item)}
                 </li>
               ))}
             </ul>
@@ -95,11 +96,14 @@ const ContentsDiseaseDetails: React.FC<propTypes> = ({ data }) => {
                   return (
                     <div
                       key={index}
-                      className="text-black mb-3 last:mb-0 capitalize flex gap-3 items-center justify-between"
+                      className="text-black mb-3 last:mb-0 flex gap-3 items-center justify-between"
                       onClick={() => router.push(`/search?query=${item}&type=concept`)}
                     >
                       <div className="flex items-start gap-2">
-                        <div>✔</div> <div className="self-center capitalize">{item}</div>
+                        <div>✔</div>{' '}
+                        <div className="self-center text-[14px] font-paragraph w-[80%]">
+                          {capitalize(item)}
+                        </div>
                       </div>
                       <div className="font-paragraph text-primary_color text-[13px] flex items-center gap-[8px]">
                         <IonImg src="/icons/arrow-right-primary.svg" className="w-[20px]" />
@@ -124,7 +128,10 @@ const ContentsDiseaseDetails: React.FC<propTypes> = ({ data }) => {
                       onClick={() => router.push(`/search?query=${item}&type=concept`)}
                     >
                       <div className="flex items-start gap-2">
-                        <div>✔</div> <div className="self-center capitalize">{item}</div>
+                        <div>✔</div>{' '}
+                        <div className="self-center text-[14px] font-paragraph w-[100%]">
+                          {item}
+                        </div>
                       </div>
                       <div className="font-paragraph text-primary_color text-[13px] flex items-center gap-[8px]">
                         <IonImg src="/icons/arrow-right-primary.svg" className="w-[20px]" />

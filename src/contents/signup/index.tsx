@@ -51,7 +51,7 @@ const ContentSignup: React.FC = () => {
 
   return (
     <LayoutBlank fullscreen={true} background="var(--color-bg_color_2)">
-      <div className="h-full w-full flex items-center justify-center flex-col">
+      <div className="h-full w-full flex items-center justify-center flex-col mt-[40px]">
         <div className="flex items-center justify-center">
           <IonImg src="/arev-logo.png" className="w-[150px]" />
         </div>
@@ -131,7 +131,7 @@ const ContentSignup: React.FC = () => {
               </div>
             </div>
           </div>
-          <div className="mt-[80px] flex flex-wrap items-center justify-center">
+          <div className="mt-[10px] mb-[40px] flex flex-wrap items-center justify-center">
             <div className="text-center opacity-30 text-[12px] text-black_color">
               Already have an account?{' '}
             </div>

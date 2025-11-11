@@ -204,7 +204,7 @@ const ContentLogin: React.FC = () => {
               </div>
             </div>
           </div>
-          <div className="mt-[80px] flex flex-wrap items-center justify-center">
+          <div className="mt-[20px] mb-[40px] flex flex-wrap items-center justify-center">
             <div className="text-center opacity-30 text-[12px] text-black_color">New here? </div>
             <div
               className="ml-1 font-bold text-primary_color"

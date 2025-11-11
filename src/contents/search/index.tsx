@@ -171,6 +171,7 @@ const ContentSearch: React.FC = () => {
   useEffect(() => {
     handleSearch(query || '')
     handleSearchDisease(query || '')
+    setIsSearchTab(true)
   }, [query, handleSearch, handleSearchDisease])
 
   return (

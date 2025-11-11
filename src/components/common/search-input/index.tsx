@@ -135,6 +135,13 @@ const SearchInput: React.FC<propTypes> = ({ filterList, onFilter, onReset }) => 
     onReset?.()
   }
 
+  useEffect(() => {
+    const query = new URLSearchParams(location.search).get('query')
+    if (query) {
+      setSearchInput(query)
+    }
+  }, [location.search])
+
   return (
     <div className="relative" ref={wrapperRef}>
       <div className="relative">

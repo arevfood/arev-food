@@ -95,7 +95,7 @@ const ContentsDiseaseDetails: React.FC<propTypes> = ({ data }) => {
                   return (
                     <div
                       key={index}
-                      className="text-black mb-3 last:mb-0 capitalize flex gap-3 items-center"
+                      className="text-black mb-3 last:mb-0 capitalize flex gap-3 items-center justify-between"
                       onClick={() => router.push(`/search?query=${item}&type=concept`)}
                     >
                       <div className="flex items-start gap-2">

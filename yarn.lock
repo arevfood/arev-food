@@ -922,7 +922,11 @@
   dependencies:
     tslib "^2.4.0"
 
+<<<<<<< Updated upstream
 "@emnapi/wasi-threads@1.0.2", "@emnapi/wasi-threads@^1.0.2":
+=======
+"@emnapi/wasi-threads@^1.0.2", "@emnapi/wasi-threads@1.0.2":
+>>>>>>> Stashed changes
   version "1.0.2"
   resolved "https://registry.npmjs.org/@emnapi/wasi-threads/-/wasi-threads-1.0.2.tgz"
   integrity sha512-5n3nTJblwRi8LlXkJ9eBzu+kZR8Yxcc7ubakyQTFzPMtIhFpUBRbsnc2Dv88IZDIbCDlBiWrknhB4Lsz7mg6BA==
@@ -934,16 +938,27 @@
   resolved "https://registry.npmjs.org/@esbuild/aix-ppc64/-/aix-ppc64-0.20.2.tgz"
   integrity sha512-D+EBOJHXdNZcLJRBkhENNG8Wji2kgc9AZ9KiPr1JuZjsNtyHzrsfLRrY0tk2H2aoFu6RANO1y1iPPUCDYWkb5g==
 
+<<<<<<< Updated upstream
 "@esbuild/android-arm64@0.20.2":
   version "0.20.2"
   resolved "https://registry.npmjs.org/@esbuild/android-arm64/-/android-arm64-0.20.2.tgz"
   integrity sha512-mRzjLacRtl/tWU0SvD8lUEwb61yP9cqQo6noDZP/O8VkwafSYwZ4yWy24kan8jE/IMERpYncRt2dw438LP3Xmg==
 
+=======
+>>>>>>> Stashed changes
 "@esbuild/android-arm@0.20.2":
   version "0.20.2"
   resolved "https://registry.npmjs.org/@esbuild/android-arm/-/android-arm-0.20.2.tgz"
   integrity sha512-t98Ra6pw2VaDhqNWO2Oph2LXbz/EJcnLmKLGBJwEwXX/JAN83Fym1rU8l0JUWK6HkIbWONCSSatf4sf2NBRx/w==
 
+<<<<<<< Updated upstream
+=======
+"@esbuild/android-arm64@0.20.2":
+  version "0.20.2"
+  resolved "https://registry.npmjs.org/@esbuild/android-arm64/-/android-arm64-0.20.2.tgz"
+  integrity sha512-mRzjLacRtl/tWU0SvD8lUEwb61yP9cqQo6noDZP/O8VkwafSYwZ4yWy24kan8jE/IMERpYncRt2dw438LP3Xmg==
+
+>>>>>>> Stashed changes
 "@esbuild/android-x64@0.20.2":
   version "0.20.2"
   resolved "https://registry.npmjs.org/@esbuild/android-x64/-/android-x64-0.20.2.tgz"
@@ -969,16 +984,27 @@
   resolved "https://registry.npmjs.org/@esbuild/freebsd-x64/-/freebsd-x64-0.20.2.tgz"
   integrity sha512-d+DipyvHRuqEeM5zDivKV1KuXn9WeRX6vqSqIDgwIfPQtwMP4jaDsQsDncjTDDsExT4lR/91OLjRo8bmC1e+Cw==
 
+<<<<<<< Updated upstream
 "@esbuild/linux-arm64@0.20.2":
   version "0.20.2"
   resolved "https://registry.npmjs.org/@esbuild/linux-arm64/-/linux-arm64-0.20.2.tgz"
   integrity sha512-9pb6rBjGvTFNira2FLIWqDk/uaf42sSyLE8j1rnUpuzsODBq7FvpwHYZxQ/It/8b+QOS1RYfqgGFNLRI+qlq2A==
 
+=======
+>>>>>>> Stashed changes
 "@esbuild/linux-arm@0.20.2":
   version "0.20.2"
   resolved "https://registry.npmjs.org/@esbuild/linux-arm/-/linux-arm-0.20.2.tgz"
   integrity sha512-VhLPeR8HTMPccbuWWcEUD1Az68TqaTYyj6nfE4QByZIQEQVWBB8vup8PpR7y1QHL3CpcF6xd5WVBU/+SBEvGTg==
 
+<<<<<<< Updated upstream
+=======
+"@esbuild/linux-arm64@0.20.2":
+  version "0.20.2"
+  resolved "https://registry.npmjs.org/@esbuild/linux-arm64/-/linux-arm64-0.20.2.tgz"
+  integrity sha512-9pb6rBjGvTFNira2FLIWqDk/uaf42sSyLE8j1rnUpuzsODBq7FvpwHYZxQ/It/8b+QOS1RYfqgGFNLRI+qlq2A==
+
+>>>>>>> Stashed changes
 "@esbuild/linux-ia32@0.20.2":
   version "0.20.2"
   resolved "https://registry.npmjs.org/@esbuild/linux-ia32/-/linux-ia32-0.20.2.tgz"
@@ -5234,7 +5260,11 @@ lightningcss-win32-x64-msvc@1.30.1:
   resolved "https://registry.npmjs.org/lightningcss-win32-x64-msvc/-/lightningcss-win32-x64-msvc-1.30.1.tgz"
   integrity sha512-PVqXh48wh4T53F/1CCu8PIPCxLzWyCnn/9T5W1Jpmdy5h9Cwd+0YQS6/LwhHXSafuc61/xg9Lv5OrCby6a++jg==
 
+<<<<<<< Updated upstream
 lightningcss@1.30.1:
+=======
+lightningcss@^1.21.0, lightningcss@1.30.1:
+>>>>>>> Stashed changes
   version "1.30.1"
   resolved "https://registry.npmjs.org/lightningcss/-/lightningcss-1.30.1.tgz"
   integrity sha512-xi6IyHML+c9+Q3W0S4fCQJOym42pyurFiJUHEcEyHS0CeKzia4yZDEsLlqOFykxOdHpNy0NmvVO31vcSqAxJCg==
@@ -7084,6 +7114,9 @@ tslib@^1.9.0:
   version "1.14.1"
   resolved "https://registry.npmjs.org/tslib/-/tslib-1.14.1.tgz"
   integrity sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==
+
+tslib@^2.4.0, tslib@^2.8.0:
+  version "2.8.0"
 
 tunnel-agent@^0.6.0:
   version "0.6.0"

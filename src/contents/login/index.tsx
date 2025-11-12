@@ -24,7 +24,47 @@ const ContentLogin: React.FC = () => {
     formState: { errors },
   } = useForm<inputProps>()
 
-  const { onSignin, loading, loginWithGoogle, loginWithFacebook } = useAuth()
+  const { onSignin, loading, loginWithGoogle, loginWithFacebook, loginWithApple } = useAuth()
+
+  const onSubmitApple = async () => {
+    try {
+      const user = await loginWithApple()
+
+      if (user) {
+        const userRef = doc(firebaseDb, 'users', user.uid)
+        const userSnap = await getDoc(userRef)
+
+        if (!userSnap.exists()) {
+          await setDoc(userRef, {
+            uid: user.uid,
+            fullname: user.displayName || '',
+            email: user.email,
+            photoURL: user.photoURL || null,
+            createdAt: new Date(),
+          })
+          showToast({
+            header: 'Account Created',
+            message: 'Welcome! Your account has been set up.',
+            type: 'success',
+          })
+        } else {
+          showToast({
+            header: 'Login Successful',
+            message: `Welcome back, ${user.displayName || 'User'}!`,
+            type: 'success',
+          })
+        }
+
+        router.replace('/')
+      }
+    } catch (_error) {
+      showToast({
+        header: 'Login Failed',
+        message: 'Something went wrong while signing in with Apple.',
+        type: 'error',
+      })
+    }
+  }
 
   const onSubmit: SubmitHandler<inputProps> = async (data) => {
     await onSignin(data, {
@@ -199,9 +239,13 @@ const ContentLogin: React.FC = () => {
               >
                 <IonImg src="/icons/google.png" className="w-auto h-[24px]" />
               </button>
-              <div className="w-[58px] h-[58px] rounded-full bg-white_color flex items-center justify-center text-black_color opacity-50">
+              <button
+                type="button"
+                className="w-[58px] h-[58px] !rounded-full bg-white_color flex items-center justify-center text-black_color opacity-50"
+                onClick={onSubmitApple}
+              >
                 <IonImg src="/icons/apple.png" className="w-auto h-[24px]" />
-              </div>
+              </button>
             </div>
           </div>
           <div className="mt-[20px] mb-[40px] flex flex-wrap items-center justify-center">

@@ -11,6 +11,7 @@ import {
   signInWithRedirect,
   updatePassword,
   deleteUser,
+  OAuthProvider,
 } from 'firebase/auth'
 import { useCallback } from 'react'
 import { Capacitor } from '@capacitor/core'
@@ -112,6 +113,36 @@ export const useAuth = () => {
     },
   })
 
+  const { mutateAsync: loginWithApple, isPending: onAppleLoading } = useMutation({
+    mutationFn: useCallback(async () => {
+      const appleProvider = new OAuthProvider('apple.com')
+      appleProvider.addScope('email')
+      appleProvider.addScope('name')
+      let result
+
+      if (Capacitor.isNativePlatform()) {
+        // On mobile (iOS/Android), use redirect
+        result = await signInWithRedirect(firebaseAuth, appleProvider)
+      } else {
+        // On web, use popup
+        result = await signInWithPopup(firebaseAuth, appleProvider)
+      }
+
+      return result.user
+    }, []),
+
+    onSuccess: (result) => {
+      queryClient.invalidateQueries({ queryKey: [queryKey] })
+      MainNotification({ type: 'success', entity, action: 'signin' })
+      return result
+    },
+
+    onError: (error) => {
+      console.error('Apple login error:', error)
+      MainNotification({ type: 'error', entity, action: 'signin' })
+    },
+  })
+
   const { mutateAsync: loginWithFacebook, isPending: onFacebookLoading } = useMutation({
     mutationFn: useCallback(async () => {
       let result
@@ -195,6 +226,7 @@ export const useAuth = () => {
       onSignupLoading ||
       onGoogleLoading ||
       onFacebookLoading ||
+      onAppleLoading ||
       onChangePasswordLoading ||
       onDeleteLoading,
     onSignin,
@@ -202,10 +234,12 @@ export const useAuth = () => {
     onSignup,
     loginWithGoogle,
     loginWithFacebook,
+    loginWithApple,
     onDeleteAccount,
     onChangePassword,
     onChangePasswordLoading,
     onFacebookLoading,
+    onAppleLoading,
     onDeleteLoading,
   }
 }

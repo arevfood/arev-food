@@ -252,7 +252,6 @@ const ContentsFoodDetails: React.FC<{ id: string }> = ({ id }) => {
                         .filter(
                           (item) =>
                             Number(item.value) > 0 &&
-                            // make it contain word from primary nutrient
                             primaryNutrient.some((nutrient) =>
                               item.title.toLowerCase().includes(nutrient),
                             ),

@@ -188,7 +188,7 @@ const ContentSearch: React.FC = () => {
             className={`text-center py-2 px-5 rounded-full text-[0.913rem] ${!isSearchTab ? 'text-white_color bg-primary_color' : 'text-black_color/[0.6] bg-transparent hover:bg-black_color/[0.04]'}`}
             onClick={() => setIsSearchTab(false)}
           >
-            Disease
+            Condition
           </p>
         </div>
       </div>

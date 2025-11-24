@@ -24,9 +24,9 @@ const ContentsWelcomeContent: React.FC = () => {
           <IonImg src="/welcome-content.jpg" className="h-full object-cover object-left" />
           <div className="absolute top-0 w-full h-full bg-linear-to-b from-primary_color/0 to-primary_color" />
           <div className="absolute bottom-[75px] p-4 text-left text-white_color">
-            <h1 className="mb-6 !font-bold">Discover Foods That Fit You</h1>
+            <h1 className="mb-6 !font-bold">Discover the Foods Your Body Truly Needs</h1>
             <p className="mb-6 !font-heading">
-              Get nutrition suggestions based on your body and health goals.
+              Personalized nutrition guidance based on your health, symptoms, and goals.
             </p>
           </div>
         </SwiperSlide>

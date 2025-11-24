@@ -30,6 +30,56 @@ const ContentsFoodDetails: React.FC<{ id: string }> = ({ id }) => {
   const { data: favoriteList, onFavorite } = useFavorite()
   const isFav = favoriteList?.findIndex((food) => food.id === id) !== -1
 
+  const parseNutritionInfo =
+    data &&
+    Object.values(
+      data.nutritional_information
+        .map((item) => {
+          if (item.title.includes('MUFA') || item.title.includes('PUFA')) {
+            return {
+              title: 'Healthy Fats',
+              value: item.value,
+              unit: item.unit,
+            }
+          }
+
+          if (item.title.includes('SFA')) {
+            return {
+              title: 'Saturated Fats',
+              value: item.value,
+              unit: item.unit,
+            }
+          }
+
+          if (item.title.toLowerCase().includes('carbohydrate')) {
+            return {
+              title: 'Carbohydrates',
+              value: item.value,
+              unit: item.unit,
+            }
+          }
+
+          return {
+            title: item.title,
+            value: item.value,
+            unit: item.unit,
+          }
+        })
+        .reduce(
+          (acc, item) => {
+            if (!acc[item.title]) {
+              acc[item.title] = { ...item }
+            } else {
+              acc[item.title].value = (Number(acc[item.title].value) + Number(item.value)).toFixed(
+                2,
+              )
+            }
+            return acc
+          },
+          {} as Record<string, { title: string; value: number | string; unit: string }>,
+        ),
+    )
+
   const ContentItem = ({
     title,
     value,
@@ -248,23 +298,24 @@ const ContentsFoodDetails: React.FC<{ id: string }> = ({ id }) => {
                 <div className="mt-4">
                   <Card>
                     <div className="py-6 px-4">
-                      {data.nutritional_information
-                        .filter(
-                          (item) =>
-                            Number(item.value) > 0 &&
-                            primaryNutrient.some((nutrient) =>
-                              item.title.toLowerCase().includes(nutrient),
-                            ),
-                        )
-                        .map((item, index) => {
-                          return (
-                            <ContentItem
-                              title={item.title}
-                              value={`${item.value}${item.unit} / 100g`}
-                              key={index}
-                            />
+                      {parseNutritionInfo &&
+                        parseNutritionInfo
+                          .filter(
+                            (item) =>
+                              Number(item.value) > 0 &&
+                              primaryNutrient.some((nutrient) =>
+                                item.title.toLowerCase().includes(nutrient),
+                              ),
                           )
-                        })}
+                          .map((item, index) => {
+                            return (
+                              <ContentItem
+                                title={item.title}
+                                value={`${item.value}${item.unit} / 100g`}
+                                key={index}
+                              />
+                            )
+                          })}
                     </div>
                   </Card>
                 </div>
@@ -276,23 +327,24 @@ const ContentsFoodDetails: React.FC<{ id: string }> = ({ id }) => {
                 <div className="mt-4">
                   <Card>
                     <div className="py-6 px-4">
-                      {data.nutritional_information
-                        .filter(
-                          (item) =>
-                            Number(item.value) > 0 &&
-                            !primaryNutrient.some((nutrient) =>
-                              item.title.toLowerCase().includes(nutrient),
-                            ),
-                        )
-                        .map((item, index) => {
-                          return (
-                            <ContentItem
-                              title={item.title}
-                              value={`${item.value}${item.unit} / 100g`}
-                              key={index}
-                            />
+                      {parseNutritionInfo &&
+                        parseNutritionInfo
+                          .filter(
+                            (item) =>
+                              Number(item.value) > 0 &&
+                              !primaryNutrient.some((nutrient) =>
+                                item.title.toLowerCase().includes(nutrient),
+                              ),
                           )
-                        })}
+                          .map((item, index) => {
+                            return (
+                              <ContentItem
+                                title={item.title}
+                                value={`${item.value}${item.unit} / 100g`}
+                                key={index}
+                              />
+                            )
+                          })}
                     </div>
                   </Card>
                 </div>

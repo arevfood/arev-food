@@ -1,0 +1,15 @@
+export const primaryNutrient = [
+  'calories',
+  'protein',
+  'carbohydrates',
+  'carbohydrate',
+  'fiber',
+  'sugars',
+  'fat',
+  'fats',
+  'vitamins',
+  'minerals',
+  'antioxidants',
+  'polyphenols',
+  'energy',
+]

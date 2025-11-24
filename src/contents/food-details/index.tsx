@@ -11,6 +11,7 @@ import { useFood } from '@/hooks/data/food'
 import { useFoodFilterCtx } from '@/context/food-filter'
 import { useFoodReason } from '@/hooks/data/food-reason'
 import CardLoading from '@/components/wrapper/card-loading'
+import { primaryNutrient } from '@/hooks/data/primary-nutrient'
 
 const ContentsFoodDetails: React.FC<{ id: string }> = ({ id }) => {
   const { data: userDetail } = useUser()
@@ -240,12 +241,50 @@ const ContentsFoodDetails: React.FC<{ id: string }> = ({ id }) => {
             </div>
             {data.nutritional_information?.length ? (
               <div className="mt-8">
-                <IconTitle icon="/icons/pin.svg" title="Nutritional Information" />
+                <IconTitle
+                  icon="/icons/food-health-insight.svg"
+                  title="Primary Nutritional Information"
+                />
                 <div className="mt-4">
                   <Card>
                     <div className="py-6 px-4">
                       {data.nutritional_information
-                        .filter((item) => Number(item.value) > 0)
+                        .filter(
+                          (item) =>
+                            Number(item.value) > 0 &&
+                            // make it contain word from primary nutrient
+                            primaryNutrient.some((nutrient) =>
+                              item.title.toLowerCase().includes(nutrient),
+                            ),
+                        )
+                        .map((item, index) => {
+                          return (
+                            <ContentItem
+                              title={item.title}
+                              value={`${item.value}${item.unit} / 100g`}
+                              key={index}
+                            />
+                          )
+                        })}
+                    </div>
+                  </Card>
+                </div>
+              </div>
+            ) : null}
+            {data.nutritional_information?.length ? (
+              <div className="mt-8">
+                <IconTitle icon="/icons/pin.svg" title="Secondary Nutritional Information" />
+                <div className="mt-4">
+                  <Card>
+                    <div className="py-6 px-4">
+                      {data.nutritional_information
+                        .filter(
+                          (item) =>
+                            Number(item.value) > 0 &&
+                            !primaryNutrient.some((nutrient) =>
+                              item.title.toLowerCase().includes(nutrient),
+                            ),
+                        )
                         .map((item, index) => {
                           return (
                             <ContentItem

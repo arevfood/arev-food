@@ -10,6 +10,12 @@ export const foodFilterData: FilterListModel[] = [
       { key: 'heart_healthy', label: 'Heart-Healthy' },
       { key: 'diabetes_friendly', label: 'Diabetes-Friendly' },
       { key: 'iron_rich', label: 'Iron Rich' },
+      { key: 'inflammation', label: 'Inflammation' },
+      { key: 'hormonal_balance', label: 'Hormonal Balance' },
+      { key: 'lipedema', label: 'Lipedema' },
+      { key: 'gut_health', label: 'Gut Health' },
+      { key: 'skin_health', label: 'Skin Health' },
+      { key: 'mood_stress_support', label: 'Mood / Stress Support' },
     ],
   },
   {

@@ -8,6 +8,7 @@ import { useHistory } from 'react-router'
 import { useToastAlert } from '@/hooks/ui/toast-alert'
 import { doc, getDoc, setDoc } from 'firebase/firestore'
 import { firebaseDb } from '@/utils/connections/firebase'
+import ResetPassword from '@/components/common/reset-password'
 
 type inputProps = {
   email: string
@@ -217,9 +218,7 @@ const ContentLogin: React.FC = () => {
               )}
             </MainButton>
           </div>
-          <div className="w-full text-black_color text-right opacity-30 text-[12px] mt-2">
-            Forgot Password?
-          </div>
+          <ResetPassword />
           <div className="mt-[80px]">
             <div className="w-full text-black_color text-center opacity-30 text-[12px] mt-2">
               or continue With

@@ -2,7 +2,7 @@ import { GeneralKeyValue } from '@/models/general-key-value'
 import { UserSignup } from '@/models/user'
 import { firebaseAuth, firebaseDb } from '@/utils/connections/firebase'
 import { errorHandler } from '@/utils/error-handler'
-import { createUserWithEmailAndPassword } from 'firebase/auth'
+import { createUserWithEmailAndPassword, sendPasswordResetEmail } from 'firebase/auth'
 import { deleteDoc, doc, getDoc, setDoc } from 'firebase/firestore'
 
 export const FIREBASE_SIGNUP = async ({ email, password, fullname }: UserSignup) => {
@@ -21,6 +21,21 @@ export const FIREBASE_SIGNUP = async ({ email, password, fullname }: UserSignup)
     const result = userData.data()
 
     return result
+  } catch (error) {
+    if (error instanceof Error) {
+      errorHandler({
+        code: 500,
+        details: error.message,
+        error: 'INTERNAL_SERVER_ERROR',
+        error_code: 'FIREBASE_SIGNUP_ERROR',
+      })
+    }
+  }
+}
+
+export const FIREBASE_RESET_PASSWORD = async ({ email }: { email: string }) => {
+  try {
+    await sendPasswordResetEmail(firebaseAuth, email)
   } catch (error) {
     if (error instanceof Error) {
       errorHandler({

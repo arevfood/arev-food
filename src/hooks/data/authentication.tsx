@@ -1,6 +1,6 @@
 import MainNotification from '@/components/common/notifications'
 import { SessionUser, UserLogin, UserSignup } from '@/models/user'
-import { FIREBASE_SIGNUP } from '@/providers/firebase/user'
+import { FIREBASE_RESET_PASSWORD, FIREBASE_SIGNUP } from '@/providers/firebase/user'
 import { firebaseAuth, googleProvider, facebookProvider } from '@/utils/connections/firebase'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import {
@@ -89,6 +89,23 @@ export const useAuth = () => {
     },
     onError: () => {
       MainNotification({ type: 'error', entity: entity, action: 'signout' })
+    },
+  })
+
+  const { mutateAsync: onResetPassword, isPending: onResetPasswordLoading } = useMutation({
+    mutationFn: useCallback(async (payload: { email: string }) => {
+      const result = await FIREBASE_RESET_PASSWORD({
+        email: payload.email,
+      })
+      return result
+    }, []),
+    onSuccess: (result) => {
+      queryClient.invalidateQueries({ queryKey: [queryKey] })
+      MainNotification({ type: 'success', entity: entity, action: 'signin' })
+      return result
+    },
+    onError: () => {
+      MainNotification({ type: 'error', entity: entity, action: 'signin' })
     },
   })
 
@@ -228,7 +245,8 @@ export const useAuth = () => {
       onFacebookLoading ||
       onAppleLoading ||
       onChangePasswordLoading ||
-      onDeleteLoading,
+      onDeleteLoading ||
+      onResetPasswordLoading,
     onSignin,
     onSignOut,
     onSignup,
@@ -237,6 +255,8 @@ export const useAuth = () => {
     loginWithApple,
     onDeleteAccount,
     onChangePassword,
+    onResetPassword,
+    onResetPasswordLoading,
     onChangePasswordLoading,
     onFacebookLoading,
     onAppleLoading,

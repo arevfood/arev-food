@@ -3,7 +3,6 @@ import CustomInput from '../input'
 import { useState, useEffect, useRef } from 'react'
 import { v4 as uuid } from 'uuid'
 import { FilterListModel } from '@/models/filter-list'
-import CustomCheckbox from '@/components/common/checkbox'
 import MainButton from '@/components/common/button'
 import { useLocation, useHistory } from 'react-router'
 import { useFoodFilterCtx } from '@/context/food-filter'
@@ -12,6 +11,7 @@ import { diseaseSearch } from '@/hooks/data/disease-search'
 import { useFoods } from '@/hooks/data/food'
 import { FoodQueryDataModel } from '@/models/food-query'
 import debounce from 'lodash/debounce'
+import SearchFilterItem from '../search-filter-item'
 
 type propTypes = {
   filterList: FilterListModel[]
@@ -231,24 +231,11 @@ const SearchInput: React.FC<propTypes> = ({ filterList, onFilter, onReset }) => 
               {filterList.map((item) => {
                 return (
                   <div key={uuid()} className="mb-6">
-                    <div className="font-heading font-bold mb-2">{item.label}</div>
-                    <div className="flex flex-wrap gap-4">
-                      {item.items.map((list) => {
-                        return (
-                          <CustomCheckbox
-                            key={list.key}
-                            label={list.label}
-                            checked={selectedFilter[item.key]?.includes(list.key) || false}
-                            onChange={() => {
-                              handleSelectFilter({
-                                key: item.key,
-                                value: list.key,
-                              })
-                            }}
-                          />
-                        )
-                      })}
-                    </div>
+                    <SearchFilterItem
+                      item={item}
+                      selectedFilter={selectedFilter}
+                      handleSelectFilter={handleSelectFilter}
+                    />
                   </div>
                 )
               })}

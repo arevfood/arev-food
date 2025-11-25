@@ -93,13 +93,7 @@ const SearchInput: React.FC<propTypes> = ({ filterList, onFilter, onReset }) => 
     const query = (value !== undefined ? value : searchInput).trim()
 
     if (!query) {
-      const params = new URLSearchParams(location.search)
-      params.delete('query')
-      router.push({
-        pathname: location.pathname,
-        search: `?${params.toString()}`,
-      })
-      setShowSuggestions(false)
+      handleResetFilter()
       return
     }
 

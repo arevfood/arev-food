@@ -69,24 +69,29 @@ const ContentSearch: React.FC = () => {
 
   const handleSearch = useCallback(
     async (search: string, recentTemperature?: number) => {
-      if (query && userDetail) {
+      if (query) {
         const temperature = recentTemperature || 0
         const data = await foodsSearch({
           metadata: {
-            age: String(getAge(userDetail.dateBirth)),
-            country: userDetail.country,
-            city: userDetail.city,
-            gender: userDetail.gender,
-            height: String(userDetail.health.height),
-            weight: String(userDetail.health.weight),
-            blood_sugar_level: String(userDetail.health.blood_sugar_level),
-            blood_pressure: userDetail.health.blood_pressure,
-            dietary_preference: userDetail.health.dietary_preference,
-            health_condition: userDetail.health.health_conditions
-              .split(',')
-              .map((condition: string) => condition.trim()),
-            health_conditions: [search],
-            lifestyle: userDetail.health.lifestyle,
+            age: userDetail?.dateBirth ? String(getAge(userDetail.dateBirth)) : '',
+            country: userDetail?.country || '',
+            city: userDetail?.city || '',
+            gender: userDetail?.gender || '',
+            height: userDetail?.health?.height ? String(userDetail.health.height) : '',
+            weight: userDetail?.health?.weight ? String(userDetail.health.weight) : '',
+            blood_sugar_level: userDetail?.health?.blood_sugar_level
+              ? String(userDetail.health.blood_sugar_level)
+              : '',
+            blood_pressure: userDetail?.health?.blood_pressure
+              ? userDetail.health.blood_pressure
+              : '',
+            dietary_preference: userDetail?.health?.dietary_preference || '',
+            health_condition: userDetail?.health?.health_conditions
+              ? userDetail.health.health_conditions
+                  .split(',')
+                  .map((condition: string) => condition.trim())
+              : [],
+            lifestyle: userDetail?.health?.lifestyle || '',
           },
           query: search,
           temperature,
@@ -224,8 +229,9 @@ const ContentSearch: React.FC = () => {
                     title={food.name}
                     description={food.food_details?.description || '-'}
                     isFav={
-                      favoriteData?.findIndex((findFood) => findFood.id === food.id) !== -1 &&
-                      Boolean(food.id)
+                      favoriteData &&
+                      favoriteData.findIndex((findFood) => findFood.id === food.id) !== -1 &&
+                      !!food.id
                     }
                     onFavorite={() => onFavorite({ food_id: food.id })}
                     loading={foodsLoading}

@@ -11,7 +11,8 @@ import { useFood } from '@/hooks/data/food'
 import { useFoodFilterCtx } from '@/context/food-filter'
 import { useFoodReason } from '@/hooks/data/food-reason'
 import CardLoading from '@/components/wrapper/card-loading'
-import { primaryNutrient } from '@/hooks/data/primary-nutrient'
+import ContentItem from '@/components/common/content-item'
+import NutritionAccordion from '@/components/common/nutrition-accordion'
 
 const ContentsFoodDetails: React.FC<{ id: string }> = ({ id }) => {
   const { data: userDetail } = useUser()
@@ -29,81 +30,6 @@ const ContentsFoodDetails: React.FC<{ id: string }> = ({ id }) => {
 
   const { data: favoriteList, onFavorite } = useFavorite()
   const isFav = favoriteList?.findIndex((food) => food.id === id) !== -1
-
-  const parseNutritionInfo =
-    data &&
-    Object.values(
-      data.nutritional_information
-        .map((item) => {
-          if (item.title.includes('MUFA') || item.title.includes('PUFA')) {
-            return {
-              title: 'Healthy Fats',
-              value: item.value,
-              unit: item.unit,
-            }
-          }
-
-          if (item.title.includes('SFA')) {
-            return {
-              title: 'Saturated Fats',
-              value: item.value,
-              unit: item.unit,
-            }
-          }
-
-          if (item.title.toLowerCase().includes('carbohydrate')) {
-            return {
-              title: 'Carbohydrates',
-              value: item.value,
-              unit: item.unit,
-            }
-          }
-
-          return {
-            title: item.title,
-            value: item.value,
-            unit: item.unit,
-          }
-        })
-        .reduce(
-          (acc, item) => {
-            if (!acc[item.title]) {
-              acc[item.title] = { ...item }
-            } else {
-              acc[item.title].value = (Number(acc[item.title].value) + Number(item.value)).toFixed(
-                2,
-              )
-            }
-            return acc
-          },
-          {} as Record<string, { title: string; value: number | string; unit: string }>,
-        ),
-    )
-
-  const ContentItem = ({
-    title,
-    value,
-    type = 'row',
-  }: {
-    title: string
-    value: string
-    type?: string
-  }) => {
-    return (
-      <>
-        <div
-          className={`flex ${type === 'column' ? 'flex-col gap-2' : 'flex-row gap-4'} items-start justify-between text-black mb-6 last:mb-0`}
-        >
-          <div className="font-bold font-heading text-[16px] w-[50%]">{title}</div>
-          <div
-            className={`text-black/40 text-[14px] ${type === 'row' ? 'w-[50%] text-right' : ''}`}
-          >
-            {value}
-          </div>
-        </div>
-      </>
-    )
-  }
 
   const ContentTitleFoodInsight = ({
     title,
@@ -290,65 +216,10 @@ const ContentsFoodDetails: React.FC<{ id: string }> = ({ id }) => {
               </div>
             </div>
             {data.nutritional_information?.length ? (
-              <div className="mt-8">
-                <IconTitle
-                  icon="/icons/food-health-insight.svg"
-                  title="Primary Nutritional Information"
-                />
-                <div className="mt-4">
-                  <Card>
-                    <div className="py-6 px-4">
-                      {parseNutritionInfo &&
-                        parseNutritionInfo
-                          .filter(
-                            (item) =>
-                              Number(item.value) > 0 &&
-                              primaryNutrient.some((nutrient) =>
-                                item.title.toLowerCase().includes(nutrient),
-                              ),
-                          )
-                          .map((item, index) => {
-                            return (
-                              <ContentItem
-                                title={item.title}
-                                value={`${item.value}${item.unit} / 100g`}
-                                key={index}
-                              />
-                            )
-                          })}
-                    </div>
-                  </Card>
-                </div>
-              </div>
+              <NutritionAccordion data={data.nutritional_information} type="primary" />
             ) : null}
             {data.nutritional_information?.length ? (
-              <div className="mt-8">
-                <IconTitle icon="/icons/pin.svg" title="Secondary Nutritional Information" />
-                <div className="mt-4">
-                  <Card>
-                    <div className="py-6 px-4">
-                      {parseNutritionInfo &&
-                        parseNutritionInfo
-                          .filter(
-                            (item) =>
-                              Number(item.value) > 0 &&
-                              !primaryNutrient.some((nutrient) =>
-                                item.title.toLowerCase().includes(nutrient),
-                              ),
-                          )
-                          .map((item, index) => {
-                            return (
-                              <ContentItem
-                                title={item.title}
-                                value={`${item.value}${item.unit} / 100g`}
-                                key={index}
-                              />
-                            )
-                          })}
-                    </div>
-                  </Card>
-                </div>
-              </div>
+              <NutritionAccordion data={data.nutritional_information} type="secondary" />
             ) : null}
           </div>
         </>

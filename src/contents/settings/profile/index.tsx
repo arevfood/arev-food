@@ -156,7 +156,7 @@ const ContentsSettingsProfile: React.FC = () => {
           placeholder="Choose your gender"
           value={watch('gender')}
           options={genderOptions}
-          onChange={(val) => setValue('gender', val)}
+          onChange={(val) => setValue('gender', `${val}`)}
           errorMessage={errors.gender?.message}
         />
       </div>
@@ -171,7 +171,7 @@ const ContentsSettingsProfile: React.FC = () => {
             countries ? countries.map((country) => ({ label: country, value: country })) : []
           }
           onChange={async (val) => {
-            setValue('country', val)
+            setValue('country', `${val}`)
             setValue('city', '')
           }}
           errorMessage={errors.country?.message}
@@ -181,7 +181,7 @@ const ContentsSettingsProfile: React.FC = () => {
           placeholder="Choose your city"
           value={watch('city')}
           options={cities ? cities.map((city) => ({ label: city, value: city })) : []}
-          onChange={(val) => setValue('city', val)}
+          onChange={(val) => setValue('city', `${val}`)}
           errorMessage={errors.city?.message}
         />
       </div>

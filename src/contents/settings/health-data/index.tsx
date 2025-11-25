@@ -5,9 +5,9 @@ import { useToastAlert } from '@/hooks/ui/toast-alert'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useEffect } from 'react'
 import CustomSelect from '@/components/common/select-option'
-import { dietaryPreferenceOptions } from '@/data/dietary-preference'
 import { IonSpinner } from '@ionic/react'
 import { useHistory } from 'react-router'
+import { foodFilterData } from '@/data/food-filter'
 
 type inputProps = {
   health: {
@@ -15,7 +15,7 @@ type inputProps = {
     weight: number
     blood_sugar_level: number
     blood_pressure: string
-    health_conditions: string
+    health_conditions: string[]
     dietary_preference: string
     lifestyle: string
   }
@@ -42,6 +42,9 @@ const ContentsSettingsHealthData: React.FC = () => {
       }, {}),
     }
 
+    console.log('data', data)
+    console.log('filteredPayload', filteredPayload)
+
     const result = await onUpdate({ payload: filteredPayload })
 
     if (!result) {
@@ -67,7 +70,7 @@ const ContentsSettingsHealthData: React.FC = () => {
       setValue('health.weight', userDetail.health?.weight)
       setValue('health.blood_sugar_level', userDetail.health?.blood_sugar_level)
       setValue('health.blood_pressure', userDetail.health?.blood_pressure)
-      setValue('health.health_conditions', userDetail.health?.health_conditions)
+      setValue('health.health_conditions', userDetail.health?.health_conditions.split(','))
       setValue('health.dietary_preference', userDetail.health?.dietary_preference)
       setValue('health.lifestyle', userDetail.health?.lifestyle)
     }
@@ -116,10 +119,26 @@ const ContentsSettingsHealthData: React.FC = () => {
           placeholder="e.g. 120/80"
           errorMessage={errors.health?.blood_pressure?.message}
         />
-        <CustomInput
-          {...register('health.health_conditions')}
-          label="Health Conditions (Optional)"
-          placeholder="e.g. Diabetes, Hypertension"
+        <CustomSelect
+          multiple
+          label="Health Condition (Optional)"
+          placeholder="Choose your health condition"
+          value={watch('health.health_conditions')}
+          options={
+            foodFilterData
+              .find((item) => item.key === 'health_conditions')
+              ?.items?.map((item) => ({
+                value: item.key,
+                label: item.label,
+              })) || []
+          }
+          onChange={(val) => {
+            if (Array.isArray(val)) {
+              setValue('health.health_conditions', val)
+            } else {
+              setValue('health.health_conditions', [val])
+            }
+          }}
           errorMessage={errors.health?.health_conditions?.message}
         />
       </div>
@@ -129,8 +148,17 @@ const ContentsSettingsHealthData: React.FC = () => {
           label="Diet Type"
           placeholder="Choose your diet type"
           value={watch('health.dietary_preference')}
-          options={dietaryPreferenceOptions}
-          onChange={(val) => setValue('health.dietary_preference', val)}
+          options={
+            foodFilterData
+              .find((item) => item.key === 'dietary_preference')
+              ?.items?.map((item) => ({
+                value: item.key,
+                label: item.label,
+              })) || []
+          }
+          onChange={(val) => {
+            setValue('health.dietary_preference', `${val}`)
+          }}
           errorMessage={errors.health?.dietary_preference?.message}
         />
       </div>

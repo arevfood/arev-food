@@ -127,7 +127,7 @@ const ContentsSettingsMenstrualCycle: React.FC = () => {
             placeholder="Choose your Cycle Pattern (Optional)"
             value={watch('menstrual_cycle.cycle_pattern')}
             options={cyclePatternOptions}
-            onChange={(val) => setValue('menstrual_cycle.cycle_pattern', val)}
+            onChange={(val) => setValue('menstrual_cycle.cycle_pattern', `${val}`)}
             errorMessage={errors.menstrual_cycle?.cycle_pattern?.message}
           />
         </div>
@@ -137,7 +137,7 @@ const ContentsSettingsMenstrualCycle: React.FC = () => {
             placeholder="Choose your PMS Intensity (Optional)"
             value={watch('menstrual_cycle.pms_intensity')}
             options={pmsIntensityOptions}
-            onChange={(val) => setValue('menstrual_cycle.pms_intensity', val)}
+            onChange={(val) => setValue('menstrual_cycle.pms_intensity', `${val}`)}
             errorMessage={errors.menstrual_cycle?.pms_intensity?.message}
           />
         </div>
@@ -147,7 +147,7 @@ const ContentsSettingsMenstrualCycle: React.FC = () => {
             placeholder="Do you want to track your menstrual cycle?"
             value={watch('menstrual_cycle.track_menstrual_cycle')}
             options={trackMenstrualCycleOptions}
-            onChange={(val) => setValue('menstrual_cycle.track_menstrual_cycle', val)}
+            onChange={(val) => setValue('menstrual_cycle.track_menstrual_cycle', `${val}`)}
             errorMessage={errors.menstrual_cycle?.track_menstrual_cycle?.message}
           />
         </div>

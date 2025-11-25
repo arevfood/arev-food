@@ -218,7 +218,7 @@ const ContentMenstrual: React.FC = () => {
               placeholder="Choose cycle pattern"
               value={watch('menstrual_cycle.cycle_pattern')}
               options={cyclePatternOptions}
-              onChange={(val) => setValue('menstrual_cycle.cycle_pattern', val)}
+              onChange={(val) => setValue('menstrual_cycle.cycle_pattern', `${val}`)}
               errorMessage={errors.menstrual_cycle?.cycle_pattern?.message}
             />
           </div>
@@ -228,7 +228,7 @@ const ContentMenstrual: React.FC = () => {
               placeholder="Choose pms intensity"
               value={watch('menstrual_cycle.pms_intensity')}
               options={pmsIntensityOptions}
-              onChange={(val) => setValue('menstrual_cycle.pms_intensity', val)}
+              onChange={(val) => setValue('menstrual_cycle.pms_intensity', `${val}`)}
               errorMessage={errors.menstrual_cycle?.pms_intensity?.message}
             />
           </div>

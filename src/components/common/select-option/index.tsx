@@ -9,11 +9,12 @@ type Option = {
 type Props = {
   label?: string
   placeholder?: string
-  value?: string
+  value?: string | string[]
   options: Option[]
   errorMessage?: string
-  onChange?: (value: string) => void
+  onChange?: (value: string | string[]) => void
   disabled?: boolean
+  multiple?: boolean
 }
 
 const CustomSelect: React.FC<Props> = ({
@@ -24,6 +25,7 @@ const CustomSelect: React.FC<Props> = ({
   errorMessage,
   onChange = () => {},
   disabled = false,
+  multiple = false,
 }) => {
   return (
     <div className="w-full relative flex flex-col gap-[6px] mb-[16px]">
@@ -31,13 +33,14 @@ const CustomSelect: React.FC<Props> = ({
       <IonList className="custom-list">
         <IonItem>
           <IonSelect
+            multiple={multiple}
             placeholder={placeholder}
             value={value}
             onIonChange={(e) => onChange(e.detail.value)}
             interface="action-sheet"
             disabled={disabled}
             interfaceOptions={{ cssClass: 'custom-select-popover' }}
-            className="w-full bg-white px-4 py-1 rounded-[100px] !text-black !font-semibold font-heading flex border-[3px] !border-bg_color_1"
+            className={`w-full bg-white px-4 py-1 rounded-[100px] !text-black !font-semibold font-heading flex border-[3px] !border-bg_color_1`}
           >
             {options.map((opt) => (
               <IonSelectOption key={opt.value} value={opt.value}>

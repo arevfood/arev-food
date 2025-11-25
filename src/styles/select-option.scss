@@ -2,6 +2,10 @@
   background: transparent !important;
 }
 
+ion-select::part(text) {
+  width: 75vw !important;
+}
+
 ion-list.custom-list,
 ion-list.custom-list ion-item {
   background: transparent !important;

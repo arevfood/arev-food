@@ -91,7 +91,7 @@ const SearchInput: React.FC<propTypes> = ({ filterList, onFilter, onReset }) => 
   const handleSearchQuery = (value?: string) => {
     const query = (value !== undefined ? value : searchInput).trim()
 
-    if (!query) {
+    if (!query && Object.keys(selectedFilter).length === 0) {
       handleResetFilter()
       return
     }

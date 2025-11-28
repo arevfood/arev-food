@@ -1,7 +1,6 @@
 import { IonIcon, IonImg } from '@ionic/react'
 import CustomInput from '../input'
 import { useState, useEffect, useRef } from 'react'
-import { v4 as uuid } from 'uuid'
 import { FilterListModel } from '@/models/filter-list'
 import MainButton from '@/components/common/button'
 import { useLocation, useHistory } from 'react-router'
@@ -224,7 +223,7 @@ const SearchInput: React.FC<propTypes> = ({ filterList, onFilter, onReset }) => 
             <div className="h-[calc(50vh_+_10px)] overflow-y-scroll pt-6">
               {filterList.map((item) => {
                 return (
-                  <div key={uuid()} className="mb-6">
+                  <div key={item.key} className="mb-6">
                     <SearchFilterItem
                       item={item}
                       selectedFilter={selectedFilter}

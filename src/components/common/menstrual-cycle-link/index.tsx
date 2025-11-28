@@ -34,7 +34,8 @@ const MenstrualCycleLink: React.FC = () => {
           </div>
         </IonRouterLink>
       )}
-      {userDetail?.menstrual_cycle?.track_menstrual_cycle === 'no' && (
+      {(userDetail?.menstrual_cycle?.track_menstrual_cycle === 'no' ||
+        !userDetail?.menstrual_cycle?.track_menstrual_cycle) && (
         <div
           id="menstrual-cycle-modal"
           className="cursor-pointer text-[16px] px-2 py-2.5 text-black flex items-center gap-[8px] opacity-[0.62] duration-300 rounded-[8px] active:opacity-100 active:bg-black/[0.04]"

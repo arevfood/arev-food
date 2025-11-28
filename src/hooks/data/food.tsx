@@ -42,9 +42,7 @@ export const useFoods = ({ limit = 10, page = 1 }: { limit?: number; page?: numb
       queryClient.invalidateQueries({ queryKey: [queryKey] })
       return result
     },
-    onError: (e) => {
-      console.log(e)
-    },
+    onError: () => {},
   })
 
   const { mutateAsync: onGetFoodRecommendation, isPending: onGetFoodRecommendationLoading } =

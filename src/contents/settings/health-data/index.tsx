@@ -8,6 +8,7 @@ import CustomSelect from '@/components/common/select-option'
 import { IonSpinner } from '@ionic/react'
 import { useHistory } from 'react-router'
 import { foodFilterData } from '@/data/food-filter'
+import { diseaseData } from '@/data/disease'
 
 type inputProps = {
   health: {
@@ -41,9 +42,6 @@ const ContentsSettingsHealthData: React.FC = () => {
         return acc
       }, {}),
     }
-
-    console.log('data', data)
-    console.log('filteredPayload', filteredPayload)
 
     const result = await onUpdate({ payload: filteredPayload })
 
@@ -125,12 +123,10 @@ const ContentsSettingsHealthData: React.FC = () => {
           placeholder="Choose your health condition"
           value={watch('health.health_conditions')}
           options={
-            foodFilterData
-              .find((item) => item.key === 'health_conditions')
-              ?.items?.map((item) => ({
-                value: item.key,
-                label: item.label,
-              })) || []
+            diseaseData.map((item) => ({
+              value: item.key,
+              label: item.label,
+            })) || []
           }
           onChange={(val) => {
             if (Array.isArray(val)) {

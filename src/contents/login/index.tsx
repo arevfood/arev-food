@@ -240,7 +240,7 @@ const ContentLogin: React.FC = () => {
               </button>
               <button
                 type="button"
-                className="w-[58px] h-[58px] !rounded-full bg-white_color flex items-center justify-center text-black_color opacity-50"
+                className="w-[58px] h-[58px] !rounded-full bg-white_color flex items-center justify-center text-black_color opacity-50 hidden"
                 onClick={onSubmitApple}
               >
                 <IonImg src="/icons/apple.png" className="w-auto h-[24px]" />
